@@ -17,7 +17,7 @@ if __name__ == "__main__":
         raise SystemExit(f"Missing task directories: {', '.join(missing)}")
     processes: list[subprocess.Popen[str]] = []
     environment = os.environ.copy()
-    environment.update({"TASK1_DEMO_MODE": "1", "TASK1_PORT": "8001", "TASK2_PORT": "8002", "TASK3_PORT": "8003", "TASK1_BASE_URL": "http://127.0.0.1:8001"})
+    environment.update({"TASK1_MANIFEST_DB": "data/manifest.sqlite3", "TASK1_PORT": "8001", "TASK2_PORT": "8002", "TASK3_PORT": "8003", "TASK1_BASE_URL": "http://127.0.0.1:8001"})
     commands = [
         ([sys.executable, "-m", "knowledge_brain.server"], root / "task1-knowledge-brain", {"PYTHONPATH": "src"}),
         (["npm", "start"], root / "task2-inbox-agent", {}),

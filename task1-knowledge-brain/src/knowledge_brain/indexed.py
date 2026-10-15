@@ -5,7 +5,7 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
-from .api import QueryResult
+from .api import QueryResult, SourceCitation
 from .article import parse_article
 from .chunking import chunk_article
 from .rag import ModelAnswer
@@ -56,7 +56,6 @@ class IndexedQueryService:
     """Query only documents persisted by the crawler; empty indexes abstain."""
 
     def __init__(self, database_path: str | Path, *, top_k: int = 5) -> None:
-        self.database_path = str(database_path)
         self.store = load_index(database_path)
         self.top_k = top_k
 
@@ -70,8 +69,6 @@ class IndexedQueryService:
                 retrieval_trace=("no matching active indexed documents",),
             )
         generated = ExtractiveAnswerModel().answer(question, evidence, "")
-        from .api import SourceCitation
-
         citations = tuple(
             SourceCitation(
                 item.chunk.title or "Untitled",

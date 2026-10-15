@@ -21,9 +21,13 @@ class DemoQueryService:
 
 def main() -> None:
     demo_mode = os.getenv("TASK1_DEMO_MODE", "0").lower() in {"1", "true", "yes"}
-    if not demo_mode and not os.getenv("CLAUDE_API_KEY"):
-        raise SystemExit("CLAUDE_API_KEY is required outside TASK1_DEMO_MODE; no live model adapter is configured yet")
-    api = Task1Api(query_service=DemoQueryService() if demo_mode else None)
+    if demo_mode:
+        query_service = DemoQueryService()
+    else:
+        from .indexed import IndexedQueryService
+
+        query_service = IndexedQueryService(os.getenv("TASK1_MANIFEST_DB", "data/manifest.sqlite3"))
+    api = Task1Api(query_service=query_service)
     with make_server(os.getenv("TASK1_HOST", "127.0.0.1"), int(os.getenv("TASK1_PORT", "8001")), create_wsgi_app(api)) as server:
         print("Task 1 API listening on http://127.0.0.1:8001")
         server.serve_forever()

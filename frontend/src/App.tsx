@@ -7,8 +7,17 @@ type ScopeResult = { requirements: Array<{ requirement_id: string; description: 
 
 async function api<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, { headers: { "content-type": "application/json", ...(options?.headers ?? {}) }, ...options });
-  const payload = await response.json() as T & { error?: string; message?: string };
-  if (!response.ok) throw new Error(payload.message ?? payload.error ?? `Request failed (${response.status})`);
+  const body = await response.text();
+  let payload: (T & { error?: string; message?: string }) | undefined;
+  if (body.trim()) {
+    try {
+      payload = JSON.parse(body) as T & { error?: string; message?: string };
+    } catch {
+      throw new Error(`Service returned invalid JSON (${response.status}).`);
+    }
+  }
+  if (!response.ok) throw new Error(payload?.message ?? payload?.error ?? `Request failed (${response.status})`);
+  if (!payload) throw new Error(`Service returned an empty response (${response.status}).`);
   return payload;
 }
 

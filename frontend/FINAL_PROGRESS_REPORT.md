@@ -66,8 +66,8 @@ Task 1 already had the required query endpoint. To support the browser workflows
 
 ### Real retrieval path
 
-- [indexed.py](C:/Users/kishore/Desktop/raji/labs/Business-Labs/task1-knowledge-brain/src/knowledge_brain/indexed.py) loads active `article_versions` from the crawler's SQLite manifest, parses them with [article.py](C:/Users/kishore/Desktop/raji/labs/Business-Labs/task1-knowledge-brain/src/knowledge_brain/article.py), chunks them with [chunking.py](C:/Users/kishore/Desktop/raji/labs/Business-Labs/task1-knowledge-brain/src/knowledge_brain/chunking.py), and queries the existing [retrieval.py](C:/Users/kishore/Desktop/raji/labs/Business-Labs/task1-knowledge-brain/src/knowledge_brain/retrieval.py).
-- [ingest.py](C:/Users/kishore/Desktop/raji/labs/Business-Labs/task1-knowledge-brain/src/knowledge_brain/ingest.py) provides the explicit crawl/index command.
+- [indexed.py](../task1-knowledge-brain/src/knowledge_brain/indexed.py) loads active `article_versions` from the crawler's SQLite manifest, parses them with [article.py](../task1-knowledge-brain/src/knowledge_brain/article.py), chunks them with [chunking.py](../task1-knowledge-brain/src/knowledge_brain/chunking.py), and queries the existing [retrieval.py](../task1-knowledge-brain/src/knowledge_brain/retrieval.py).
+- [ingest.py](../task1-knowledge-brain/src/knowledge_brain/ingest.py) provides the explicit crawl/index command.
 - The verified fixture retrieval returned the actual URL `https://support.brilliantdirectories.com/support/settings` and a non-demo article chunk identifier beginning with `article-`.
 - Direct probe evidence: `status=answered`, `source_url=https://support.brilliantdirectories.com/support/settings`, `chunk_id=article-b98ecb3008159728:e7865d3cae99:c4b579fa0b31`, and the same chunk ID in `retrieval_trace`.
 - The default real-mode configuration is `TASK1_MANIFEST_DB=data/manifest.sqlite3 PYTHONPATH=src python -m knowledge_brain.server`; ingestion is `TASK1_MANIFEST_DB=data/manifest.sqlite3 PYTHONPATH=src python -m knowledge_brain.ingest --max-articles 50`.
