@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.3",
+  "info": {"title": "Task 1 Knowledge Brain API", "version": "0.1.0"},
+  "servers": [{"url": "http://127.0.0.1:8001", "description": "Local development only; no authentication"}],
+  "components": {
+    "schemas": {
+      "Citation": {"type": "object", "required": ["title", "url"], "properties": {"title": {"type": "string"}, "url": {"type": "string", "format": "uri"}, "section": {"type": ["string", "null"]}, "chunk_id": {"type": ["string", "null"]}}},
+      "QueryRequest": {"type": "object", "required": ["question"], "properties": {"question": {"type": "string", "minLength": 1, "maxLength": 10000}}},
+      "QueryResponse": {"type": "object", "required": ["answer", "status", "sources", "image_references", "human_help_needed", "request_id", "retrieval_trace"], "properties": {"answer": {"type": ["string", "null"]}, "status": {"type": "string"}, "sources": {"type": "array", "items": {"$ref": "#/components/schemas/Citation"}}, "image_references": {"type": "array", "items": {"type": "string"}}, "human_help_needed": {"type": "boolean"}, "request_id": {"type": "string"}, "retrieval_trace": {"type": "array", "items": {"type": "string"}}}},
+      "Error": {"type": "object", "required": ["error", "message", "request_id"], "properties": {"error": {"type": "string"}, "message": {"type": "string"}, "request_id": {"type": "string"}}}
+    }
+  },
+  "paths": {
+    "/query": {"post": {"summary": "Query grounded knowledge", "requestBody": {"required": true, "content": {"application/json": {"schema": {"$ref": "#/components/schemas/QueryRequest"}}}}, "responses": {"200": {"description": "Answered or insufficient evidence", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/QueryResponse"}}}}, "400": {"description": "Invalid request"}, "503": {"description": "Model or retrieval unavailable"}, "504": {"description": "Query timeout"}}}},
+    "/ingestion/run": {"post": {"summary": "Start or report an ingestion run", "responses": {"200": {"description": "Ingestion status"}}}},
+    "/ingestion/status": {"get": {"summary": "Get ingestion status", "responses": {"200": {"description": "Ingestion status"}}}},
+    "/escalations": {"post": {"summary": "Create human review task", "responses": {"201": {"description": "Created"}}}},
+    "/escalations/{id}/resolve": {"post": {"summary": "Resolve human review task", "responses": {"200": {"description": "Resolved"}, "404": {"description": "Not found"}}}},
+    "/health": {"get": {"summary": "Health status", "responses": {"200": {"description": "Healthy"}}}}
+  }
+}
