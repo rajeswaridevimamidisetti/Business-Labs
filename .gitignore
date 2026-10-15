@@ -9,6 +9,8 @@ venv/
 node_modules/
 dist/
 build/
+.vite/
+*.tsbuildinfo
 .coverage
 htmlcov/
 data/local/

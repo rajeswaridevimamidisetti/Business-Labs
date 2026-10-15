@@ -1,0 +1,44 @@
+:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #e8edf5; background: #0a0e16; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: radial-gradient(circle at 12% 0%, #17253d 0, #0a0e16 38rem); }
+button, textarea, select { font: inherit; }
+button { border: 0; border-radius: 10px; padding: .75rem 1rem; color: #08111e; background: #7de2c4; font-weight: 750; cursor: pointer; }
+button:hover:not(:disabled) { background: #a4f1db; transform: translateY(-1px); }
+button:disabled { opacity: .55; cursor: wait; }
+.app-shell { max-width: 1240px; margin: auto; padding: 3rem 1.25rem 2rem; }
+.hero { display: flex; justify-content: space-between; gap: 2rem; align-items: end; padding: 1rem 0 3rem; }
+.eyebrow { color: #7de2c4; letter-spacing: .16em; font-size: .72rem; font-weight: 800; }
+h1 { max-width: 700px; margin: .75rem 0; font-size: clamp(2.5rem, 7vw, 5.8rem); line-height: .95; letter-spacing: -.06em; }
+h2 { margin: .35rem 0 .5rem; font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -.03em; }
+h3 { margin: 1.25rem 0 .7rem; }
+p { color: #a7b2c5; line-height: 1.6; }
+.hero p { max-width: 620px; font-size: 1.1rem; }
+.health-pill, .tags span, .result-meta span { border: 1px solid #2a3b55; color: #a7b2c5; border-radius: 999px; padding: .5rem .75rem; font-size: .78rem; white-space: nowrap; }
+.pulse { display: inline-block; width: .55rem; height: .55rem; margin-right: .4rem; border-radius: 50%; background: #7de2c4; box-shadow: 0 0 0 .2rem #7de2c422; }
+.dashboard { display: grid; gap: 1.25rem; }
+.panel { background: #111925dd; border: 1px solid #24334a; border-radius: 20px; padding: clamp(1.15rem, 3vw, 2rem); box-shadow: 0 20px 70px #0004; }
+.section-heading { max-width: 780px; margin-bottom: 1.5rem; }
+.stack { display: grid; gap: .65rem; }
+label { color: #d9e2ef; font-weight: 700; font-size: .9rem; }
+textarea, select { width: 100%; resize: vertical; color: #e8edf5; background: #0a101b; border: 1px solid #2b3a50; border-radius: 10px; padding: .85rem; outline: none; }
+textarea:focus, select:focus { border-color: #7de2c4; box-shadow: 0 0 0 3px #7de2c422; }
+.result-card, .email-card, .draft-card, .proposal-card { margin-top: 1.25rem; padding: 1.1rem; border-radius: 14px; background: #0c1420; border: 1px solid #253850; }
+.result-meta { display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: #7de2c4; text-transform: capitalize; }
+.answer { color: #edf4ff; font-size: 1.05rem; }
+.muted, small { color: #8190a7; display: block; line-height: 1.5; }
+.source-list, .plain-list { padding-left: 1.1rem; }
+.source-list li, .plain-list li { margin: .7rem 0; color: #d4ddea; }
+.source-list a, .plain-list a { display: block; color: #7de2c4; margin-top: .2rem; }
+.source-list small { margin-top: .15rem; }
+.split, .scope-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.email-card h3 { margin-bottom: .3rem; }
+.tags { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+.draft-card { margin-top: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .8rem; }
+.quiet { background: #1a293d; color: #cbd6e5; }
+.status { margin: 1rem 0 0; color: #7de2c4; }
+.status.error { color: #ff9d9d; }
+.proposal-card button { margin-top: .8rem; }
+.change-report { margin-top: 1rem; border-top: 1px solid #253850; padding-top: .75rem; }
+footer { padding: 2rem 0 0; color: #718097; font-size: .82rem; text-align: center; }
+@media (max-width: 760px) { .app-shell { padding-top: 1.5rem; } .hero { display: block; } .health-pill { display: inline-block; margin-top: 1.25rem; } .split, .scope-grid { grid-template-columns: 1fr; } }
