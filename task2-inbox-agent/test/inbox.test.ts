@@ -5,7 +5,7 @@ import { classifyEmail } from "../src/classifier.js";
 import { createDraft } from "../src/drafts.js";
 import { EligibilityTracker } from "../src/eligibility.js";
 import { defaultInboxEvaluationCases } from "../src/evals.js";
-import { ReviewWorkflow } from "../src/review.js";
+import { ReviewAlreadyFinalizedError, ReviewWorkflow } from "../src/review.js";
 import { Task1Client, Task1ClientError } from "../src/task1-client.js";
 import { FeedbackStore } from "../src/feedback.js";
 import { renderReviewPage } from "../src/review-ui.js";
@@ -41,6 +41,48 @@ test("review workflow stores edits and blocks duplicate finalization", () => {
   const event = workflow.review(draft, "edit", "Edited reply", "clarity");
   assert.equal(event.action, "edited");
   assert.throws(() => workflow.review(draft, "approve"));
+});
+
+test("review actions have explicit terminal and non-terminal transitions", () => {
+  const emails = syntheticEmails();
+  const answer = { answer: "Use settings.", status: "answered", sources: [{ title: "Guide", url: "https://example.test/guide" }], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: [] };
+  const draftFor = (emailIndex: number) => createDraft(emails[emailIndex], { category: "how-to", subcategory: "general", urgency: "normal", risk: "low", productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" }, answer);
+
+  const saveWorkflow = new ReviewWorkflow();
+  const saved = saveWorkflow.review(draftFor(0), "save", "Saved reply");
+  assert.equal(saved.action, "pending");
+  assert.equal(saveWorkflow.status(emails[0].id), "pending");
+  assert.equal(saveWorkflow.review(draftFor(0), "approve").action, "approved");
+
+  const editWorkflow = new ReviewWorkflow();
+  assert.equal(editWorkflow.review(draftFor(1), "edit", "Edited reply").action, "edited");
+  const rejectWorkflow = new ReviewWorkflow();
+  assert.equal(rejectWorkflow.review(draftFor(2), "reject", "Rejected reply").action, "rejected");
+  const escalationWorkflow = new ReviewWorkflow();
+  assert.equal(escalationWorkflow.review(draftFor(3), "expert_assistance", undefined, "Needs specialist").action, "expert_assistance");
+});
+
+test("repeated saves remain safe, but duplicate approval and escalation are rejected", () => {
+  const email = syntheticEmails()[4];
+  const draft = createDraft(email, { category: "how-to", subcategory: "general", urgency: "normal", risk: "low", productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" }, { answer: "Use settings.", status: "answered", sources: [{ title: "Guide", url: "https://example.test/guide" }], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: [] });
+  const saveWorkflow = new ReviewWorkflow();
+  saveWorkflow.review(draft, "save", "First save");
+  saveWorkflow.review(draft, "save", "Second save");
+  assert.equal(saveWorkflow.history().length, 2);
+
+  const approvalWorkflow = new ReviewWorkflow();
+  approvalWorkflow.review(draft, "approve");
+  assert.throws(() => approvalWorkflow.review(draft, "approve"), (error: ReviewAlreadyFinalizedError) => error.message === "Review is already finalized.");
+
+  const escalationWorkflow = new ReviewWorkflow();
+  escalationWorkflow.review(draft, "expert_assistance");
+  assert.throws(() => escalationWorkflow.review(draft, "expert_assistance"), ReviewAlreadyFinalizedError);
+});
+
+test("review workflow rejects invalid runtime actions", () => {
+  const email = syntheticEmails()[5];
+  const draft = createDraft(email, { category: "how-to", subcategory: "general", urgency: "normal", risk: "low", productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" }, { answer: "Use settings.", status: "answered", sources: [{ title: "Guide", url: "https://example.test/guide" }], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: [] });
+  assert.throws(() => (new ReviewWorkflow()).review(draft, "unknown" as never), /invalid review action/);
 });
 
 test("eligibility requires twenty unchanged low-risk cases and supports kill switch", () => {

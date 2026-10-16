@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useState } from "react";
 type Citation = { title: string; url: string; section?: string | null };
 type Email = { id: string; from: string; subject: string; body: string; expectedCategory: string; expectedRisk: string; heldOut: boolean };
 type Draft = { emailId: string; classification: { category: string; urgency: string; risk: string }; suggestedReply: string; evidence: Citation[]; humanApprovalRequired: boolean; nextAction: string };
+type ReviewStatus = "pending" | "approved" | "edited" | "rejected" | "expert_assistance";
 type ScopeResult = { requirements: Array<{ requirement_id: string; description: string; source_segment_id: string; status: string }>; feasibility: Array<{ requirement_id: string; classification: string; evidence: Citation[]; reason?: string }>; estimates: Array<{ requirement_id: string; task: string; low_hours: number; likely_hours: number; high_hours: number }>; proposal: { proposal_id: string; version: number; approval_status: string; total_likely_hours: number; pricing_assumption: string }; changes: { added: string[]; removed: string[]; modified: string[]; unchanged: string[] } | null };
 
 async function api<T>(url: string, options?: RequestInit): Promise<T> {
@@ -53,13 +54,33 @@ function InboxAgent() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [reviewStatus, setReviewStatus] = useState<ReviewStatus>("pending");
   useEffect(() => { api<{ emails: Email[] }>("/api/task2/v1/emails").then((payload) => { setEmails(payload.emails); setSelected(payload.emails[0]?.id ?? ""); }).catch((reason) => setError(reason instanceof Error ? reason.message : "Could not load emails.")); }, []);
-  async function createDraft() { if (!selected) return; setBusy(true); setError(""); setMessage(""); try { const payload = await api<{ draft: Draft }>("/api/task2/v1/drafts", { method: "POST", body: JSON.stringify({ emailId: selected }) }); setDraft(payload.draft); setReply(payload.draft.suggestedReply); } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not create draft."); } finally { setBusy(false); } }
-  async function review(action: "approve" | "edit" | "reject" | "expert_assistance") { if (!draft) return; setBusy(true); setError(""); try { await api("/api/task2/v1/reviews", { method: "POST", body: JSON.stringify({ emailId: draft.emailId, action, finalContent: action === "edit" || action === "reject" ? reply : undefined, reason: action === "expert_assistance" ? "Requested from browser review console" : undefined }) }); setMessage(`Review action recorded: ${action.replace("_", " ")}.`); } catch (reason) { setError(reason instanceof Error ? reason.message : "Review action failed."); } finally { setBusy(false); } }
+  async function createDraft() { if (!selected) return; setBusy(true); setError(""); setMessage(""); try { const payload = await api<{ draft: Draft; reviewStatus: ReviewStatus }>("/api/task2/v1/drafts", { method: "POST", body: JSON.stringify({ emailId: selected }) }); setDraft(payload.draft); setReply(payload.draft.suggestedReply); setReviewStatus(payload.reviewStatus); } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not create draft."); } finally { setBusy(false); } }
+  async function review(action: "approve" | "save" | "edit" | "reject" | "expert_assistance") {
+    if (!draft) return;
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const result = await api<{ reviewStatus: ReviewStatus }>("/api/task2/v1/reviews", {
+        method: "POST",
+        body: JSON.stringify({
+          emailId: draft.emailId,
+          action,
+          finalContent: action === "save" || action === "edit" || action === "reject" ? reply : undefined,
+          reason: action === "expert_assistance" ? "Requested from browser review console" : undefined,
+        }),
+      });
+      setReviewStatus(result.reviewStatus);
+      setMessage(action === "save" ? "Draft saved. Review remains open." : `Review action recorded: ${action.replace("_", " ")}.`);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Review action failed.");
+    } finally { setBusy(false); }
+  }
+  const reviewFinalized = reviewStatus !== "pending";
   const email = emails.find((item) => item.id === selected);
   return <section className="panel">
     <div className="section-heading"><span className="eyebrow">02 · Inbox Agent</span><h2>Review before anything is sent</h2><p>Choose a backend-provided synthetic email, generate an evidence-grounded draft, then record a review action.</p></div>
-    <div className="split"><div className="stack"><label htmlFor="email">Email</label><select id="email" value={selected} onChange={(event) => { setSelected(event.target.value); setDraft(undefined); setMessage(""); }}>{emails.map((item) => <option key={item.id} value={item.id}>{item.subject}</option>)}</select>{email && <article className="email-card"><small>{email.from} · {email.id}</small><h3>{email.subject}</h3><p>{email.body}</p><div className="tags"><span>{email.expectedCategory}</span><span>{email.expectedRisk} risk</span></div></article>}<button onClick={createDraft} disabled={busy || !selected}>{busy ? "Working…" : "Generate draft"}</button></div>{draft && <div className="draft-card"><div className="result-meta"><strong>{draft.classification.category}</strong><span>{draft.classification.risk} risk</span></div><label htmlFor="reply">Draft reply</label><textarea id="reply" value={reply} onChange={(event) => setReply(event.target.value)} rows={9} /><p className="muted">{draft.nextAction} · {draft.evidence.length} evidence item(s)</p><div className="actions"><button onClick={() => review("approve")} disabled={busy}>Approve</button><button onClick={() => review("edit")} disabled={busy}>Save edit</button><button className="quiet" onClick={() => review("reject")} disabled={busy}>Reject</button><button className="quiet" onClick={() => review("expert_assistance")} disabled={busy}>Escalate</button></div></div>}</div>
+    <div className="split"><div className="stack"><label htmlFor="email">Email</label><select id="email" value={selected} onChange={(event) => { setSelected(event.target.value); setDraft(undefined); setReviewStatus("pending"); setMessage(""); setError(""); }}>{emails.map((item) => <option key={item.id} value={item.id}>{item.subject}</option>)}</select>{email && <article className="email-card"><small>{email.from} · {email.id}</small><h3>{email.subject}</h3><p>{email.body}</p><div className="tags"><span>{email.expectedCategory}</span><span>{email.expectedRisk} risk</span></div></article>}<button onClick={createDraft} disabled={busy || !selected}>{busy ? "Working…" : "Generate draft"}</button></div>{draft && <div className="draft-card"><div className="result-meta"><strong>{draft.classification.category}</strong><span>{draft.classification.risk} risk · review {reviewStatus}</span></div><label htmlFor="reply">Draft reply</label><textarea id="reply" value={reply} onChange={(event) => setReply(event.target.value)} rows={9} disabled={reviewFinalized} /><p className="muted">{draft.nextAction} · {draft.evidence.length} evidence item(s)</p><div className="actions"><button onClick={() => review("approve")} disabled={busy || reviewFinalized}>Approve</button><button onClick={() => review("save")} disabled={busy || reviewFinalized}>Save edit</button><button onClick={() => review("edit")} disabled={busy || reviewFinalized}>Edit</button><button className="quiet" onClick={() => review("reject")} disabled={busy || reviewFinalized}>Reject</button><button className="quiet" onClick={() => review("expert_assistance")} disabled={busy || reviewFinalized}>Escalate</button></div></div>}</div>
     <Status message={message} error={error} />
   </section>;
 }

@@ -9,6 +9,7 @@ export type Category =
 
 export type Risk = "low" | "medium" | "high" | "critical";
 export type ReviewStatus = "pending" | "approved" | "edited" | "rejected" | "expert_assistance";
+export type ReviewAction = "approve" | "save" | "edit" | "reject" | "expert_assistance";
 
 export interface IncomingEmail {
   id: string;

@@ -1,8 +1,11 @@
-# Foundation Design
+# AI Tech Consultant Design
 
 ## Scope
 
-This change establishes the repository boundary only. Task behavior, model calls, retrieval, UI workflows, and evaluation runs are intentionally not implemented yet.
+The repository is a local-first, three-service capstone. Task 1 owns ingestion
+and retrieval; Tasks 2 and 3 consume it through HTTP. Deterministic local
+fallbacks are used when a provider is unavailable, and never represent
+unverified evidence as a completed answer.
 
 ## Services
 
@@ -28,7 +31,9 @@ Human review remains authoritative for email actions, escalations, and proposal 
 
 ## Validation boundary
 
-The foundation currently provides health checks and test discovery scaffolding only. Future implementation must add at least 20 test cases per task, compare the required model/configuration choices, and record actual quality, cost, and latency results in `EVALS.md`.
+Deterministic suites cover the three workflows, including 20 pending evaluation
+cases per task. Live model quality, cost, and latency remain pending in
+`EVALS.md`; no placeholder scores are reported.
 
 ## Decisions
 

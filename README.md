@@ -19,11 +19,15 @@ AI Tech Consultant capstone with Task 1 knowledge services, Task 2 inbox workflo
 
 Secrets stay local. Copy `.env.example` to `.env` and replace placeholders without committing the copy.
 
-Create separate Python environments:
+Create separate Python environments (PowerShell):
 
 ```bash
-cd task1-knowledge-brain && python3 -m venv .venv && . .venv/bin/activate && python -m pip install -e '.[test]'
-cd ../task3-meeting-to-scope && python3 -m venv .venv && . .venv/bin/activate && python -m pip install -e '.[test]'
+cd task1-knowledge-brain
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[test]"
+cd ..\task3-meeting-to-scope
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[test]"
 ```
 
 Install and check the TypeScript task separately:
@@ -35,19 +39,37 @@ npm run typecheck
 npm test
 ```
 
-The Python health checks can be run without external services:
+The Python test suites are run from their own package roots:
 
 ```bash
-cd task1-knowledge-brain && python -m unittest discover -s tests
-cd ../task3-meeting-to-scope && python -m unittest discover -s tests
+cd task1-knowledge-brain
+.\.venv\Scripts\python.exe -m pytest -q
+cd ..\task3-meeting-to-scope
+$env:PYTHONPATH="src"
+python -m unittest discover -s tests
 ```
 
 These commands validate deterministic behavior. They do not run live Claude calls or claim evaluation results.
 
-Run the repository readiness check with:
+Start all three backend services and keep them running with:
 
 ```bash
-python run_local.py
+python run_local.py --serve
 ```
 
-Task 1's public API is documented in `task1-knowledge-brain/docs/task1-api.md`; Tasks 2 and 3 use that HTTP contract rather than importing Task 1 internals.
+Then start the browser console in a second PowerShell window:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+For a one-shot integration check that starts the services, exercises the
+cross-task routes, and shuts them down automatically, run `python run_local.py`
+without `--serve`.
+
+Task 1's public API is documented in `task1-knowledge-brain/docs/task1-api.md`;
+Tasks 2 and 3 use that HTTP contract rather than importing Task 1 internals.
+Task 2 exposes `/v1/emails`, `/v1/drafts`, and `/v1/reviews`; Task 3 exposes
+`/v1/transcripts`, `/v1/scope`, and proposal approval routes for the console.
