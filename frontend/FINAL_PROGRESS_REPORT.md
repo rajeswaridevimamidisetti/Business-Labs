@@ -68,11 +68,10 @@ Task 1 already had the required query endpoint. To support the browser workflows
 
 - [indexed.py](../task1-knowledge-brain/src/knowledge_brain/indexed.py) loads active `article_versions` from the crawler's SQLite manifest, parses them with [article.py](../task1-knowledge-brain/src/knowledge_brain/article.py), chunks them with [chunking.py](../task1-knowledge-brain/src/knowledge_brain/chunking.py), and queries the existing [retrieval.py](../task1-knowledge-brain/src/knowledge_brain/retrieval.py).
 - [ingest.py](../task1-knowledge-brain/src/knowledge_brain/ingest.py) provides the explicit crawl/index command.
-- The verified fixture retrieval returned the actual URL `https://support.brilliantdirectories.com/support/settings` and a non-demo article chunk identifier beginning with `article-`.
+- The verified fixture retrieval returned the actual URL `https://support.brilliantdirectories.com/support/settings` and an article chunk identifier beginning with `article-`.
 - Direct probe evidence: `status=answered`, `source_url=https://support.brilliantdirectories.com/support/settings`, `chunk_id=article-b98ecb3008159728:e7865d3cae99:c4b579fa0b31`, and the same chunk ID in `retrieval_trace`.
 - The default real-mode configuration is `TASK1_MANIFEST_DB=data/manifest.sqlite3 PYTHONPATH=src python -m knowledge_brain.server`; ingestion is `TASK1_MANIFEST_DB=data/manifest.sqlite3 PYTHONPATH=src python -m knowledge_brain.ingest --max-articles 50`.
 - Missing/corrupt indexes fail explicitly; empty indexes and unmatched questions return `insufficient_evidence` with no sources.
-- `TASK1_DEMO_MODE=1` remains an explicit opt-in only. Its response includes `demo_mode: true`, and the browser labels it “Demo fallback — not KB evidence.”
 
 ### Not verified or incomplete
 
@@ -155,7 +154,7 @@ The repository documentation is appropriately explicit that live evaluation resu
 - Real vision-call results.
 - Production scheduling, deployment, email delivery, authorization, or rollback evidence.
 
-**Overall verdict: READY FOR LOCAL RETRIEVAL VERIFICATION AND DETERMINISTIC DEMO WITH A REAL REACT FRONTEND; NOT READY FOR PRODUCTION OR COMPANY ACCEPTANCE.**
+**Overall verdict: READY FOR LOCAL RETRIEVAL VERIFICATION WITH A REAL REACT FRONTEND; NOT READY FOR PRODUCTION OR COMPANY ACCEPTANCE.**
 
 ## Regression environment and remaining blocker
 
@@ -164,7 +163,7 @@ The repository documentation is appropriately explicit that live evaluation resu
 - Playwright: `1.64.1`; Chromium installation completed
 - No `data/manifest.sqlite3` is checked into the repository.
 - The real retrieval implementation is verified with isolated crawler SQLite fixtures. A target environment must run [ingest.py](C:/Users/kishore/Desktop/raji/labs/Business-Labs/task1-knowledge-brain/src/knowledge_brain/ingest.py) before real indexed answers can be returned.
-- The cross-service smoke test remains an explicit demo-mode test by design; its result is not live Knowledge Base evidence.
+- The cross-service smoke test validates the local service wiring; it is not live model-evaluation evidence.
 
 ## Highest-priority next steps
 

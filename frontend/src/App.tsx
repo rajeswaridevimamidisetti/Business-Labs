@@ -28,7 +28,7 @@ function Status({ message, error }: { message?: string; error?: string }) {
 
 function KnowledgeBrain() {
   const [question, setQuestion] = useState("");
-  const [result, setResult] = useState<{ answer: string | null; status: string; sources: Citation[]; human_help_needed: boolean; retrieval_trace: string[]; demo_mode?: boolean }>();
+  const [result, setResult] = useState<{ answer: string | null; status: string; sources: Citation[]; human_help_needed: boolean; retrieval_trace: string[] }>();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   async function submit(event: FormEvent) {
@@ -41,7 +41,7 @@ function KnowledgeBrain() {
     <div className="section-heading"><span className="eyebrow">01 · Knowledge Brain</span><h2>Grounded answers, visible evidence</h2><p>Ask the configured Knowledge Brain. Answers and abstentions come directly from Task 1.</p></div>
     <form onSubmit={submit} className="stack"><label htmlFor="question">Question</label><textarea id="question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="How do settings work?" rows={4} /><button disabled={busy}>{busy ? "Searching…" : "Ask Knowledge Brain"}</button></form>
     <Status error={error} />
-    {result && <div className="result-card"><div className="result-meta"><strong>{result.status.replace(/_/g, " ")}</strong><span>{result.demo_mode ? "Demo fallback — not KB evidence" : result.human_help_needed ? "Human help needed" : result.sources.length ? "Retrieved KB evidence" : "No evidence"}</span></div><p className="answer">{result.answer ?? "No grounded answer was returned."}</p><h3>Sources</h3>{result.sources.length ? <ul className="source-list">{result.sources.map((source) => <li key={`${source.url}-${source.title}`}><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>{source.section && <small>{source.section}</small>}</li>)}</ul> : <p className="muted">No citations returned. Treat this response as an abstention.</p>}<small>Trace: {result.retrieval_trace.join(" · ") || "not provided"}</small></div>}
+    {result && <div className="result-card"><div className="result-meta"><strong>{result.status.replace(/_/g, " ")}</strong><span>{result.human_help_needed ? "Human help needed" : result.sources.length ? "Retrieved KB evidence" : "No evidence"}</span></div><p className="answer">{result.answer ?? "No grounded answer was returned."}</p><h3>Sources</h3>{result.sources.length ? <ul className="source-list">{result.sources.map((source) => <li key={`${source.url}-${source.title}`}><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>{source.section && <small>{source.section}</small>}</li>)}</ul> : <p className="muted">No citations returned. Treat this response as an abstention.</p>}<small>Trace: {result.retrieval_trace.join(" · ") || "not provided"}</small></div>}
   </section>;
 }
 

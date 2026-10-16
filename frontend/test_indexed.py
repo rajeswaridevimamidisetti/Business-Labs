@@ -6,7 +6,6 @@ from pathlib import Path
 from knowledge_brain.api import QueryResult
 from knowledge_brain.crawl import FetchResponse, ManifestStore
 from knowledge_brain.indexed import IndexedQueryService, load_index
-from knowledge_brain.server import DemoQueryService
 
 
 class IndexedRetrievalTest(unittest.TestCase):
@@ -33,7 +32,7 @@ class IndexedRetrievalTest(unittest.TestCase):
         self.assertEqual(result.status, "answered")
         self.assertIn("Open account settings", result.answer or "")
         self.assertEqual(result.sources[0].url, "https://support.brilliantdirectories.com/support/settings")
-        self.assertNotEqual(result.sources[0].chunk_id, "demo-chunk")
+        self.assertTrue(result.sources[0].chunk_id.startswith("article-"))
         self.assertTrue(result.retrieval_trace)
 
     def test_empty_index_abstains_without_sources(self) -> None:
@@ -46,12 +45,6 @@ class IndexedRetrievalTest(unittest.TestCase):
     def test_missing_index_is_unavailable(self) -> None:
         with self.assertRaisesRegex(RuntimeError, "database does not exist"):
             load_index(Path(tempfile.gettempdir()) / "missing-business-labs-index.sqlite3")
-
-    def test_demo_mode_is_explicit_and_marked(self) -> None:
-        result = DemoQueryService().query("How do settings work?", "req-demo")
-        self.assertTrue(result.demo_mode)
-        self.assertEqual(result.retrieval_trace, ("demo-mode",))
-        self.assertEqual(result.sources[0].title, "Demo support article")
 
     def test_corrupt_index_is_unavailable(self) -> None:
         directory = tempfile.TemporaryDirectory()
