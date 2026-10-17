@@ -3,7 +3,7 @@ import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { queryHowToKnowledge, buildKnowledgeQuestion, Task1Client, Task1ClientError } from "./task1-client.js";
 import { createDraft } from "./drafts.js";
-import { syntheticEmails } from "./dataset.js";
+import { findEmail, inboxEmails } from "./email-lookup.js";
 import { ReviewAlreadyFinalizedError, ReviewWorkflow } from "./review.js";
 import { Draft, ReviewAction } from "./schemas.js";
 import { classifyEmailDeterministically } from "./classifier.js";
@@ -11,7 +11,7 @@ import { FeedbackStore } from "./feedback.js";
 
 const port = Number(process.env.TASK2_PORT ?? "8002");
 const task1 = new Task1Client({ baseUrl: process.env.TASK1_BASE_URL ?? "http://127.0.0.1:8001" });
-const emails = syntheticEmails();
+const emails = inboxEmails;
 const feedbackPath = process.env.TASK2_FEEDBACK_PATH ?? "data/local/task2-feedback.json";
 mkdirSync(dirname(feedbackPath), { recursive: true });
 const feedback = new FeedbackStore(feedbackPath);
@@ -43,8 +43,8 @@ const server = createServer((request, response) => {
   }
   if (request.method === "POST" && (request.url === "/v1/smoke/draft" || request.url === "/v1/drafts")) {
     readJson(request).then(async (input) => {
-      const email = emails.find((item) => item.id === input.emailId) ?? emails[0];
-      if (!email) return send(response, 400, { error: "no_email_available" });
+      const email = findEmail(input.emailId);
+      if (!email) return send(response, 404, { error: "email_not_found" });
       const requestId = request.headers["x-request-id"]?.toString() ?? `task2-${Date.now()}`;
       let knowledge;
       if (email.expectedCategory === "how-to") {
@@ -64,9 +64,10 @@ const server = createServer((request, response) => {
   }
   if (request.method === "POST" && request.url === "/v1/reviews") {
     readJson(request).then((input) => {
-      const email = emails.find((item) => item.id === input.emailId);
+      const email = findEmail(input.emailId);
       const actions: ReviewAction[] = ["approve", "save", "edit", "reject", "expert_assistance"];
-      if (!email || typeof input.action !== "string" || !actions.includes(input.action as ReviewAction)) return send(response, 400, { error: "emailId and a valid action are required" });
+      if (!email) return send(response, 404, { error: "email_not_found" });
+      if (typeof input.action !== "string" || !actions.includes(input.action as ReviewAction)) return send(response, 400, { error: "emailId and a valid action are required" });
       const draft = drafts.get(email.id);
       if (!draft) return send(response, 400, { error: "draft must be created before review" });
       const content = typeof input.finalContent === "string" ? input.finalContent : draft.suggestedReply;

@@ -2207,5 +2207,562 @@
     "project_id": "browser-project",
     "approved_by": null,
     "approved_at": null
+  },
+  "proposal-browser-1792234728879:v1": {
+    "proposal_id": "proposal-browser-1792234728879",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-5c0d614698f5",
+          "description": "We now also need pagination for large result sets.",
+          "source_segment_id": "browser-1792234728879-seg-5",
+          "source_passage": "We now also need pagination for large result sets.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We now also need pagination for large result sets."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-4ccbb9d67af5",
+          "description": "Please add filtering by project status.",
+          "source_segment_id": "browser-1792234728879-seg-7",
+          "source_passage": "Please add filtering by project status.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Please add filtering by project status."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-1f7ed41b914f",
+          "description": "We no longer need the creation date in the API response.",
+          "source_segment_id": "browser-1792234728879-seg-11",
+          "source_passage": "We no longer need the creation date in the API response.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We no longer need the creation date in the API response."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-235a242319fc",
+          "description": "I will compare these changes with the approved baseline and generate a change report.",
+          "source_segment_id": "browser-1792234728879-seg-15",
+          "source_passage": "I will compare these changes with the approved baseline and generate a change report.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: I will compare these changes with the approved baseline and generate a change report."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-b15691797168",
+          "description": "The revised proposal must remain pending until a reviewer approves it.",
+          "source_segment_id": "browser-1792234728879-seg-19",
+          "source_passage": "The revised proposal must remain pending until a reviewer approves it.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The revised proposal must remain pending until a reviewer approves it."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We now also need pagination for large result sets.",
+        "We no longer need the creation date in the API response.",
+        "The revised proposal must remain pending until a reviewer approves it."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-5c0d614698f5",
+        "req-1f7ed41b914f",
+        "req-235a242319fc",
+        "req-b15691797168"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We now also need pagination for large result sets.",
+        "Demonstrate that the delivered workflow satisfies: Please add filtering by project status.",
+        "Demonstrate that the delivered workflow satisfies: We no longer need the creation date in the API response.",
+        "Demonstrate that the delivered workflow satisfies: I will compare these changes with the approved baseline and generate a change report.",
+        "Demonstrate that the delivered workflow satisfies: The revised proposal must remain pending until a reviewer approves it."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-5c0d614698f5",
+        "Clarify feasibility for req-1f7ed41b914f",
+        "Clarify feasibility for req-235a242319fc",
+        "Clarify feasibility for req-b15691797168"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-5c0d614698f5",
+        "task": "We now also need pagination for large result sets.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-4ccbb9d67af5",
+        "task": "Please add filtering by project status.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-1f7ed41b914f",
+        "task": "We no longer need the creation date in the API response.",
+        "low_hours": 12,
+        "likely_hours": 24,
+        "high_hours": 40,
+        "rationale": "Integration work requires provider discovery, credentials, mapping, and end-to-end verification.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-235a242319fc",
+        "task": "I will compare these changes with the approved baseline and generate a change report.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-b15691797168",
+        "task": "The revised proposal must remain pending until a reviewer approves it.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 60,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792234745052:v1": {
+    "proposal_id": "proposal-browser-1792234745052",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-5c0d614698f5",
+          "description": "We now also need pagination for large result sets.",
+          "source_segment_id": "browser-1792234745052-seg-5",
+          "source_passage": "We now also need pagination for large result sets.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We now also need pagination for large result sets."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-4ccbb9d67af5",
+          "description": "Please add filtering by project status.",
+          "source_segment_id": "browser-1792234745052-seg-7",
+          "source_passage": "Please add filtering by project status.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Please add filtering by project status."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-1f7ed41b914f",
+          "description": "We no longer need the creation date in the API response.",
+          "source_segment_id": "browser-1792234745052-seg-11",
+          "source_passage": "We no longer need the creation date in the API response.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We no longer need the creation date in the API response."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-235a242319fc",
+          "description": "I will compare these changes with the approved baseline and generate a change report.",
+          "source_segment_id": "browser-1792234745052-seg-15",
+          "source_passage": "I will compare these changes with the approved baseline and generate a change report.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: I will compare these changes with the approved baseline and generate a change report."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-b15691797168",
+          "description": "The revised proposal must remain pending until a reviewer approves it.",
+          "source_segment_id": "browser-1792234745052-seg-19",
+          "source_passage": "The revised proposal must remain pending until a reviewer approves it.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The revised proposal must remain pending until a reviewer approves it."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We now also need pagination for large result sets.",
+        "We no longer need the creation date in the API response.",
+        "The revised proposal must remain pending until a reviewer approves it."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-5c0d614698f5",
+        "req-1f7ed41b914f",
+        "req-235a242319fc",
+        "req-b15691797168"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We now also need pagination for large result sets.",
+        "Demonstrate that the delivered workflow satisfies: Please add filtering by project status.",
+        "Demonstrate that the delivered workflow satisfies: We no longer need the creation date in the API response.",
+        "Demonstrate that the delivered workflow satisfies: I will compare these changes with the approved baseline and generate a change report.",
+        "Demonstrate that the delivered workflow satisfies: The revised proposal must remain pending until a reviewer approves it."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-5c0d614698f5",
+        "Clarify feasibility for req-1f7ed41b914f",
+        "Clarify feasibility for req-235a242319fc",
+        "Clarify feasibility for req-b15691797168"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-5c0d614698f5",
+        "task": "We now also need pagination for large result sets.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-4ccbb9d67af5",
+        "task": "Please add filtering by project status.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-1f7ed41b914f",
+        "task": "We no longer need the creation date in the API response.",
+        "low_hours": 12,
+        "likely_hours": 24,
+        "high_hours": 40,
+        "rationale": "Integration work requires provider discovery, credentials, mapping, and end-to-end verification.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-235a242319fc",
+        "task": "I will compare these changes with the approved baseline and generate a change report.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-b15691797168",
+        "task": "The revised proposal must remain pending until a reviewer approves it.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5c0d614698f5",
+          "req-1f7ed41b914f",
+          "req-235a242319fc",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 60,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "approved",
+    "project_id": "browser-project",
+    "approved_by": "browser-reviewer",
+    "approved_at": "2026-10-17T10:59:06.574383+00:00"
+  },
+  "proposal-browser-1792234752860:v1": {
+    "proposal_id": "proposal-browser-1792234752860",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-8d9e1dcdbd94",
+          "description": "We need search and filters.",
+          "source_segment_id": "browser-1792234752860-seg-1",
+          "source_passage": "We need search and filters.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need search and filters."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-9e6a9a292dac",
+          "description": "Mobile users must have a usable experience.",
+          "source_segment_id": "browser-1792234752860-seg-2",
+          "source_passage": "Mobile users must have a usable experience.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Mobile users must have a usable experience."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-c1a37a066126",
+          "description": "We should confirm the existing search configuration.",
+          "source_segment_id": "browser-1792234752860-seg-3",
+          "source_passage": "We should confirm the existing search configuration.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We should confirm the existing search configuration."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need search and filters.",
+        "Mobile users must have a usable experience."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We need search and filters.",
+        "Demonstrate that the delivered workflow satisfies: Mobile users must have a usable experience.",
+        "Demonstrate that the delivered workflow satisfies: We should confirm the existing search configuration."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": []
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-8d9e1dcdbd94",
+        "task": "We need search and filters.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-9e6a9a292dac",
+        "task": "Mobile users must have a usable experience.",
+        "low_hours": 16,
+        "likely_hours": 32,
+        "high_hours": 56,
+        "rationale": "Cross-surface UI work requires responsive design, implementation, and review.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-c1a37a066126",
+        "task": "We should confirm the existing search configuration.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 48,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "approved",
+    "project_id": "browser-project",
+    "approved_by": "browser-reviewer",
+    "approved_at": "2026-10-17T10:59:15.200185+00:00"
   }
 }

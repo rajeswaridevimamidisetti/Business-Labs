@@ -66,7 +66,7 @@ def _load_python_cases(module_name: str, package_root: Path, task: str) -> list[
         if task == "task1":
             prompt = source.question
             expected = source.expected_behavior
-            metadata = {"required_citations": source.required_citations, "expected_status": source.expected_status}
+            metadata = {"required_citations": source.required_citations, "expected_status": source.expected_status, "assertions": list(source.assertions)}
         else:
             prompt = source.transcript
             expected = source.expected
@@ -114,9 +114,9 @@ def load_task2_cases() -> list[Case]:
         Case(
             source["id"],
             "task2",
-            f"Evaluate the inbox workflow for the {source['category']} email.",
+            f"Subject: {source['subject']}\nMessage: {source['message']}",
             source["expected"],
-            {"category": source["category"], "held_out": source["heldOut"]},
+            {"category": source["category"], "held_out": source["heldOut"], "assertions": source["assertions"]},
         )
         for source in source_cases
     ]

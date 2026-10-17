@@ -79,9 +79,30 @@ Start all three backend services and keep them running with:
 python run_local.py --serve
 ```
 
+Start the complete backend and frontend stack with one command:
+
+```powershell
+python run_local.py --full-stack --serve
+```
+
+This checks the required local ports and installed Node dependencies, starts
+Task 1, Task 2, Task 3, and Vite, prints all service URLs, and shuts down the
+child processes when interrupted. Install frontend and Task 2 dependencies
+first with `npm install` in each respective directory.
+
 Then start the browser console in a second PowerShell window:
 
-```bash
+```
+
+Run the deterministic evaluation inventory without contacting Claude:
+
+```powershell
+python evaluator\offline_eval.py
+```
+
+This verifies 20 cases per task, preserves each case's pending provider status,
+and writes a timestamped `offline-*.json` evidence file under
+`shared\evaluations\`. It records no model scores, costs, or latency.bash
 cd frontend
 npm install
 npm run dev

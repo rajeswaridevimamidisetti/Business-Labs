@@ -27,6 +27,16 @@ Validate the case inventory without contacting any service or Claude:
 python evaluator\live_claude_eval.py --dry-run
 ```
 
+Run the offline deterministic inventory and write timestamped evidence:
+
+```powershell
+python evaluator\offline_eval.py
+```
+
+This executes inventory assertions for 20 cases per task and writes a new
+`offline-*.json` file with `provider_called: false`. It does not produce
+Claude quality, cost, or latency results.
+
 After the three local services are running, execute the live evaluation:
 
 ```powershell
@@ -48,7 +58,7 @@ automated judging is not human review.
 - Latency measured from timed calls with the execution environment recorded.
 - Deterministic tests separated from model evaluations.
 - Task 2 and Task 3 integration evidence showing Task 1 API use without retrieval duplication.
-- Task 3 has 20 complete deterministic cases covering extraction, feasibility, scope, estimates, proposals, follow-up changes, and approval enforcement. Their execution status remains pending until the deterministic evaluation runner records actual case results.
+- Task 3 has 20 complete deterministic cases covering extraction, feasibility, scope, estimates, proposals, follow-up changes, and approval enforcement. Their provider evaluation status remains pending until an actual model evaluation is executed.
 
 ## Result record
 
