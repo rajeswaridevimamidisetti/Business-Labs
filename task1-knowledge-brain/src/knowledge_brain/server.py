@@ -56,6 +56,8 @@ def main() -> None:
     from .indexed import IndexedQueryService
 
     database_path = os.getenv("TASK1_MANIFEST_DB", "data/manifest.sqlite3")
+    manifest = ManifestStore(database_path)
+    manifest.close()
     query_service = IndexedQueryService(database_path)
     api = Task1Api(query_service=query_service, ingestion_service=LocalIngestionService(database_path))
     with make_server(os.getenv("TASK1_HOST", "127.0.0.1"), int(os.getenv("TASK1_PORT", "8001")), create_wsgi_app(api)) as server:

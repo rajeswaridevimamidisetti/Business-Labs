@@ -32,14 +32,18 @@
       "assumptions": [
         "Client supplies access, content, credentials and acceptance decisions"
       ],
-      "dependencies": [],
+      "dependencies": [
+        "req-84d0dbde6cc0"
+      ],
       "acceptance_criteria": [
         "Demonstrate that the delivered workflow satisfies: We need settings."
       ],
       "client_responsibilities": [
         "Provide timely feedback and test data"
       ],
-      "open_questions_and_risks": []
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-84d0dbde6cc0"
+      ]
     },
     "estimates": [
       {
@@ -52,8 +56,10 @@
         "assumptions": [
           "Requirements remain stable"
         ],
-        "dependencies": [],
-        "human_review_required": false
+        "dependencies": [
+          "req-84d0dbde6cc0"
+        ],
+        "human_review_required": true
       }
     ],
     "total_likely_hours": 8,
