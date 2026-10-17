@@ -9,7 +9,7 @@ from .api import QueryResult, SourceCitation
 from .article import parse_article
 from .chunking import chunk_article
 from .rag import ModelAnswer
-from .retrieval import RetrievalStore
+from .retrieval import RetrievalStore, evidence_supports_question
 
 
 class ExtractiveAnswerModel:
@@ -68,6 +68,14 @@ class IndexedQueryService:
                 human_help_needed=True,
                 retrieval_trace=("no matching active indexed documents",),
             )
+        trace = tuple(item.chunk.chunk_id for item in evidence)
+        if not evidence_supports_question(question, evidence):
+            return QueryResult(
+                None,
+                "insufficient_evidence",
+                human_help_needed=True,
+                retrieval_trace=trace + ("retrieved evidence does not sufficiently support the question",),
+            )
         generated = ExtractiveAnswerModel().answer(question, evidence, "")
         citations = tuple(
             SourceCitation(
@@ -84,5 +92,5 @@ class IndexedQueryService:
             citations,
             tuple(evidence[0].chunk.image_references),
             False,
-            tuple(item.chunk.chunk_id for item in evidence),
+            trace,
         )

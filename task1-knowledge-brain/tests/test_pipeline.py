@@ -13,6 +13,11 @@ class FakeModel:
         return ModelAnswer("Grounded answer", (evidence[0].chunk.chunk_id,))
 
 
+class PartialModel:
+    def answer(self, question, evidence, system_policy):
+        return ModelAnswer("Settings are available.", (evidence[0].chunk.chunk_id,))
+
+
 class PipelineTest(unittest.TestCase):
     def article(self):
         return parse_article(
@@ -51,6 +56,50 @@ class PipelineTest(unittest.TestCase):
         result = GroundedQueryService(RetrievalStore(), FakeModel()).query("unknown", "req-2")
         self.assertEqual(result.status, "insufficient_evidence")
         self.assertTrue(result.human_help_needed)
+
+    def test_supported_website_settings_question_answers(self):
+        article = self.article()
+        store = RetrievalStore()
+        store.upsert(chunk_article(article))
+        result = GroundedQueryService(store, FakeModel()).query("How do I save settings?", "req-settings")
+        self.assertEqual(result.status, "answered")
+
+    def test_unrelated_personal_bank_balance_question_abstains(self):
+        article = self.article()
+        store = RetrievalStore()
+        store.upsert(chunk_article(article))
+        result = GroundedQueryService(store, FakeModel()).query(
+            "What is the current balance in my personal bank account?", "req-bank"
+        )
+        self.assertEqual(result.status, "insufficient_evidence")
+        self.assertIsNone(result.answer)
+        self.assertIn(result.retrieval_trace[-1], {"no active evidence", "retrieved evidence does not sufficiently support the question"})
+
+    def test_irrelevant_website_builder_documents_abstain(self):
+        article = parse_article(
+            "<article><h1>Website Builder</h1><p>Use the website builder to create static pages and SEO settings.</p></article>",
+            "https://support.example/website-builder",
+        )
+        store = RetrievalStore()
+        store.upsert(chunk_article(article))
+        result = GroundedQueryService(store, FakeModel()).query(
+            "How do I configure payment gateway settings?", "req-irrelevant"
+        )
+        self.assertEqual(result.status, "insufficient_evidence")
+        self.assertIsNone(result.answer)
+
+    def test_relevant_but_incomplete_evidence_abstains(self):
+        article = parse_article(
+            "<article><h1>Settings</h1><p>Settings can be updated by an administrator.</p></article>",
+            "https://support.example/settings",
+        )
+        store = RetrievalStore()
+        store.upsert(chunk_article(article))
+        result = GroundedQueryService(store, PartialModel()).query(
+            "How do I configure settings and save changes?", "req-incomplete"
+        )
+        self.assertEqual(result.status, "insufficient_evidence")
+        self.assertIsNone(result.answer)
 
 
 if __name__ == "__main__":

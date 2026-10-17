@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from .api import QueryResult, SourceCitation
-from .retrieval import RetrievedChunk, RetrievalStore
+from .retrieval import RetrievedChunk, RetrievalStore, evidence_supports_question
 
 
 class AnswerModel(Protocol):
@@ -33,10 +33,18 @@ class GroundedQueryService:
         evidence = self.store.query(question, k=self.top_k, mode="hybrid")
         if not evidence:
             return QueryResult(None, "insufficient_evidence", human_help_needed=True, retrieval_trace=("no active evidence",))
+        trace = tuple(item.chunk.chunk_id for item in evidence)
+        if not evidence_supports_question(question, evidence):
+            return QueryResult(
+                None,
+                "insufficient_evidence",
+                human_help_needed=True,
+                retrieval_trace=trace + ("retrieved evidence does not sufficiently support the question",),
+            )
         try:
             generated = self.model.answer(question, evidence, SYSTEM_POLICY)
         except Exception:
-            return QueryResult(None, "model_unavailable", human_help_needed=True, retrieval_trace=tuple(item.chunk.chunk_id for item in evidence))
+            return QueryResult(None, "model_unavailable", human_help_needed=True, retrieval_trace=trace)
         valid = {item.chunk.chunk_id: item for item in evidence}
         citations = tuple(
             SourceCitation(item.chunk.title or "Untitled", item.chunk.url, "/".join(item.chunk.section_path) or None, item.chunk.chunk_id)
@@ -44,5 +52,5 @@ class GroundedQueryService:
             if (item := valid.get(chunk_id)) is not None
         )
         if not generated.answer or not citations:
-            return QueryResult(None, "insufficient_evidence", human_help_needed=True, retrieval_trace=tuple(item.chunk.chunk_id for item in evidence))
-        return QueryResult(generated.answer, "answered", citations, generated.image_references, False, tuple(item.chunk.chunk_id for item in evidence))
+            return QueryResult(None, "insufficient_evidence", human_help_needed=True, retrieval_trace=trace)
+        return QueryResult(generated.answer, "answered", citations, generated.image_references, False, trace)

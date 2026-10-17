@@ -11,6 +11,7 @@ AI Tech Consultant capstone with Task 1 knowledge services, Task 2 inbox workflo
 - `DESIGN.md`: approved foundation architecture and boundaries.
 - `TRACEABILITY.md`: requirement-to-evidence mapping.
 - `EVALS.md`: evaluation plan; no results are claimed yet.
+- `evaluator/`: separate live Claude evaluation runner and mocked tests.
 - `AI_LOG.md`: concise implementation log.
 - `DEMO.md`: truthful demo runbook.
 - `AUDIT.md`: final requirement audit and remaining blockers.
@@ -50,6 +51,26 @@ python -m unittest discover -s tests
 ```
 
 These commands validate deterministic behavior. They do not run live Claude calls or claim evaluation results.
+
+## Live Claude evaluation
+
+Live evaluation is intentionally separate from the deterministic test suites
+and fixture-based retrieval tests. Install the official Anthropic Python SDK,
+then set `CLAUDE_API_KEY` and `CLAUDE_MODEL` in the current PowerShell
+session without printing the key:
+
+```powershell
+python -m pip install -r evaluator\requirements.txt
+python evaluator\live_claude_eval.py --dry-run
+python evaluator\live_claude_eval.py
+```
+
+The final command requires the three local services to be running. It uses
+the existing Task 1, Task 2, and Task 3 HTTP interfaces, sends each returned
+application result to Claude for structured provisional scoring, and writes
+actual responses, usage, latency, errors, and optional cost estimates to a
+new timestamped file in `shared\evaluations\`. It does not overwrite prior
+runs. Missing credentials or an uninstalled SDK stops before any API call.
 
 Start all three backend services and keep them running with:
 

@@ -63,8 +63,27 @@ class RetrievalStore:
         return tuple(results[:k])
 
 
+_STOP_WORDS = {
+    "a", "an", "and", "are", "can", "do", "does", "for", "from", "how",
+    "i", "in", "is", "it", "my", "of", "on", "please", "the", "to", "what",
+    "where", "which", "with", "work", "you",
+}
+
+
 def _tokens(text: str) -> set[str]:
-    return set(re.findall(r"[a-z0-9]+", text.lower()))
+    return {token for token in re.findall(r"[a-z0-9]+", text.lower()) if len(token) > 2 and token not in _STOP_WORDS}
+
+
+def evidence_supports_question(question: str, evidence: tuple[RetrievedChunk, ...]) -> bool:
+    """Require topical overlap, not merely a citation-shaped retrieval result."""
+
+    query_terms = _tokens(question)
+    if not query_terms or not evidence:
+        return False
+    best_overlap = len(query_terms & _tokens(evidence[0].chunk.content))
+    if len(query_terms) <= 2:
+        return best_overlap == len(query_terms)
+    return best_overlap >= 2 and best_overlap / len(query_terms) >= 0.5
 
 
 def _cosine(left: list[float], right: list[float]) -> float:

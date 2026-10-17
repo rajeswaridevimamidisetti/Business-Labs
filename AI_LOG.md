@@ -26,3 +26,5 @@
 - Rejected generated work example: an initial review workflow allowed a second finalization after an edit; its failing test exposed the unsafe transition, so the implementation was changed to reject every second terminal review action.
 - 2026-10-15: Replaced readiness-only startup with safe deterministic Task 1, Task 2, and Task 3 HTTP smoke services; added local persistence for Task 2 feedback and Task 3 proposal approvals.
 - Validation: `python run_local.py` passed: Task 2 and Task 3 obtained evidence through Task 1 and all processes shut down. Task 2 passed 22 tests; Task 3 passed 20 tests.
+- 2026-10-17: Added the separate `evaluator/live_claude_eval.py` runner using Anthropic's official Python SDK. It loads the existing 20 cases for each task, calls the documented HTTP interfaces, records provisional Claude judgments, usage, latency, errors, and optional cost in new timestamped files.
+- Validation: evaluator mocked tests passed: 3 tests; dry run loaded 60 cases without API calls; missing-key mode stopped before provider calls. Existing suites remained green: Task 1 37 tests, Task 2 25 tests, Task 3 20 tests.

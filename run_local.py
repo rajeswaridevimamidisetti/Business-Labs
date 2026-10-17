@@ -52,14 +52,27 @@ if __name__ == "__main__":
             "http://127.0.0.1:8003/v1/scope",
             {"meeting_id": "smoke-meeting", "project_id": "smoke-project", "date": "2026-01-01", "transcript": "[00:01] Client: We need settings."},
         )
+        def task2_is_safe(result: dict[str, object]) -> bool:
+            status = result.get("task1Status")
+            draft = result.get("draft")
+            if status == "answered":
+                return isinstance(draft, dict) and bool(draft.get("evidence"))
+            if status == "insufficient_evidence":
+                return (
+                    isinstance(draft, dict)
+                    and not draft.get("evidence")
+                    and draft.get("humanApprovalRequired") is True
+                )
+            return False
+
         if (
-            task2_result.get("task1Status") != "answered"
-            or task2_ui_result.get("task1Status") != "answered"
+            not task2_is_safe(task2_result)
+            or not task2_is_safe(task2_ui_result)
             or task3_result.get("feasibility") != "verified"
             or not task3_scope.get("proposal")
         ):
             raise RuntimeError(f"downstream evidence smoke failed: {task2_result}, {task2_ui_result}, {task3_result}, {task3_scope}")
-        print("E2E HTTP smoke passed: Task 2 and Task 3 obtained evidence through Task 1, including UI routes.")
+        print("E2E HTTP smoke passed: Task 2 and Task 3 used Task 1 safely, including UI routes.")
         if keep_alive:
             print("Services are running. Press Ctrl+C to stop them.")
             while True:
