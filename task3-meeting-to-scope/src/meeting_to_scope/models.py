@@ -89,6 +89,9 @@ class Proposal:
     total_likely_hours: float
     pricing_assumption: str
     approval_status: str = "pending"
+    project_id: str = ""
+    approved_by: str | None = None
+    approved_at: str | None = None
 
 
 @dataclass(frozen=True)
@@ -166,16 +169,32 @@ class ProductFeasibilityAgent:
 class ScopeAgent:
     def build(self, requirements: tuple[Requirement, ...], feasibility: tuple[Feasibility, ...]) -> ScopeDocument:
         unverified = tuple(item.requirement_id for item in feasibility if not item.verified or item.classification == "needs clarification")
+        scoped_requirements = tuple(
+            Requirement(
+                item.requirement_id,
+                item.description,
+                item.source_segment_id,
+                item.source_passage,
+                item.status,
+                item.priority,
+                item.explicit,
+                item.acceptance_criteria or (f"Demonstrate that the delivered workflow satisfies: {item.description}",),
+                item.dependencies,
+                item.existing_solution_status,
+                item.estimate_status,
+            )
+            for item in requirements
+        )
         return ScopeDocument(
-            "Deliver the agreed client workflow improvements.",
-            "The current workflow does not fully support the requested outcome.",
-            requirements,
-            "Implement only requirements with traceable evidence and clarify unverified items before commitment.",
-            tuple(item.description for item in requirements if item.status == "confirmed"),
+            "Deliver the client-confirmed workflow improvements described in the meeting.",
+            "The current workflow does not fully support the outcomes recorded in the transcript.",
+            scoped_requirements,
+            "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+            tuple(item.description for item in scoped_requirements if item.status == "confirmed"),
             ("Unverified integrations and requirements without approval",),
             ("Client supplies access, content, credentials and acceptance decisions",),
             tuple(unverified),
-            tuple(f"{item.requirement_id}: confirm observable acceptance behavior" for item in requirements),
+            tuple(criteria for item in scoped_requirements for criteria in item.acceptance_criteria),
             ("Provide timely feedback and test data",),
             tuple(f"Clarify feasibility for {item}" for item in unverified),
         )
@@ -186,7 +205,20 @@ class EstimationAgent:
         estimates: list[Estimate] = []
         for requirement in scope.agreed_requirements:
             uncertain = requirement.requirement_id in scope.dependencies
-            estimates.append(Estimate(requirement.requirement_id, requirement.description, 4, 8, 16, "Small initial work-package estimate; validate after clarification.", ("Requirements remain stable",), scope.dependencies, uncertain))
+            text = requirement.description.lower()
+            if any(term in text for term in ("integration", "api", "payment")):
+                low, likely, high = 12, 24, 40
+                rationale = "Integration work requires provider discovery, credentials, mapping, and end-to-end verification."
+            elif any(term in text for term in ("mobile", "redesign", "dashboard")):
+                low, likely, high = 16, 32, 56
+                rationale = "Cross-surface UI work requires responsive design, implementation, and review."
+            elif any(term in text for term in ("remove", "change", "add")):
+                low, likely, high = 4, 10, 20
+                rationale = "A bounded configuration or workflow change is expected, pending validation of the existing setup."
+            else:
+                low, likely, high = 4, 8, 16
+                rationale = "Small initial work package; validate details against the confirmed acceptance criteria."
+            estimates.append(Estimate(requirement.requirement_id, requirement.description, low, likely, high, rationale, ("Requirements remain stable",), scope.dependencies, uncertain or requirement.status != "confirmed"))
         return tuple(estimates)
 
 
@@ -194,10 +226,10 @@ class ProposalReviewAgent:
     def create(self, proposal_id: str, scope: ScopeDocument, estimates: tuple[Estimate, ...], version: int = 1) -> Proposal:
         return Proposal(proposal_id, version, scope, estimates, sum(item.likely_hours for item in estimates), "Pricing is intentionally configurable and is not an approved commercial quote.")
 
-    def approve(self, proposal: Proposal, reviewer: str) -> Proposal:
+    def approve(self, proposal: Proposal, reviewer: str, approved_at: str | None = None) -> Proposal:
         if not reviewer.strip():
             raise PermissionError("reviewer is required")
-        return Proposal(proposal.proposal_id, proposal.version, proposal.scope, proposal.estimates, proposal.total_likely_hours, proposal.pricing_assumption, "approved")
+        return Proposal(proposal.proposal_id, proposal.version, proposal.scope, proposal.estimates, proposal.total_likely_hours, proposal.pricing_assumption, "approved", proposal.project_id, reviewer, approved_at)
 
     def send(self, proposal: Proposal) -> str:
         if proposal.approval_status != "approved":

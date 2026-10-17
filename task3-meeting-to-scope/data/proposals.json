@@ -1,0 +1,2211 @@
+{
+  "proposal-smoke-meeting:v1": {
+    "proposal_id": "proposal-smoke-meeting",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-84d0dbde6cc0",
+          "description": "We need settings.",
+          "source_segment_id": "smoke-meeting-seg-1",
+          "source_passage": "We need settings.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need settings."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need settings."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We need settings."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": []
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-84d0dbde6cc0",
+        "task": "We need settings.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [],
+        "human_review_required": false
+      }
+    ],
+    "total_likely_hours": 8,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "smoke-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792231720679:v1": {
+    "proposal_id": "proposal-browser-1792231720679",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-e8f9c3a34e61",
+          "description": "We need search and filters for business category, location, and membership type.",
+          "source_segment_id": "browser-1792231720679-seg-3",
+          "source_passage": "We need search and filters for business category, location, and membership type.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need search and filters for business category, location, and membership type."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-5af90e113608",
+          "description": "Should users be able to combine multiple filters in one search?",
+          "source_segment_id": "browser-1792231720679-seg-5",
+          "source_passage": "Should users be able to combine multiple filters in one search?",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Should users be able to combine multiple filters in one search?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-149c628fceb5",
+          "description": "They should be able to select a category and location together.",
+          "source_segment_id": "browser-1792231720679-seg-7",
+          "source_passage": "They should be able to select a category and location together.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: They should be able to select a category and location together."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-69144278519d",
+          "description": "Search results should show the business name, location, and contact information.",
+          "source_segment_id": "browser-1792231720679-seg-9",
+          "source_passage": "Search results should show the business name, location, and contact information.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Search results should show the business name, location, and contact information."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-f22beaa92546",
+          "description": "Do you need these features on mobile as well?",
+          "source_segment_id": "browser-1792231720679-seg-11",
+          "source_passage": "Do you need these features on mobile as well?",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Do you need these features on mobile as well?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-8b211751551e",
+          "description": "The search page and filters must work on mobile phones.",
+          "source_segment_id": "browser-1792231720679-seg-13",
+          "source_passage": "The search page and filters must work on mobile phones.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The search page and filters must work on mobile phones."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-eb2d01632907",
+          "description": "We should check the existing search configuration and available platform features before confirming custom development.",
+          "source_segment_id": "browser-1792231720679-seg-15",
+          "source_passage": "We should check the existing search configuration and available platform features before confirming custom development.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We should check the existing search configuration and available platform features before confirming custom development."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-9dd10a0f014e",
+          "description": "We want a working search experience without changing unrelated website functionality.",
+          "source_segment_id": "browser-1792231720679-seg-17",
+          "source_passage": "We want a working search experience without changing unrelated website functionality.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We want a working search experience without changing unrelated website functionality."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need search and filters for business category, location, and membership type.",
+        "Do you need these features on mobile as well?",
+        "The search page and filters must work on mobile phones."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-5af90e113608",
+        "req-9dd10a0f014e"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We need search and filters for business category, location, and membership type.",
+        "Demonstrate that the delivered workflow satisfies: Should users be able to combine multiple filters in one search?",
+        "Demonstrate that the delivered workflow satisfies: They should be able to select a category and location together.",
+        "Demonstrate that the delivered workflow satisfies: Search results should show the business name, location, and contact information.",
+        "Demonstrate that the delivered workflow satisfies: Do you need these features on mobile as well?",
+        "Demonstrate that the delivered workflow satisfies: The search page and filters must work on mobile phones.",
+        "Demonstrate that the delivered workflow satisfies: We should check the existing search configuration and available platform features before confirming custom development.",
+        "Demonstrate that the delivered workflow satisfies: We want a working search experience without changing unrelated website functionality."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-5af90e113608",
+        "Clarify feasibility for req-9dd10a0f014e"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-e8f9c3a34e61",
+        "task": "We need search and filters for business category, location, and membership type.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5af90e113608",
+          "req-9dd10a0f014e"
+        ],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-5af90e113608",
+        "task": "Should users be able to combine multiple filters in one search?",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5af90e113608",
+          "req-9dd10a0f014e"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-149c628fceb5",
+        "task": "They should be able to select a category and location together.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5af90e113608",
+          "req-9dd10a0f014e"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-69144278519d",
+        "task": "Search results should show the business name, location, and contact information.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5af90e113608",
+          "req-9dd10a0f014e"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-f22beaa92546",
+        "task": "Do you need these features on mobile as well?",
+        "low_hours": 16,
+        "likely_hours": 32,
+        "high_hours": 56,
+        "rationale": "Cross-surface UI work requires responsive design, implementation, and review.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5af90e113608",
+          "req-9dd10a0f014e"
+        ],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-8b211751551e",
+        "task": "The search page and filters must work on mobile phones.",
+        "low_hours": 16,
+        "likely_hours": 32,
+        "high_hours": 56,
+        "rationale": "Cross-surface UI work requires responsive design, implementation, and review.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5af90e113608",
+          "req-9dd10a0f014e"
+        ],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-eb2d01632907",
+        "task": "We should check the existing search configuration and available platform features before confirming custom development.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5af90e113608",
+          "req-9dd10a0f014e"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-9dd10a0f014e",
+        "task": "We want a working search experience without changing unrelated website functionality.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-5af90e113608",
+          "req-9dd10a0f014e"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 112,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "approved",
+    "project_id": "browser-project",
+    "approved_by": "browser-reviewer",
+    "approved_at": "2026-10-17T10:08:44.958829+00:00"
+  },
+  "proposal-browser-1792231776499:v1": {
+    "proposal_id": "proposal-browser-1792231776499",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-f26adc829b1c",
+          "description": "Buttons should be easy to tap, and text should be readable without zooming.",
+          "source_segment_id": "browser-1792231776499-seg-9",
+          "source_passage": "Buttons should be easy to tap, and text should be readable without zooming.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Buttons should be easy to tap, and text should be readable without zooming."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-e06e0f0a099b",
+          "description": "Should we redesign the complete website?",
+          "source_segment_id": "browser-1792231776499-seg-11",
+          "source_passage": "Should we redesign the complete website?",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Should we redesign the complete website?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-c1926a10200a",
+          "description": "We want to improve the existing pages and preserve the current branding.",
+          "source_segment_id": "browser-1792231776499-seg-13",
+          "source_passage": "We want to improve the existing pages and preserve the current branding.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We want to improve the existing pages and preserve the current branding."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-fdeaf9b707ee",
+          "description": "We need to inspect the current theme and identify which changes can be achieved through configuration.",
+          "source_segment_id": "browser-1792231776499-seg-15",
+          "source_passage": "We need to inspect the current theme and identify which changes can be achieved through configuration.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to inspect the current theme and identify which changes can be achieved through configuration."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-e9a7abcbd0ea",
+          "description": "The contact form must remain functional after the changes.",
+          "source_segment_id": "browser-1792231776499-seg-17",
+          "source_passage": "The contact form must remain functional after the changes.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The contact form must remain functional after the changes."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need to inspect the current theme and identify which changes can be achieved through configuration.",
+        "The contact form must remain functional after the changes."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-f26adc829b1c",
+        "req-c1926a10200a",
+        "req-fdeaf9b707ee",
+        "req-e9a7abcbd0ea"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: Buttons should be easy to tap, and text should be readable without zooming.",
+        "Demonstrate that the delivered workflow satisfies: Should we redesign the complete website?",
+        "Demonstrate that the delivered workflow satisfies: We want to improve the existing pages and preserve the current branding.",
+        "Demonstrate that the delivered workflow satisfies: We need to inspect the current theme and identify which changes can be achieved through configuration.",
+        "Demonstrate that the delivered workflow satisfies: The contact form must remain functional after the changes."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-f26adc829b1c",
+        "Clarify feasibility for req-c1926a10200a",
+        "Clarify feasibility for req-fdeaf9b707ee",
+        "Clarify feasibility for req-e9a7abcbd0ea"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-f26adc829b1c",
+        "task": "Buttons should be easy to tap, and text should be readable without zooming.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f26adc829b1c",
+          "req-c1926a10200a",
+          "req-fdeaf9b707ee",
+          "req-e9a7abcbd0ea"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-e06e0f0a099b",
+        "task": "Should we redesign the complete website?",
+        "low_hours": 16,
+        "likely_hours": 32,
+        "high_hours": 56,
+        "rationale": "Cross-surface UI work requires responsive design, implementation, and review.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f26adc829b1c",
+          "req-c1926a10200a",
+          "req-fdeaf9b707ee",
+          "req-e9a7abcbd0ea"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-c1926a10200a",
+        "task": "We want to improve the existing pages and preserve the current branding.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f26adc829b1c",
+          "req-c1926a10200a",
+          "req-fdeaf9b707ee",
+          "req-e9a7abcbd0ea"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-fdeaf9b707ee",
+        "task": "We need to inspect the current theme and identify which changes can be achieved through configuration.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f26adc829b1c",
+          "req-c1926a10200a",
+          "req-fdeaf9b707ee",
+          "req-e9a7abcbd0ea"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-e9a7abcbd0ea",
+        "task": "The contact form must remain functional after the changes.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f26adc829b1c",
+          "req-c1926a10200a",
+          "req-fdeaf9b707ee",
+          "req-e9a7abcbd0ea"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 68,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792231796377:v1": {
+    "proposal_id": "proposal-browser-1792231796377",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-f846af492e79",
+          "description": "We want a support portal with frequently asked questions and a contact-support form.",
+          "source_segment_id": "browser-1792231796377-seg-3",
+          "source_passage": "We want a support portal with frequently asked questions and a contact-support form.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We want a support portal with frequently asked questions and a contact-support form."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-d59cc28d5587",
+          "description": "Should customers log in to access the help articles?",
+          "source_segment_id": "browser-1792231796377-seg-5",
+          "source_passage": "Should customers log in to access the help articles?",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Should customers log in to access the help articles?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-046285a7ccc1",
+          "description": "The help articles should be public.",
+          "source_segment_id": "browser-1792231796377-seg-7",
+          "source_passage": "The help articles should be public.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The help articles should be public."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-09d46f1d9148",
+          "description": "Customers may need to log in to view their existing support requests.",
+          "source_segment_id": "browser-1792231796377-seg-7",
+          "source_passage": "Customers may need to log in to view their existing support requests.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Customers may need to log in to view their existing support requests."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-6065923e60ba",
+          "description": "We also want categories for billing, account access, and technical problems.",
+          "source_segment_id": "browser-1792231796377-seg-9",
+          "source_passage": "We also want categories for billing, account access, and technical problems.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We also want categories for billing, account access, and technical problems."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-d599918dc537",
+          "description": "We use an existing support platform, but we have not confirmed whether its API supports the integration we need.",
+          "source_segment_id": "browser-1792231796377-seg-13",
+          "source_passage": "We use an existing support platform, but we have not confirmed whether its API supports the integration we need.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We use an existing support platform, but we have not confirmed whether its API supports the integration we need."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-09dd76ac3089",
+          "description": "We do not need a live chat feature yet.",
+          "source_segment_id": "browser-1792231796377-seg-17",
+          "source_passage": "We do not need a live chat feature yet.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We do not need a live chat feature yet."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "Customers may need to log in to view their existing support requests.",
+        "We use an existing support platform, but we have not confirmed whether its API supports the integration we need.",
+        "We do not need a live chat feature yet."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-f846af492e79",
+        "req-d59cc28d5587",
+        "req-09d46f1d9148",
+        "req-6065923e60ba",
+        "req-d599918dc537"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We want a support portal with frequently asked questions and a contact-support form.",
+        "Demonstrate that the delivered workflow satisfies: Should customers log in to access the help articles?",
+        "Demonstrate that the delivered workflow satisfies: The help articles should be public.",
+        "Demonstrate that the delivered workflow satisfies: Customers may need to log in to view their existing support requests.",
+        "Demonstrate that the delivered workflow satisfies: We also want categories for billing, account access, and technical problems.",
+        "Demonstrate that the delivered workflow satisfies: We use an existing support platform, but we have not confirmed whether its API supports the integration we need.",
+        "Demonstrate that the delivered workflow satisfies: We do not need a live chat feature yet."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-f846af492e79",
+        "Clarify feasibility for req-d59cc28d5587",
+        "Clarify feasibility for req-09d46f1d9148",
+        "Clarify feasibility for req-6065923e60ba",
+        "Clarify feasibility for req-d599918dc537"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-f846af492e79",
+        "task": "We want a support portal with frequently asked questions and a contact-support form.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f846af492e79",
+          "req-d59cc28d5587",
+          "req-09d46f1d9148",
+          "req-6065923e60ba",
+          "req-d599918dc537"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-d59cc28d5587",
+        "task": "Should customers log in to access the help articles?",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f846af492e79",
+          "req-d59cc28d5587",
+          "req-09d46f1d9148",
+          "req-6065923e60ba",
+          "req-d599918dc537"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-046285a7ccc1",
+        "task": "The help articles should be public.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f846af492e79",
+          "req-d59cc28d5587",
+          "req-09d46f1d9148",
+          "req-6065923e60ba",
+          "req-d599918dc537"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-09d46f1d9148",
+        "task": "Customers may need to log in to view their existing support requests.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f846af492e79",
+          "req-d59cc28d5587",
+          "req-09d46f1d9148",
+          "req-6065923e60ba",
+          "req-d599918dc537"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-6065923e60ba",
+        "task": "We also want categories for billing, account access, and technical problems.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f846af492e79",
+          "req-d59cc28d5587",
+          "req-09d46f1d9148",
+          "req-6065923e60ba",
+          "req-d599918dc537"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-d599918dc537",
+        "task": "We use an existing support platform, but we have not confirmed whether its API supports the integration we need.",
+        "low_hours": 12,
+        "likely_hours": 24,
+        "high_hours": 40,
+        "rationale": "Integration work requires provider discovery, credentials, mapping, and end-to-end verification.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f846af492e79",
+          "req-d59cc28d5587",
+          "req-09d46f1d9148",
+          "req-6065923e60ba",
+          "req-d599918dc537"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-09dd76ac3089",
+        "task": "We do not need a live chat feature yet.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-f846af492e79",
+          "req-d59cc28d5587",
+          "req-09d46f1d9148",
+          "req-6065923e60ba",
+          "req-d599918dc537"
+        ],
+        "human_review_required": false
+      }
+    ],
+    "total_likely_hours": 72,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792231814205:v1": {
+    "proposal_id": "proposal-browser-1792231814205",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-fbb2a65c6f16",
+          "description": "We also want a price-range filter so users can narrow the results.",
+          "source_segment_id": "browser-1792231814205-seg-5",
+          "source_passage": "We also want a price-range filter so users can narrow the results.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We also want a price-range filter so users can narrow the results."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-96032895a96f",
+          "description": "Please add sorting by newest listing and highest rating.",
+          "source_segment_id": "browser-1792231814205-seg-7",
+          "source_passage": "Please add sorting by newest listing and highest rating.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Please add sorting by newest listing and highest rating."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-e9f994e96d8d",
+          "description": "We need to check feasibility and estimate the additional work.",
+          "source_segment_id": "browser-1792231814205-seg-9",
+          "source_passage": "We need to check feasibility and estimate the additional work.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to check feasibility and estimate the additional work."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-026952810d25",
+          "description": "We no longer need membership type as a search filter for the first release.",
+          "source_segment_id": "browser-1792231814205-seg-11",
+          "source_passage": "We no longer need membership type as a search filter for the first release.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We no longer need membership type as a search filter for the first release."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need to check feasibility and estimate the additional work.",
+        "We no longer need membership type as a search filter for the first release."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-fbb2a65c6f16",
+        "req-e9f994e96d8d",
+        "req-026952810d25"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We also want a price-range filter so users can narrow the results.",
+        "Demonstrate that the delivered workflow satisfies: Please add sorting by newest listing and highest rating.",
+        "Demonstrate that the delivered workflow satisfies: We need to check feasibility and estimate the additional work.",
+        "Demonstrate that the delivered workflow satisfies: We no longer need membership type as a search filter for the first release."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-fbb2a65c6f16",
+        "Clarify feasibility for req-e9f994e96d8d",
+        "Clarify feasibility for req-026952810d25"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-fbb2a65c6f16",
+        "task": "We also want a price-range filter so users can narrow the results.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-fbb2a65c6f16",
+          "req-e9f994e96d8d",
+          "req-026952810d25"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-96032895a96f",
+        "task": "Please add sorting by newest listing and highest rating.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-fbb2a65c6f16",
+          "req-e9f994e96d8d",
+          "req-026952810d25"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-e9f994e96d8d",
+        "task": "We need to check feasibility and estimate the additional work.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-fbb2a65c6f16",
+          "req-e9f994e96d8d",
+          "req-026952810d25"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-026952810d25",
+        "task": "We no longer need membership type as a search filter for the first release.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-fbb2a65c6f16",
+          "req-e9f994e96d8d",
+          "req-026952810d25"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 36,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792232472244:v1": {
+    "proposal_id": "proposal-browser-1792232472244",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-2736593aaff3",
+          "description": "We need search filters for business category and location.",
+          "source_segment_id": "browser-1792232472244-seg-3",
+          "source_passage": "We need search filters for business category and location.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need search filters for business category and location."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-0cfa0ccb65be",
+          "description": "Should users be able to combine both filters?",
+          "source_segment_id": "browser-1792232472244-seg-5",
+          "source_passage": "Should users be able to combine both filters?",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Should users be able to combine both filters?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-722d4f8eb295",
+          "description": "They must be able to select a category and location together.",
+          "source_segment_id": "browser-1792232472244-seg-7",
+          "source_passage": "They must be able to select a category and location together.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: They must be able to select a category and location together."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-fe685c963df5",
+          "description": "Search results should display the business name, location, and contact details.",
+          "source_segment_id": "browser-1792232472244-seg-9",
+          "source_passage": "Search results should display the business name, location, and contact details.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Search results should display the business name, location, and contact details."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-9ad14e7bebfc",
+          "description": "Should the feature work on mobile?",
+          "source_segment_id": "browser-1792232472244-seg-11",
+          "source_passage": "Should the feature work on mobile?",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Should the feature work on mobile?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-d6a965f6ccd7",
+          "description": "We need to verify the current platform's search configuration before confirming feasibility.",
+          "source_segment_id": "browser-1792232472244-seg-15",
+          "source_passage": "We need to verify the current platform's search configuration before confirming feasibility.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to verify the current platform's search configuration before confirming feasibility."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need search filters for business category and location.",
+        "They must be able to select a category and location together.",
+        "We need to verify the current platform's search configuration before confirming feasibility."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-0cfa0ccb65be",
+        "req-d6a965f6ccd7"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We need search filters for business category and location.",
+        "Demonstrate that the delivered workflow satisfies: Should users be able to combine both filters?",
+        "Demonstrate that the delivered workflow satisfies: They must be able to select a category and location together.",
+        "Demonstrate that the delivered workflow satisfies: Search results should display the business name, location, and contact details.",
+        "Demonstrate that the delivered workflow satisfies: Should the feature work on mobile?",
+        "Demonstrate that the delivered workflow satisfies: We need to verify the current platform's search configuration before confirming feasibility."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-0cfa0ccb65be",
+        "Clarify feasibility for req-d6a965f6ccd7"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-2736593aaff3",
+        "task": "We need search filters for business category and location.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-0cfa0ccb65be",
+          "req-d6a965f6ccd7"
+        ],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-0cfa0ccb65be",
+        "task": "Should users be able to combine both filters?",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-0cfa0ccb65be",
+          "req-d6a965f6ccd7"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-722d4f8eb295",
+        "task": "They must be able to select a category and location together.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-0cfa0ccb65be",
+          "req-d6a965f6ccd7"
+        ],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-fe685c963df5",
+        "task": "Search results should display the business name, location, and contact details.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-0cfa0ccb65be",
+          "req-d6a965f6ccd7"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-9ad14e7bebfc",
+        "task": "Should the feature work on mobile?",
+        "low_hours": 16,
+        "likely_hours": 32,
+        "high_hours": 56,
+        "rationale": "Cross-surface UI work requires responsive design, implementation, and review.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-0cfa0ccb65be",
+          "req-d6a965f6ccd7"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-d6a965f6ccd7",
+        "task": "We need to verify the current platform's search configuration before confirming feasibility.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-0cfa0ccb65be",
+          "req-d6a965f6ccd7"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 72,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792232487993:v1": {
+    "proposal_id": "proposal-browser-1792232487993",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-782a89505d69",
+          "description": "We want our website to connect to our existing payment provider.",
+          "source_segment_id": "browser-1792232487993-seg-1",
+          "source_passage": "We want our website to connect to our existing payment provider.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We want our website to connect to our existing payment provider."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-ff9f97896d4a",
+          "description": "Payments must be secure, and failed payments should be clearly reported.",
+          "source_segment_id": "browser-1792232487993-seg-9",
+          "source_passage": "Payments must be secure, and failed payments should be clearly reported.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Payments must be secure, and failed payments should be clearly reported."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-f68cd1a3023d",
+          "description": "We can record it as a proposed requirement with a feasibility dependency, but we should not promise delivery yet.",
+          "source_segment_id": "browser-1792232487993-seg-15",
+          "source_passage": "We can record it as a proposed requirement with a feasibility dependency, but we should not promise delivery yet.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We can record it as a proposed requirement with a feasibility dependency, but we should not promise delivery yet."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-55f09ceaa7f2",
+          "description": "Please list the missing information and identify what the client must provide.",
+          "source_segment_id": "browser-1792232487993-seg-17",
+          "source_passage": "Please list the missing information and identify what the client must provide.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Please list the missing information and identify what the client must provide."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "Payments must be secure, and failed payments should be clearly reported.",
+        "Please list the missing information and identify what the client must provide."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-ff9f97896d4a",
+        "req-f68cd1a3023d"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We want our website to connect to our existing payment provider.",
+        "Demonstrate that the delivered workflow satisfies: Payments must be secure, and failed payments should be clearly reported.",
+        "Demonstrate that the delivered workflow satisfies: We can record it as a proposed requirement with a feasibility dependency, but we should not promise delivery yet.",
+        "Demonstrate that the delivered workflow satisfies: Please list the missing information and identify what the client must provide."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-ff9f97896d4a",
+        "Clarify feasibility for req-f68cd1a3023d"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-782a89505d69",
+        "task": "We want our website to connect to our existing payment provider.",
+        "low_hours": 12,
+        "likely_hours": 24,
+        "high_hours": 40,
+        "rationale": "Integration work requires provider discovery, credentials, mapping, and end-to-end verification.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-ff9f97896d4a",
+          "req-f68cd1a3023d"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-ff9f97896d4a",
+        "task": "Payments must be secure, and failed payments should be clearly reported.",
+        "low_hours": 12,
+        "likely_hours": 24,
+        "high_hours": 40,
+        "rationale": "Integration work requires provider discovery, credentials, mapping, and end-to-end verification.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-ff9f97896d4a",
+          "req-f68cd1a3023d"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-f68cd1a3023d",
+        "task": "We can record it as a proposed requirement with a feasibility dependency, but we should not promise delivery yet.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-ff9f97896d4a",
+          "req-f68cd1a3023d"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-55f09ceaa7f2",
+        "task": "Please list the missing information and identify what the client must provide.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-ff9f97896d4a",
+          "req-f68cd1a3023d"
+        ],
+        "human_review_required": false
+      }
+    ],
+    "total_likely_hours": 64,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792232505544:v1": {
+    "proposal_id": "proposal-browser-1792232505544",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-c3bfc668c88b",
+          "description": "We want improvements to the homepage, business listing pages, and contact form.",
+          "source_segment_id": "browser-1792232505544-seg-5",
+          "source_passage": "We want improvements to the homepage, business listing pages, and contact form.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We want improvements to the homepage, business listing pages, and contact form."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-8be95fb194e0",
+          "description": "Do you want a complete redesign?",
+          "source_segment_id": "browser-1792232505544-seg-7",
+          "source_passage": "Do you want a complete redesign?",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Do you want a complete redesign?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-6ecd2469182c",
+          "description": "Buttons must be easy to tap, and text must be readable without zooming.",
+          "source_segment_id": "browser-1792232505544-seg-11",
+          "source_passage": "Buttons must be easy to tap, and text must be readable without zooming.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Buttons must be easy to tap, and text must be readable without zooming."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-fe0c06f28a1b",
+          "description": "The contact form must continue working after the changes.",
+          "source_segment_id": "browser-1792232505544-seg-13",
+          "source_passage": "The contact form must continue working after the changes.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The contact form must continue working after the changes."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-32db07336f53",
+          "description": "We do not want existing functionality to break.",
+          "source_segment_id": "browser-1792232505544-seg-15",
+          "source_passage": "We do not want existing functionality to break.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We do not want existing functionality to break."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "Buttons must be easy to tap, and text must be readable without zooming.",
+        "The contact form must continue working after the changes."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-8be95fb194e0",
+        "req-6ecd2469182c",
+        "req-fe0c06f28a1b"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We want improvements to the homepage, business listing pages, and contact form.",
+        "Demonstrate that the delivered workflow satisfies: Do you want a complete redesign?",
+        "Demonstrate that the delivered workflow satisfies: Buttons must be easy to tap, and text must be readable without zooming.",
+        "Demonstrate that the delivered workflow satisfies: The contact form must continue working after the changes.",
+        "Demonstrate that the delivered workflow satisfies: We do not want existing functionality to break."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-8be95fb194e0",
+        "Clarify feasibility for req-6ecd2469182c",
+        "Clarify feasibility for req-fe0c06f28a1b"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-c3bfc668c88b",
+        "task": "We want improvements to the homepage, business listing pages, and contact form.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-8be95fb194e0",
+          "req-6ecd2469182c",
+          "req-fe0c06f28a1b"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-8be95fb194e0",
+        "task": "Do you want a complete redesign?",
+        "low_hours": 16,
+        "likely_hours": 32,
+        "high_hours": 56,
+        "rationale": "Cross-surface UI work requires responsive design, implementation, and review.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-8be95fb194e0",
+          "req-6ecd2469182c",
+          "req-fe0c06f28a1b"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-6ecd2469182c",
+        "task": "Buttons must be easy to tap, and text must be readable without zooming.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-8be95fb194e0",
+          "req-6ecd2469182c",
+          "req-fe0c06f28a1b"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-fe0c06f28a1b",
+        "task": "The contact form must continue working after the changes.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-8be95fb194e0",
+          "req-6ecd2469182c",
+          "req-fe0c06f28a1b"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-32db07336f53",
+        "task": "We do not want existing functionality to break.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-8be95fb194e0",
+          "req-6ecd2469182c",
+          "req-fe0c06f28a1b"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 66,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792232517625:v1": {
+    "proposal_id": "proposal-browser-1792232517625",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-6cfebb30bafd",
+          "description": "We now want a price-range filter as well.",
+          "source_segment_id": "browser-1792232517625-seg-5",
+          "source_passage": "We now want a price-range filter as well.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We now want a price-range filter as well."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-6b58c2ea8c72",
+          "description": "Add sorting by newest listing and highest rating.",
+          "source_segment_id": "browser-1792232517625-seg-7",
+          "source_passage": "Add sorting by newest listing and highest rating.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Add sorting by newest listing and highest rating."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-d0c5b2355583",
+          "description": "We need to assess their feasibility and additional effort.",
+          "source_segment_id": "browser-1792232517625-seg-9",
+          "source_passage": "We need to assess their feasibility and additional effort.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to assess their feasibility and additional effort."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-8c478726dc6d",
+          "description": "We no longer need membership type as a filter in the first release.",
+          "source_segment_id": "browser-1792232517625-seg-11",
+          "source_passage": "We no longer need membership type as a filter in the first release.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We no longer need membership type as a filter in the first release."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-b15691797168",
+          "description": "The revised proposal must remain pending until a reviewer approves it.",
+          "source_segment_id": "browser-1792232517625-seg-19",
+          "source_passage": "The revised proposal must remain pending until a reviewer approves it.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The revised proposal must remain pending until a reviewer approves it."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need to assess their feasibility and additional effort.",
+        "We no longer need membership type as a filter in the first release.",
+        "The revised proposal must remain pending until a reviewer approves it."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-6cfebb30bafd",
+        "req-d0c5b2355583",
+        "req-8c478726dc6d",
+        "req-b15691797168"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We now want a price-range filter as well.",
+        "Demonstrate that the delivered workflow satisfies: Add sorting by newest listing and highest rating.",
+        "Demonstrate that the delivered workflow satisfies: We need to assess their feasibility and additional effort.",
+        "Demonstrate that the delivered workflow satisfies: We no longer need membership type as a filter in the first release.",
+        "Demonstrate that the delivered workflow satisfies: The revised proposal must remain pending until a reviewer approves it."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-6cfebb30bafd",
+        "Clarify feasibility for req-d0c5b2355583",
+        "Clarify feasibility for req-8c478726dc6d",
+        "Clarify feasibility for req-b15691797168"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-6cfebb30bafd",
+        "task": "We now want a price-range filter as well.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-6cfebb30bafd",
+          "req-d0c5b2355583",
+          "req-8c478726dc6d",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-6b58c2ea8c72",
+        "task": "Add sorting by newest listing and highest rating.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-6cfebb30bafd",
+          "req-d0c5b2355583",
+          "req-8c478726dc6d",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-d0c5b2355583",
+        "task": "We need to assess their feasibility and additional effort.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-6cfebb30bafd",
+          "req-d0c5b2355583",
+          "req-8c478726dc6d",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-8c478726dc6d",
+        "task": "We no longer need membership type as a filter in the first release.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-6cfebb30bafd",
+          "req-d0c5b2355583",
+          "req-8c478726dc6d",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-b15691797168",
+        "task": "The revised proposal must remain pending until a reviewer approves it.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-6cfebb30bafd",
+          "req-d0c5b2355583",
+          "req-8c478726dc6d",
+          "req-b15691797168"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 44,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792232585827:v1": {
+    "proposal_id": "proposal-browser-1792232585827",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-b3ebc3add369",
+          "description": "Desktop layout should remain unchanged.",
+          "source_segment_id": "browser-1792232585827-seg-7",
+          "source_passage": "Desktop layout should remain unchanged.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Desktop layout should remain unchanged."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-6fe61966e760",
+          "description": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix.",
+          "source_segment_id": "browser-1792232585827-seg-9",
+          "source_passage": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-b3ebc3add369",
+        "req-6fe61966e760"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: Desktop layout should remain unchanged.",
+        "Demonstrate that the delivered workflow satisfies: We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-b3ebc3add369",
+        "Clarify feasibility for req-6fe61966e760"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-b3ebc3add369",
+        "task": "Desktop layout should remain unchanged.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-b3ebc3add369",
+          "req-6fe61966e760"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-6fe61966e760",
+        "task": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-b3ebc3add369",
+          "req-6fe61966e760"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 18,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792232599829:v1": {
+    "proposal_id": "proposal-browser-1792232599829",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-72700cc2d7d1",
+          "description": "We need a new REST API endpoint to retrieve project details.",
+          "source_segment_id": "browser-1792232599829-seg-1",
+          "source_passage": "We need a new REST API endpoint to retrieve project details.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need a new REST API endpoint to retrieve project details."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-8c71d6ac2428",
+          "description": "What fields should the endpoint return?",
+          "source_segment_id": "browser-1792232599829-seg-3",
+          "source_passage": "What fields should the endpoint return?",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: What fields should the endpoint return?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-ff5370931857",
+          "description": "The endpoint must validate the request and return consistent error responses.",
+          "source_segment_id": "browser-1792232599829-seg-7",
+          "source_passage": "The endpoint must validate the request and return consistent error responses.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The endpoint must validate the request and return consistent error responses."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-43a5fd2ae5df",
+          "description": "We need to confirm the existing authentication and authorization middleware.",
+          "source_segment_id": "browser-1792232599829-seg-9",
+          "source_passage": "We need to confirm the existing authentication and authorization middleware.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to confirm the existing authentication and authorization middleware."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-351698b87189",
+          "description": "Only authorized users should access project details.",
+          "source_segment_id": "browser-1792232599829-seg-11",
+          "source_passage": "Only authorized users should access project details.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Only authorized users should access project details."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need a new REST API endpoint to retrieve project details.",
+        "The endpoint must validate the request and return consistent error responses.",
+        "We need to confirm the existing authentication and authorization middleware."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-72700cc2d7d1",
+        "req-8c71d6ac2428",
+        "req-ff5370931857",
+        "req-43a5fd2ae5df",
+        "req-351698b87189"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We need a new REST API endpoint to retrieve project details.",
+        "Demonstrate that the delivered workflow satisfies: What fields should the endpoint return?",
+        "Demonstrate that the delivered workflow satisfies: The endpoint must validate the request and return consistent error responses.",
+        "Demonstrate that the delivered workflow satisfies: We need to confirm the existing authentication and authorization middleware.",
+        "Demonstrate that the delivered workflow satisfies: Only authorized users should access project details."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-72700cc2d7d1",
+        "Clarify feasibility for req-8c71d6ac2428",
+        "Clarify feasibility for req-ff5370931857",
+        "Clarify feasibility for req-43a5fd2ae5df",
+        "Clarify feasibility for req-351698b87189"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-72700cc2d7d1",
+        "task": "We need a new REST API endpoint to retrieve project details.",
+        "low_hours": 12,
+        "likely_hours": 24,
+        "high_hours": 40,
+        "rationale": "Integration work requires provider discovery, credentials, mapping, and end-to-end verification.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-8c71d6ac2428",
+        "task": "What fields should the endpoint return?",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-ff5370931857",
+        "task": "The endpoint must validate the request and return consistent error responses.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-43a5fd2ae5df",
+        "task": "We need to confirm the existing authentication and authorization middleware.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-351698b87189",
+        "task": "Only authorized users should access project details.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 56,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  }
+}

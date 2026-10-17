@@ -1,11 +1,16 @@
 import unittest
 import tempfile
+import json
+import threading
+from http.client import HTTPConnection
 from pathlib import Path
 
 from meeting_to_scope.evals import default_cases
 from meeting_to_scope.fixtures import synthetic_transcripts
 from meeting_to_scope.models import EstimationAgent, ProductFeasibilityAgent, ProposalReviewAgent, ScopeAgent, TranscriptAnalyst
 from meeting_to_scope.storage import ProposalStore
+from meeting_to_scope.server import Handler
+from http.server import ThreadingHTTPServer
 
 
 class KnowledgeClient:
@@ -67,6 +72,7 @@ class WorkflowTest(unittest.TestCase):
 
     def test_task3_has_twenty_pending_evaluation_cases(self):
         self.assertEqual(len(default_cases()), 20)
+        self.assertTrue(all(case.transcript.strip() and case.assertions for case in default_cases()))
         self.assertTrue(all(case.status == "pending" for case in default_cases()))
 
     def test_approved_proposal_version_survives_restart(self):
@@ -154,6 +160,54 @@ class WorkflowTest(unittest.TestCase):
         agent = ProposalReviewAgent()
         report = agent.compare(agent.create("p", scope, EstimationAgent().estimate(scope)), agent.create("p", scope, EstimationAgent().estimate(scope), 2))
         self.assertEqual(len(report.unchanged), len(requirements))
+
+    def test_http_follow_up_requires_approved_persisted_baseline(self):
+        with tempfile.TemporaryDirectory() as directory:
+            Handler.store = ProposalStore(Path(directory) / "proposals.json")
+            Handler.proposals = {}
+            server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+            thread = threading.Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            try:
+                connection = HTTPConnection("127.0.0.1", server.server_address[1])
+                body = json.dumps({"project_id": "http-project", "meeting_id": "m1", "date": "2026-02-01", "transcript": "Client: We need search."})
+                connection.request("POST", "/v1/scope", body, {"Content-Type": "application/json"})
+                initial = json.loads(connection.getresponse().read())
+                proposal = initial["proposal"]
+                self.assertEqual(proposal["approval_status"], "pending")
+
+                follow_up = json.dumps({"project_id": "http-project", "meeting_id": "m2", "date": "2026-02-02", "transcript": "Client: Add saved filters."})
+                connection.request("POST", "/v1/scope/follow-up", follow_up, {"Content-Type": "application/json"})
+                blocked_response = connection.getresponse()
+                self.assertEqual(blocked_response.status, 409)
+                blocked_response.read()
+
+                connection.request("POST", f"/v1/proposals/{proposal['proposal_id']}/approve", json.dumps({"reviewer": "tester"}), {"Content-Type": "application/json"})
+                approved = json.loads(connection.getresponse().read())
+                self.assertEqual(approved["proposal"]["approval_status"], "approved")
+                self.assertEqual(approved["proposal"]["approved_by"], "tester")
+
+                connection.request("POST", "/v1/scope/follow-up", follow_up, {"Content-Type": "application/json"})
+                revised = json.loads(connection.getresponse().read())
+                self.assertEqual(revised["proposal"]["version"], 2)
+                self.assertEqual(revised["proposal"]["approval_status"], "pending")
+                self.assertTrue(revised["changes"]["added"])
+                self.assertEqual(revised["baseline"]["version"], 1)
+
+                connection.request("POST", f"/v1/proposals/{proposal['proposal_id']}/approve", json.dumps({"reviewer": "tester-2"}), {"Content-Type": "application/json"})
+                final_response = connection.getresponse()
+                self.assertEqual(final_response.status, 200)
+                final_response.read()
+                restarted = ProposalStore(Path(directory) / "proposals.json")
+                record = restarted.get(proposal["proposal_id"], 2)
+                self.assertEqual(record["approval_status"], "approved")
+                self.assertEqual(record["approved_by"], "tester-2")
+                self.assertTrue(record["approved_at"])
+            finally:
+                connection.close()
+                server.shutdown()
+                server.server_close()
+                thread.join(timeout=2)
 
 
 if __name__ == "__main__":

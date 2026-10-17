@@ -68,9 +68,9 @@ def _load_python_cases(module_name: str, package_root: Path, task: str) -> list[
             expected = source.expected_behavior
             metadata = {"required_citations": source.required_citations, "expected_status": source.expected_status}
         else:
-            prompt = f"Evaluate the meeting-to-scope workflow for: {source.expected}"
+            prompt = source.transcript
             expected = source.expected
-            metadata = {}
+            metadata = {"assertions": list(source.assertions)}
         cases.append(Case(source.case_id, task, prompt, expected, metadata))
     return cases
 

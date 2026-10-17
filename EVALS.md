@@ -48,7 +48,7 @@ automated judging is not human review.
 - Latency measured from timed calls with the execution environment recorded.
 - Deterministic tests separated from model evaluations.
 - Task 2 and Task 3 integration evidence showing Task 1 API use without retrieval duplication.
-- Task 3 has 20 pending cases covering extraction, feasibility, scope, estimates, proposals, follow-up changes, and approval enforcement.
+- Task 3 has 20 complete deterministic cases covering extraction, feasibility, scope, estimates, proposals, follow-up changes, and approval enforcement. Their execution status remains pending until the deterministic evaluation runner records actual case results.
 
 ## Result record
 
