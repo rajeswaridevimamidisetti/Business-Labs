@@ -1,4 +1,4 @@
-import { Citation, Task1Answer } from "./schemas.js";
+import { Citation, IncomingEmail, Task1Answer } from "./schemas.js";
 
 export class Task1ClientError extends Error {
   constructor(public readonly code: string, message: string) { super(message); }
@@ -19,9 +19,9 @@ export class Task1Client {
     this.fetcher = options.fetcher ?? fetch;
   }
 
-  async query(question: string, requestId: string): Promise<Task1Answer> {
+  async query(question: string, requestId: string, timeoutMs = this.timeoutMs): Promise<Task1Answer> {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const response = await this.fetcher(`${this.options.baseUrl.replace(/\/$/, "")}/query`, {
         method: "POST",
@@ -39,6 +39,37 @@ export class Task1Client {
       if (error instanceof DOMException && error.name === "AbortError") throw new Task1ClientError("timeout", "Task 1 request timed out");
       throw new Task1ClientError("unavailable", "Task 1 is unavailable");
     } finally { clearTimeout(timeout); }
+  }
+
+}
+
+export function buildKnowledgeQuestion(email: IncomingEmail): string {
+  return [
+    "Find product documentation that directly answers the customer's question.",
+    `Customer question: ${email.body}`,
+    `Subject context: ${email.subject}`,
+    "Return only evidence relevant to this product question; do not use generic navigation pages as support.",
+  ].join("\n");
+}
+
+export function buildFocusedRetryQuestion(email: IncomingEmail): string {
+  const topic = email.body.replace(/[?!.,]/g, " ").replace(/\s+/g, " ").trim();
+  const topicHint = /\b(billing|payment)\b/i.test(topic)
+    ? "Payment Settings billing"
+    : /\b(signup|registration|form)\b/i.test(topic)
+      ? "Form Manager member signup form"
+      : "";
+  return (topicHint || topic).replace(/\s+/g, " ").trim();
+}
+
+export async function queryHowToKnowledge(client: Task1Client, email: IncomingEmail, requestId: string): Promise<Task1Answer> {
+  try {
+    const first = await client.query(buildKnowledgeQuestion(email), requestId);
+    if (first.status === "answered") return first;
+    return await client.query(buildFocusedRetryQuestion(email), `${requestId}-retry`, 3_000);
+  } catch (error) {
+    if (email.expectedCategory !== "how-to") throw error;
+    return await client.query(buildFocusedRetryQuestion(email), `${requestId}-retry`, 3_000);
   }
 }
 

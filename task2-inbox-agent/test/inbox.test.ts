@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { syntheticEmails } from "../src/dataset.js";
-import { classifyEmail } from "../src/classifier.js";
+import { classifyEmail, classifyEmailDeterministically } from "../src/classifier.js";
 import { createDraft } from "../src/drafts.js";
 import { EligibilityTracker } from "../src/eligibility.js";
 import { defaultInboxEvaluationCases } from "../src/evals.js";
 import { ReviewAlreadyFinalizedError, ReviewWorkflow } from "../src/review.js";
-import { Task1Client, Task1ClientError } from "../src/task1-client.js";
+import { queryHowToKnowledge, Task1Client, Task1ClientError } from "../src/task1-client.js";
 import { FeedbackStore } from "../src/feedback.js";
 import { renderReviewPage } from "../src/review-ui.js";
 import { mkdtempSync, rmSync } from "node:fs";
@@ -32,6 +32,73 @@ test("drafts do not invent product behavior without Task 1 evidence", () => {
   const draft = createDraft(email, { category: "how-to", subcategory: "general", urgency: "normal", risk: "low", productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" }, { answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] });
   assert.equal(draft.evidence.length, 0);
   assert.equal(draft.humanApprovalRequired, true);
+});
+
+test("different supported emails retain their selected subject in distinct drafts", () => {
+  const answer = { answer: "Open Settings and choose Billing.", status: "answered", sources: [{ title: "Billing guide", url: "https://example.test/billing" }], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: [] };
+  const classification = { category: "how-to" as const, subcategory: "general", urgency: "normal" as const, risk: "low" as const, productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" };
+  const first = syntheticEmails()[0];
+  const second = { ...first, id: "email-distinct", subject: "How do I update billing settings?", body: "I need to update billing settings for my account." };
+  const firstDraft = createDraft(first, classification, answer);
+  const secondDraft = createDraft(second, classification, answer);
+  assert.notEqual(firstDraft.suggestedReply, secondDraft.suggestedReply);
+  assert.match(secondDraft.suggestedReply, /How do I update billing settings/);
+  assert.equal(secondDraft.evidence.length, 1);
+});
+
+test("unsupported troubleshooting drafts use the selected issue and request diagnostic details", () => {
+  const email = { ...syntheticEmails()[12], subject: "Checkout returns a timeout", body: "Checkout times out after I click Pay.", expectedCategory: "troubleshooting" as const };
+  const classification = { category: "troubleshooting" as const, subcategory: "synthetic", urgency: "normal" as const, risk: "medium" as const, productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" };
+  const draft = createDraft(email, classification, { answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] });
+  assert.match(draft.suggestedReply, /Checkout returns a timeout/);
+  assert.match(draft.suggestedReply, /exact error message/);
+  assert.match(draft.suggestedReply, /do not want to guess/);
+  assert.equal(draft.evidence.length, 0);
+  assert.equal(draft.nextAction, "expert_assistance");
+});
+
+test("complaint drafts acknowledge member impact and escalate without promising resolution", () => {
+  const email = { ...syntheticEmails()[30], subject: "Member impact", body: "The issue has affected our members and we need help resolving it.", expectedCategory: "complaint" as const };
+  const draft = createDraft(email, { category: "complaint", subcategory: "rule-based", urgency: "high", risk: "high", productKnowledgeRequired: true, humanReviewRequired: true, promptVersion: "v1" }, { answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] });
+  assert.match(draft.suggestedReply, /affected your members/i);
+  assert.match(draft.suggestedReply, /incident started|member impact/i);
+  assert.match(draft.suggestedReply, /specialist/i);
+  assert.doesNotMatch(draft.suggestedReply, /fixed|resolution timeline/i);
+});
+
+test("vague how-to requests ask for the goal and account area without inventing steps", () => {
+  const email = { ...syntheticEmails()[0], subject: "How-to request", body: "Please explain the next step for our account and what information you need.", expectedCategory: "how-to" as const };
+  const classification = { category: "how-to" as const, subcategory: "synthetic", urgency: "normal" as const, risk: "low" as const, productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" };
+  const draft = createDraft(email, classification, { answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] });
+  assert.match(draft.suggestedReply, /which account page or action/);
+  assert.match(draft.suggestedReply, /exact text/);
+  assert.equal(draft.evidence.length, 0);
+});
+
+test("vague troubleshooting requests do not ask for unrelated device details", () => {
+  const email = { ...syntheticEmails()[12], subject: "Troubleshooting request", body: "Please explain the next step for our account and what information you need.", expectedCategory: "troubleshooting" as const };
+  const classification = { category: "troubleshooting" as const, subcategory: "synthetic", urgency: "normal" as const, risk: "medium" as const, productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" };
+  const draft = createDraft(email, classification, { answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] });
+  assert.match(draft.suggestedReply, /which account page or action/);
+  assert.doesNotMatch(draft.suggestedReply, /browser or device|reproduction steps|expected result/);
+});
+
+test("supported actionable questions use the returned evidence answer", () => {
+  const email = { ...syntheticEmails()[0], subject: "How do I update billing settings?", body: "How do I update billing settings?", expectedCategory: "how-to" as const };
+  const classification = { category: "how-to" as const, subcategory: "billing", urgency: "normal" as const, risk: "low" as const, productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" };
+  const draft = createDraft(email, classification, { answer: "Open Settings, select Billing, and save your changes.", status: "answered", sources: [{ title: "Billing guide", url: "https://example.test/billing" }], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: ["chunk-1"] });
+  assert.match(draft.suggestedReply, /Open Settings, select Billing/);
+  assert.equal(draft.evidence.length, 1);
+  assert.equal(draft.nextAction, "human_review");
+});
+
+test("unsupported questions remain honest and do not include an answer", () => {
+  const email = { ...syntheticEmails()[0], subject: "Personal bank balance", body: "What is my current personal bank balance?", expectedCategory: "how-to" as const };
+  const classification = { category: "how-to" as const, subcategory: "unsupported", urgency: "normal" as const, risk: "low" as const, productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" };
+  const draft = createDraft(email, classification, { answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] });
+  assert.match(draft.suggestedReply, /could not find supporting Knowledge Brain evidence/);
+  assert.doesNotMatch(draft.suggestedReply, /your current balance is|bank balance is/);
+  assert.equal(draft.evidence.length, 0);
 });
 
 test("review workflow stores edits and blocks duplicate finalization", () => {
@@ -87,9 +154,10 @@ test("review workflow rejects invalid runtime actions", () => {
 
 test("eligibility requires twenty unchanged low-risk cases and supports kill switch", () => {
   const tracker = new EligibilityTracker();
-  for (let index = 0; index < 19; index += 1) tracker.record("how-to/general", { eventId: String(index), emailId: "e", action: "approved", generatedDraft: "same", finalContent: "same", promptVersion: "p", modelVersion: "m", createdAt: "now" }, "low", true);
+  const sentEvent = (eventId: string) => ({ eventId, emailId: `e-${eventId}`, action: "sent" as const, generatedDraft: "same", finalContent: "same", promptVersion: "p", modelVersion: "m", createdAt: "now" });
+  for (let index = 0; index < 19; index += 1) tracker.record("how-to/general", sentEvent(String(index)), "low", true);
   assert.equal(tracker.isEligible("how-to/general"), false);
-  tracker.record("how-to/general", { eventId: "20", emailId: "e", action: "approved", generatedDraft: "same", finalContent: "same", promptVersion: "p", modelVersion: "m", createdAt: "now" }, "low", true);
+  tracker.record("how-to/general", sentEvent("20"), "low", true);
   assert.equal(tracker.isEligible("how-to/general"), true);
   tracker.enableKillSwitch();
   assert.equal(tracker.isEligible("how-to/general"), false);
@@ -100,6 +168,78 @@ test("evaluation suite has twenty pending cases", () => assert.equal(defaultInbo
 test("Task 1 client preserves typed successful response", async () => {
   const client = new Task1Client({ baseUrl: "http://task1", fetcher: async () => new Response(JSON.stringify({ answer: "A", status: "answered", sources: [], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: [] }), { status: 200 }) });
   assert.equal((await client.query("Question", "r")).answer, "A");
+});
+
+test("Task 1 query includes the selected email subject, category, and message", async () => {
+  let sentBody = "";
+  const client = new Task1Client({
+    baseUrl: "http://task1",
+    fetcher: async (_url, options) => {
+      sentBody = String(options?.body ?? "");
+      return new Response(JSON.stringify({ answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] }), { status: 200 });
+    },
+  });
+
+  await client.query("Subject: Checkout returns a timeout\nCategory: troubleshooting\nMessage: Checkout times out after I click Pay.", "r");
+  assert.match(sentBody, /Checkout returns a timeout/);
+  assert.match(sentBody, /troubleshooting/);
+  assert.match(sentBody, /Checkout times out after I click Pay/);
+});
+
+test("How-To knowledge query retries once with a focused topic and preserves citations", async () => {
+  let calls = 0;
+  const sentBodies: string[] = [];
+  const email = { ...syntheticEmails()[1] };
+  const client = new Task1Client({
+    baseUrl: "http://task1",
+    fetcher: async (_url, options) => {
+      calls += 1;
+      const body = String(options?.body ?? "");
+      sentBodies.push(body);
+      if (calls === 1) {
+        return new Response(JSON.stringify({ answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] }), { status: 200 });
+      }
+      return new Response(JSON.stringify({ answer: "Open Payment Settings.", status: "answered", sources: [{ title: "Payment Settings", url: "https://example.test/payment" }], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: [] }), { status: 200 });
+    },
+  });
+  const result = await queryHowToKnowledge(client, email, "r");
+  assert.equal(calls, 2);
+  assert.match(sentBodies[0], /How can I update the billing settings/);
+  assert.match(sentBodies[1], /Payment Settings billing/);
+  assert.equal(result.sources[0].url, "https://example.test/payment");
+});
+
+test("signup-form How-To retry uses Form Manager evidence and accurate citation count", async () => {
+  let calls = 0;
+  const email = { ...syntheticEmails()[2] };
+  const client = new Task1Client({
+    baseUrl: "http://task1",
+    fetcher: async (_url, options) => {
+      calls += 1;
+      const body = String(options?.body ?? "");
+      if (calls === 1) return new Response(JSON.stringify({ answer: null, status: "insufficient_evidence", sources: [], image_references: [], human_help_needed: true, request_id: "r", retrieval_trace: [] }), { status: 200 });
+      assert.equal(body, JSON.stringify({ question: "Form Manager member signup form" }));
+      return new Response(JSON.stringify({ answer: "Use Form Manager.", status: "answered", sources: [{ title: "Form Manager", url: "https://example.test/form-manager" }], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: [] }), { status: 200 });
+    },
+  });
+  const knowledge = await queryHowToKnowledge(client, email, "r");
+  const draft = createDraft(email, classifyEmailDeterministically(email), knowledge);
+  assert.equal(calls, 2);
+  assert.equal(draft.evidenceStatus, "supported");
+  assert.equal(draft.evidence.length, 1);
+  assert.equal(draft.evidence[0].url, "https://example.test/form-manager");
+  assert.match(draft.suggestedReply, /Use Form Manager/);
+});
+
+test("How-To unavailable service retries once and preserves the typed failure", async () => {
+  let calls = 0;
+  const email = { ...syntheticEmails()[1] };
+  const client = new Task1Client({ baseUrl: "http://task1", fetcher: async () => {
+    calls += 1;
+    throw new Error("offline");
+  } });
+  await assert.rejects(() => queryHowToKnowledge(client, email, "r"), (error: Task1ClientError) => error.code === "unavailable");
+  assert.equal(calls, 2);
 });
 
 test("Task 1 client rejects invalid responses", async () => {
@@ -136,8 +276,20 @@ test("feedback and prompt revisions survive a store restart", () => {
   rmSync(directory, { recursive: true, force: true });
 });
 
+test("review events retain evidence status and whether the reviewer changed text", () => {
+  const email = syntheticEmails()[0];
+  const draft = createDraft(email, { category: "how-to", subcategory: "general", urgency: "normal", risk: "low", productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" }, { answer: "A", status: "answered", sources: [{ title: "Guide", url: "https://example.test" }], image_references: [], human_help_needed: false, request_id: "r", retrieval_trace: [] });
+  const event = new ReviewWorkflow(() => "now").review(draft, "edit", "Changed reply", "clarity");
+  assert.equal(event.evidenceStatus, "supported");
+  assert.equal(event.evidence?.length, 1);
+  assert.equal(event.finalTextChanged, true);
+});
+
 test("all seven email categories are represented", () => {
-  assert.deepEqual(new Set(syntheticEmails().map((email) => email.expectedCategory)).size, 7);
+  const emails = syntheticEmails();
+  assert.deepEqual(new Set(emails.map((email) => email.expectedCategory)).size, 7);
+  assert.ok(emails.every((email) => email.importantFacts.length > 0 && email.expectedOutcome.length > 0));
+  assert.ok(new Set(emails.map((email) => email.body)).size >= 20);
 });
 
 test("held-out emails are distinct from tuning emails", () => {
@@ -150,6 +302,11 @@ test("high-risk email classification fallback requires human review", async () =
   const email = syntheticEmails().find((item) => item.expectedRisk === "high")!;
   const result = await classifyEmail(email, { classify: async () => { throw new Error("model down"); } });
   assert.equal(result.humanReviewRequired, true);
+});
+
+test("deterministic classification recognizes all dataset categories", () => {
+  const classified = new Set(syntheticEmails().map((email) => classifyEmailDeterministically(email).category));
+  assert.deepEqual(classified, new Set(["how-to", "troubleshooting", "project-request", "refund-cancellation", "complaint", "quote-request", "follow-up"]));
 });
 
 test("classification policy is passed to the model", async () => {
@@ -175,12 +332,34 @@ test("eligibility resets after an edited final response", () => {
   assert.equal(tracker.isEligible("how-to/general"), false);
 });
 
+test("eligibility persists and resets after a failed or changed send", () => {
+  const directory = mkdtempSync(join(tmpdir(), "inbox-eligibility-"));
+  const file = join(directory, "eligibility.json");
+  const tracker = new EligibilityTracker(2, () => "now", file);
+  const event = { eventId: "sent-1", emailId: "e", action: "sent" as const, generatedDraft: "a", finalContent: "a", promptVersion: "p", modelVersion: "m", createdAt: "now" };
+  tracker.record("how-to/general", event, "low", true);
+  const restarted = new EligibilityTracker(2, () => "now", file);
+  assert.equal(restarted.record("how-to/general", { ...event, eventId: "failed-1", finalContent: "changed" }, "low", false), 0);
+  assert.equal(restarted.isEligible("how-to/general"), false);
+  rmSync(directory, { recursive: true, force: true });
+});
+
 test("eligibility is separated by category", () => {
   const tracker = new EligibilityTracker();
-  const event = { eventId: "1", emailId: "e", action: "approved" as const, generatedDraft: "a", finalContent: "a", promptVersion: "p", modelVersion: "m", createdAt: "now" };
+  const event = { eventId: "1", emailId: "e", action: "sent" as const, generatedDraft: "a", finalContent: "a", promptVersion: "p", modelVersion: "m", createdAt: "now" };
   for (let index = 0; index < 20; index += 1) tracker.record("how-to/general", { ...event, eventId: String(index) }, "low", true);
   assert.equal(tracker.isEligible("how-to/general"), true);
   assert.equal(tracker.isEligible("troubleshooting/general"), false);
+});
+
+test("approval alone does not qualify and duplicate sent events do not increment twice", () => {
+  const tracker = new EligibilityTracker(2);
+  const approved = { eventId: "approved", emailId: "e", action: "approved" as const, generatedDraft: "a", finalContent: "a", promptVersion: "p", modelVersion: "m", createdAt: "now" };
+  assert.equal(tracker.record("how-to/general", approved, "low", true), 0);
+  const sent = { eventId: "sent", emailId: "e", action: "sent" as const, generatedDraft: "a", finalContent: "a", promptVersion: "p", modelVersion: "m", createdAt: "now" };
+  assert.equal(tracker.record("how-to/general", sent, "low", true), 1);
+  assert.equal(tracker.record("how-to/general", sent, "low", true), 1);
+  assert.equal(tracker.isEligible("how-to/general"), false);
 });
 
 test("critical risk cannot qualify for autonomy", () => {

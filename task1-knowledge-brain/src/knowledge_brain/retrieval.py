@@ -50,7 +50,11 @@ class RetrievalStore:
         for chunk in self._chunks.values():
             if not chunk.active:
                 continue
-            keyword_score = len(tokens & _tokens(chunk.content)) / max(len(tokens), 1)
+            content_tokens = _tokens(chunk.content)
+            metadata_tokens = _tokens(" ".join((chunk.title or "", *chunk.section_path)))
+            content_overlap = len(tokens & content_tokens)
+            metadata_overlap = len(tokens & metadata_tokens)
+            keyword_score = (content_overlap + (2 * metadata_overlap)) / max(len(tokens), 1)
             score = keyword_score
             if mode in {"semantic", "hybrid"} and self.embedding_provider is not None:
                 query_vector = self.embedding_provider.embed([text])[0]
@@ -69,9 +73,30 @@ _STOP_WORDS = {
     "where", "which", "with", "work", "you",
 }
 
+_TERM_ALIASES = {
+    "signup": "signup",
+    "signups": "signup",
+    "registration": "signup",
+    "registrations": "signup",
+    "register": "signup",
+    "payment": "billing",
+    "payments": "billing",
+    "finance": "billing",
+    "billing": "billing",
+    "configuration": "settings",
+    "configurations": "settings",
+    "preferences": "settings",
+    "forms": "form",
+    "members": "member",
+}
+
 
 def _tokens(text: str) -> set[str]:
-    return {token for token in re.findall(r"[a-z0-9]+", text.lower()) if len(token) > 2 and token not in _STOP_WORDS}
+    return {
+        _TERM_ALIASES.get(token, token)
+        for token in re.findall(r"[a-z0-9]+", text.lower())
+        if len(token) > 2 and token not in _STOP_WORDS
+    }
 
 
 def evidence_supports_question(question: str, evidence: tuple[RetrievedChunk, ...]) -> bool:
@@ -80,10 +105,13 @@ def evidence_supports_question(question: str, evidence: tuple[RetrievedChunk, ..
     query_terms = _tokens(question)
     if not query_terms or not evidence:
         return False
-    best_overlap = len(query_terms & _tokens(evidence[0].chunk.content))
+    best_overlap = max(
+        len(query_terms & _tokens(f"{item.chunk.title or ''} {' '.join(item.chunk.section_path)} {item.chunk.content}"))
+        for item in evidence
+    )
     if len(query_terms) <= 2:
         return best_overlap == len(query_terms)
-    return best_overlap >= 2 and best_overlap / len(query_terms) >= 0.5
+    return best_overlap >= 2 and best_overlap / len(query_terms) >= 0.4
 
 
 def _cosine(left: list[float], right: list[float]) -> float:

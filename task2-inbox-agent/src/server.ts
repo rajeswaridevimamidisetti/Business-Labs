@@ -1,14 +1,21 @@
 import { createServer } from "node:http";
-import { Task1Client, Task1ClientError } from "./task1-client.js";
+import { mkdirSync } from "node:fs";
+import { dirname } from "node:path";
+import { queryHowToKnowledge, buildKnowledgeQuestion, Task1Client, Task1ClientError } from "./task1-client.js";
 import { createDraft } from "./drafts.js";
 import { syntheticEmails } from "./dataset.js";
 import { ReviewAlreadyFinalizedError, ReviewWorkflow } from "./review.js";
-import { Draft, ReviewAction, validateClassification } from "./schemas.js";
+import { Draft, ReviewAction } from "./schemas.js";
+import { classifyEmailDeterministically } from "./classifier.js";
+import { FeedbackStore } from "./feedback.js";
 
 const port = Number(process.env.TASK2_PORT ?? "8002");
 const task1 = new Task1Client({ baseUrl: process.env.TASK1_BASE_URL ?? "http://127.0.0.1:8001" });
 const emails = syntheticEmails();
-const reviews = new ReviewWorkflow();
+const feedbackPath = process.env.TASK2_FEEDBACK_PATH ?? "data/local/task2-feedback.json";
+mkdirSync(dirname(feedbackPath), { recursive: true });
+const feedback = new FeedbackStore(feedbackPath);
+const reviews = new ReviewWorkflow(() => new Date().toISOString(), feedback.history());
 const drafts = new Map<string, Draft>();
 
 async function readJson(request: import("node:http").IncomingMessage): Promise<Record<string, unknown>> {
@@ -38,16 +45,14 @@ const server = createServer((request, response) => {
     readJson(request).then(async (input) => {
       const email = emails.find((item) => item.id === input.emailId) ?? emails[0];
       if (!email) return send(response, 400, { error: "no_email_available" });
-      const knowledge = await task1.query(email.body, request.headers["x-request-id"]?.toString() ?? `task2-${Date.now()}`);
-      const classification = validateClassification({
-        category: email.expectedCategory,
-        subcategory: "synthetic",
-        urgency: email.expectedRisk === "high" ? "high" : "normal",
-        risk: email.expectedRisk,
-        productKnowledgeRequired: email.requiresTask1Evidence,
-        humanReviewRequired: email.expectedRisk !== "low",
-        promptVersion: "smoke-v1",
-      });
+      const requestId = request.headers["x-request-id"]?.toString() ?? `task2-${Date.now()}`;
+      let knowledge;
+      if (email.expectedCategory === "how-to") {
+        knowledge = await queryHowToKnowledge(task1, email, requestId);
+      } else {
+        knowledge = await task1.query(buildKnowledgeQuestion(email), requestId);
+      }
+      const classification = classifyEmailDeterministically(email);
       const draft = createDraft(email, classification, knowledge);
       drafts.set(email.id, draft);
       send(response, 200, { draft, task1Status: knowledge.status, reviewStatus: reviews.status(email.id) });
@@ -71,6 +76,12 @@ const server = createServer((request, response) => {
         input.action === "save" || input.action === "edit" || input.action === "reject" ? content : undefined,
         typeof input.reason === "string" ? input.reason : undefined,
       );
+      feedback.add({
+        ...event,
+        originalEmail: { subject: email.subject, body: email.body, from: email.from },
+        category: draft.classification.category,
+        risk: draft.risk,
+      });
       if (input.action === "save") drafts.set(email.id, { ...draft, suggestedReply: content });
       send(response, 201, { event, reviewStatus: reviews.status(email.id), finalized: reviews.status(email.id) !== "pending" });
     }).catch((error: unknown) => {

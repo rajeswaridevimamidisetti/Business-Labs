@@ -16,3 +16,25 @@ export async function classifyEmail(email: IncomingEmail, model: ClassificationM
     };
   }
 }
+
+export function classifyEmailDeterministically(email: IncomingEmail, promptVersion = "classification-rules-v1"): Classification {
+  const text = `${email.subject} ${email.body}`.toLowerCase();
+  const category: Classification["category"] =
+    /\brefund|cancel|charged\b/.test(text) ? "refund-cancellation"
+      : /\bcomplaint|unhappy|unresolved\b/.test(text) ? "complaint"
+        : /\bquote|cost|estimate|how much\b/.test(text) ? "quote-request"
+          : /\bintegration|redesign|dashboard|new feature\b/.test(text) ? "project-request"
+            : /\bfollowing up|follow-up|previous|earlier\b/.test(text) ? "follow-up"
+              : /\berror|cannot|can't|unable|not working|issue|problem|unavailable\b/.test(text) ? "troubleshooting"
+                : "how-to";
+  const risk: Classification["risk"] = category === "refund-cancellation" || category === "complaint" ? "high" : email.expectedRisk;
+  return {
+    category,
+    subcategory: "rule-based",
+    urgency: risk === "high" || risk === "critical" ? "high" : "normal",
+    risk,
+    productKnowledgeRequired: !["refund-cancellation"].includes(category),
+    humanReviewRequired: risk !== "low",
+    promptVersion,
+  };
+}

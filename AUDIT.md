@@ -13,8 +13,8 @@ Status is based on repository evidence as of 2026-10-15.
 | Task 1 20-case model evaluation/comparison | NOT VERIFIED | 20 pending cases exist; no live scores/costs claimed |
 | 50 synthetic Task 2 emails | PASS | `dataset.ts`, 50 records and held-out subset test |
 | Task 2 public Task 1 API boundary | PASS | `task1-client.ts`; no Task 1 internal imports |
-| Task 2 human review and 20-case rule | PASS | Review workflow, eligibility tracker, kill switch, persistence, and 22-test suite |
-| Task 2 real delivery/UI deployment | NOT VERIFIED | Escaped HTML review renderer exists; no delivery integration |
+| Task 2 human review and 20-case rule | PASS (eligibility only) | Review workflow, durable feedback audit, explicit sent-only eligibility tracker, kill switch, and Task 2 tests |
+| Task 2 real delivery/UI deployment | NOT VERIFIED | Browser review UI and SPA actions exist; approval is not email delivery and no delivery integration exists |
 | Task 2 model comparison and human edit rate | NOT VERIFIED | Pending cases; no human review dataset |
 | Three Task 3 transcripts including follow-up | PASS | `fixtures.py` and workflow tests |
 | Task 3 source-linked requirements and feasibility API | PASS | `models.py`, public HTTP client, smoke server, and 20-test suite |

@@ -8,8 +8,9 @@ export type Category =
   | "follow-up";
 
 export type Risk = "low" | "medium" | "high" | "critical";
-export type ReviewStatus = "pending" | "approved" | "edited" | "rejected" | "expert_assistance";
+export type ReviewStatus = "pending" | "approved" | "edited" | "rejected" | "expert_assistance" | "sent";
 export type ReviewAction = "approve" | "save" | "edit" | "reject" | "expert_assistance";
+export type EvidenceStatus = "supported" | "insufficient" | "unavailable";
 
 export interface IncomingEmail {
   id: string;
@@ -21,6 +22,9 @@ export interface IncomingEmail {
   expectedHandling: string;
   requiresTask1Evidence: boolean;
   heldOut: boolean;
+  importantFacts: string[];
+  expectedEvidence: string[];
+  expectedOutcome: string;
 }
 
 export interface Classification {
@@ -60,6 +64,9 @@ export interface Draft {
   humanApprovalRequired: boolean;
   nextAction: string;
   promptVersion: string;
+  evidenceStatus?: EvidenceStatus;
+  generatedAt?: string;
+  modelVersion?: string;
 }
 
 export interface FeedbackEvent {
@@ -72,6 +79,13 @@ export interface FeedbackEvent {
   promptVersion: string;
   modelVersion: string;
   createdAt: string;
+  originalEmail?: { subject: string; body: string; from: string };
+  category?: Category;
+  risk?: Risk;
+  evidence?: Citation[];
+  evidenceStatus?: EvidenceStatus;
+  finalTextChanged?: boolean;
+  outcome?: string;
 }
 
 export function validateClassification(value: unknown): Classification {

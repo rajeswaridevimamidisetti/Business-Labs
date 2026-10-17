@@ -1,0 +1,202 @@
+{
+  "events": [
+    {
+      "eventId": "review-1",
+      "emailId": "email-009",
+      "action": "approved",
+      "generatedDraft": "Hello,\n\nRegarding your \"Change signup form 9\" (how-to):\n\nForm Manager Toolbox » Form Manager The Form Manager is a core module of the Brilliant Directories platform, as it contains all forms used throughout the site. Forms allow members and visi... Form Settings Overview Important Note: These form settings are only available for Custom Forms. This option does not display for Default Forms. To reach the Form Settings, cl... Edit Form Settings » Submission Settings In this article, we will be going over the Submission Settings that can be found under Edit Form Settings: What Happens After Form Submitted Set... Edit Form Settings » Email Notifications In this article, we will be going over the Email Notifications settings that can be found in the form settings. These settings control what emails are s... Edit Form Settings » Developer Settings In this article, we will go over the Developer Settings found under Edit Form Settings. Form System Name Here, the form’s system name can be sp... In-Depth Look into Form Fields and their Settings How to Create a New Form Field When Customizing a Form To add a new form field to a form, click the Add Field button: Clicking this button gene... In-Depth Look Into Each Form Field Type What Are Field Types\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding your \"Change signup form 9\" (how-to):\n\nForm Manager Toolbox » Form Manager The Form Manager is a core module of the Brilliant Directories platform, as it contains all forms used throughout the site. Forms allow members and visi... Form Settings Overview Important Note: These form settings are only available for Custom Forms. This option does not display for Default Forms. To reach the Form Settings, cl... Edit Form Settings » Submission Settings In this article, we will be going over the Submission Settings that can be found under Edit Form Settings: What Happens After Form Submitted Set... Edit Form Settings » Email Notifications In this article, we will be going over the Email Notifications settings that can be found in the form settings. These settings control what emails are s... Edit Form Settings » Developer Settings In this article, we will go over the Developer Settings found under Edit Form Settings. Form System Name Here, the form’s system name can be sp... In-Depth Look into Form Fields and their Settings How to Create a New Form Field When Customizing a Form To add a new form field to a form, click the Add Field button: Clicking this button gene... In-Depth Look Into Each Form Field Type What Are Field Types\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T09:39:31.615Z",
+      "evidence": [
+        {
+          "title": "Form Manager",
+          "url": "https://support.brilliantdirectories.com/support/solutions/folders/12000005710",
+          "section": "Form Manager",
+          "chunk_id": "article-5d203db74e68822f:76e176da75e0:33835d14a37d"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": false,
+      "outcome": "approved",
+      "originalEmail": {
+        "subject": "Change signup form 9",
+        "body": "Where can I change the member signup form shown on our site?",
+        "from": "customer9@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    },
+    {
+      "eventId": "review-2",
+      "emailId": "email-011",
+      "action": "pending",
+      "generatedDraft": "Hello,\n\nRegarding your \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding your \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T09:39:38.842Z",
+      "evidence": [
+        {
+          "title": "Payment Settings",
+          "url": "https://support.brilliantdirectories.com/support/solutions/folders/12000005705",
+          "section": "Payment Settings",
+          "chunk_id": "article-b1003150c3ed4e2f:3c867c9e068d:fde7042ca3d2"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": false,
+      "outcome": "pending",
+      "originalEmail": {
+        "subject": "Update billing settings 11",
+        "body": "How can I update the billing settings for my directory?",
+        "from": "customer11@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    },
+    {
+      "eventId": "review-3",
+      "emailId": "email-011",
+      "action": "pending",
+      "generatedDraft": "Hello,\n\nRegarding your \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T09:39:51.087Z",
+      "evidence": [
+        {
+          "title": "Payment Settings",
+          "url": "https://support.brilliantdirectories.com/support/solutions/folders/12000005705",
+          "section": "Payment Settings",
+          "chunk_id": "article-b1003150c3ed4e2f:3c867c9e068d:fde7042ca3d2"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": true,
+      "outcome": "pending",
+      "originalEmail": {
+        "subject": "Update billing settings 11",
+        "body": "How can I update the billing settings for my directory?",
+        "from": "customer11@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    },
+    {
+      "eventId": "review-4",
+      "emailId": "email-011",
+      "action": "pending",
+      "generatedDraft": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T09:39:52.355Z",
+      "evidence": [
+        {
+          "title": "Payment Settings",
+          "url": "https://support.brilliantdirectories.com/support/solutions/folders/12000005705",
+          "section": "Payment Settings",
+          "chunk_id": "article-b1003150c3ed4e2f:3c867c9e068d:fde7042ca3d2"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": false,
+      "outcome": "pending",
+      "originalEmail": {
+        "subject": "Update billing settings 11",
+        "body": "How can I update the billing settings for my directory?",
+        "from": "customer11@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    },
+    {
+      "eventId": "review-5",
+      "emailId": "email-011",
+      "action": "pending",
+      "generatedDraft": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T09:39:53.246Z",
+      "evidence": [
+        {
+          "title": "Payment Settings",
+          "url": "https://support.brilliantdirectories.com/support/solutions/folders/12000005705",
+          "section": "Payment Settings",
+          "chunk_id": "article-b1003150c3ed4e2f:3c867c9e068d:fde7042ca3d2"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": false,
+      "outcome": "pending",
+      "originalEmail": {
+        "subject": "Update billing settings 11",
+        "body": "How can I update the billing settings for my directory?",
+        "from": "customer11@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    },
+    {
+      "eventId": "review-6",
+      "emailId": "email-011",
+      "action": "pending",
+      "generatedDraft": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T09:39:57.494Z",
+      "evidence": [
+        {
+          "title": "Payment Settings",
+          "url": "https://support.brilliantdirectories.com/support/solutions/folders/12000005705",
+          "section": "Payment Settings",
+          "chunk_id": "article-b1003150c3ed4e2f:3c867c9e068d:fde7042ca3d2"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": false,
+      "outcome": "pending",
+      "originalEmail": {
+        "subject": "Update billing settings 11",
+        "body": "How can I update the billing settings for my directory?",
+        "from": "customer11@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    },
+    {
+      "eventId": "review-7",
+      "emailId": "email-011",
+      "action": "expert_assistance",
+      "generatedDraft": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding \"Update billing settings 11\" (how-to):\n\nPayment Settings Finance » Payment Gateways » Additional Settings » Billing Address Countries This section controls the active and featured countries displayed on paid checkout pages. Here it is possible to modify the countries that display in paid... Supported Payment Gateways This article covers the payment gateways and currencies supported by the software. After connecting a payment gateway, any money received will be deposi... Finance » Payment Settings - Setting Up A Payment Gateway See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...). 1. Set Up An Account ... Setting Up PayPal Payflow When it comes to accepting online payments, there are essentially 2 components: the Payment Gateway and the Merchant Account. The payment gateway is a p... Setting Up Verifone As Your Payment Gateway For the best results Stripe is the recommended payment gateway. However, for those who would like to setup 2checkout as their payment gateway, foll... Setting Up PayPal Express/Standard (Free) As The Payment Gateway For the best results, it is recommended to use the Stripe payment gateway. Before setting up a payment gateway\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "reason": "Requested from browser review console",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T09:40:03.442Z",
+      "evidence": [
+        {
+          "title": "Payment Settings",
+          "url": "https://support.brilliantdirectories.com/support/solutions/folders/12000005705",
+          "section": "Payment Settings",
+          "chunk_id": "article-b1003150c3ed4e2f:3c867c9e068d:fde7042ca3d2"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": false,
+      "outcome": "expert_assistance",
+      "originalEmail": {
+        "subject": "Update billing settings 11",
+        "body": "How can I update the billing settings for my directory?",
+        "from": "customer11@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    }
+  ],
+  "revisions": []
+}

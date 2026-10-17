@@ -6,6 +6,7 @@ AI Tech Consultant capstone with Task 1 knowledge services, Task 2 inbox workflo
 
 - `task1-knowledge-brain/`: Python Knowledge Brain environment and health-check scaffold.
 - `task2-inbox-agent/`: TypeScript Inbox Agent environment and health-check scaffold.
+- `task2-inbox-agent/README.md`: Task 2 dataset, evidence, review, audit, and eligibility behavior.
 - `task3-meeting-to-scope/`: Python Meeting to Scope environment and health-check scaffold.
 - `shared/`: documentation, test fixtures, and evaluation data boundaries.
 - `DESIGN.md`: approved foundation architecture and boundaries.

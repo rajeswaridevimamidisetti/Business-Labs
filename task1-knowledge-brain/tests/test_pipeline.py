@@ -101,6 +101,40 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual(result.status, "insufficient_evidence")
         self.assertIsNone(result.answer)
 
+    def test_billing_settings_prefers_topic_specific_document_over_navigation(self):
+        navigation = parse_article(
+            "<article><h1>Knowledge base</h1><p>Dashboard settings and billing links are listed here.</p></article>",
+            "https://support.example/knowledge-base",
+        )
+        billing = parse_article(
+            "<article><h1>Payment Settings</h1><p>Open Finance, then Payment Settings to update billing settings for the directory.</p></article>",
+            "https://support.example/payment-settings",
+        )
+        store = RetrievalStore()
+        store.upsert(chunk_article(navigation) + chunk_article(billing))
+        result = GroundedQueryService(store, FakeModel()).query(
+            "How can I update the billing settings for my directory?", "req-billing"
+        )
+        self.assertEqual(result.status, "answered")
+        self.assertEqual(result.sources[0].url, "https://support.example/payment-settings")
+
+    def test_signup_form_prefers_form_manager_document(self):
+        navigation = parse_article(
+            "<article><h1>Knowledge base</h1><p>Member links and site navigation are listed here.</p></article>",
+            "https://support.example/knowledge-base",
+        )
+        form_manager = parse_article(
+            "<article><h1>Form Manager</h1><p>Open Toolbox, then Form Manager to change the member signup form fields.</p></article>",
+            "https://support.example/form-manager",
+        )
+        store = RetrievalStore()
+        store.upsert(chunk_article(navigation) + chunk_article(form_manager))
+        result = GroundedQueryService(store, FakeModel()).query(
+            "Where can I change the member signup form shown on our site?", "req-signup"
+        )
+        self.assertEqual(result.status, "answered")
+        self.assertEqual(result.sources[0].url, "https://support.example/form-manager")
+
 
 if __name__ == "__main__":
     unittest.main()
