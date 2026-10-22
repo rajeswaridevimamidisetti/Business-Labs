@@ -2764,5 +2764,457 @@
     "project_id": "browser-project",
     "approved_by": "browser-reviewer",
     "approved_at": "2026-10-17T10:59:15.200185+00:00"
+  },
+  "proposal-browser-1792236746774:v1": {
+    "proposal_id": "proposal-browser-1792236746774",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-8d9e1dcdbd94",
+          "description": "We need search and filters.",
+          "source_segment_id": "browser-1792236746774-seg-1",
+          "source_passage": "We need search and filters.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need search and filters."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-9e6a9a292dac",
+          "description": "Mobile users must have a usable experience.",
+          "source_segment_id": "browser-1792236746774-seg-2",
+          "source_passage": "Mobile users must have a usable experience.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Mobile users must have a usable experience."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-c1a37a066126",
+          "description": "We should confirm the existing search configuration.",
+          "source_segment_id": "browser-1792236746774-seg-3",
+          "source_passage": "We should confirm the existing search configuration.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We should confirm the existing search configuration."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need search and filters.",
+        "Mobile users must have a usable experience."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We need search and filters.",
+        "Demonstrate that the delivered workflow satisfies: Mobile users must have a usable experience.",
+        "Demonstrate that the delivered workflow satisfies: We should confirm the existing search configuration."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": []
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-8d9e1dcdbd94",
+        "task": "We need search and filters.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-9e6a9a292dac",
+        "task": "Mobile users must have a usable experience.",
+        "low_hours": 16,
+        "likely_hours": 32,
+        "high_hours": 56,
+        "rationale": "Cross-surface UI work requires responsive design, implementation, and review.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [],
+        "human_review_required": false
+      },
+      {
+        "requirement_id": "req-c1a37a066126",
+        "task": "We should confirm the existing search configuration.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 48,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "proposal-browser-1792264739600:v1": {
+    "proposal_id": "proposal-browser-1792264739600",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-b3ebc3add369",
+          "description": "Desktop layout should remain unchanged.",
+          "source_segment_id": "browser-1792264739600-seg-8",
+          "source_passage": "Desktop layout should remain unchanged.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Desktop layout should remain unchanged."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-6fe61966e760",
+          "description": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix.",
+          "source_segment_id": "browser-1792264739600-seg-10",
+          "source_passage": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-b3ebc3add369",
+        "req-6fe61966e760"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: Desktop layout should remain unchanged.",
+        "Demonstrate that the delivered workflow satisfies: We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-b3ebc3add369",
+        "Clarify feasibility for req-6fe61966e760"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-b3ebc3add369",
+        "task": "Desktop layout should remain unchanged.",
+        "low_hours": 4,
+        "likely_hours": 10,
+        "high_hours": 20,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-b3ebc3add369",
+          "req-6fe61966e760"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-6fe61966e760",
+        "task": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-b3ebc3add369",
+          "req-6fe61966e760"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 18,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "approved",
+    "project_id": "browser-project",
+    "approved_by": "browser-reviewer",
+    "approved_at": "2026-10-17T19:19:10.957529+00:00"
+  },
+  "proposal-browser-1792264768646:v1": {
+    "proposal_id": "proposal-browser-1792264768646",
+    "version": 1,
+    "scope": {
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "agreed_requirements": [
+        {
+          "requirement_id": "req-72700cc2d7d1",
+          "description": "We need a new REST API endpoint to retrieve project details.",
+          "source_segment_id": "browser-1792264768646-seg-5",
+          "source_passage": "We need a new REST API endpoint to retrieve project details.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need a new REST API endpoint to retrieve project details."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-8c71d6ac2428",
+          "description": "What fields should the endpoint return?",
+          "source_segment_id": "browser-1792264768646-seg-7",
+          "source_passage": "What fields should the endpoint return?",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: What fields should the endpoint return?"
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-ff5370931857",
+          "description": "The endpoint must validate the request and return consistent error responses.",
+          "source_segment_id": "browser-1792264768646-seg-11",
+          "source_passage": "The endpoint must validate the request and return consistent error responses.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: The endpoint must validate the request and return consistent error responses."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-43a5fd2ae5df",
+          "description": "We need to confirm the existing authentication and authorization middleware.",
+          "source_segment_id": "browser-1792264768646-seg-13",
+          "source_passage": "We need to confirm the existing authentication and authorization middleware.",
+          "status": "confirmed",
+          "priority": "normal",
+          "explicit": true,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to confirm the existing authentication and authorization middleware."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        },
+        {
+          "requirement_id": "req-351698b87189",
+          "description": "Only authorized users should access project details.",
+          "source_segment_id": "browser-1792264768646-seg-15",
+          "source_passage": "Only authorized users should access project details.",
+          "status": "unclear",
+          "priority": "normal",
+          "explicit": false,
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Only authorized users should access project details."
+          ],
+          "dependencies": [],
+          "existing_solution_status": "unverified",
+          "estimate_status": "pending"
+        }
+      ],
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified.",
+      "deliverables": [
+        "We need a new REST API endpoint to retrieve project details.",
+        "The endpoint must validate the request and return consistent error responses.",
+        "We need to confirm the existing authentication and authorization middleware."
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "dependencies": [
+        "req-72700cc2d7d1",
+        "req-8c71d6ac2428",
+        "req-ff5370931857",
+        "req-43a5fd2ae5df",
+        "req-351698b87189"
+      ],
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: We need a new REST API endpoint to retrieve project details.",
+        "Demonstrate that the delivered workflow satisfies: What fields should the endpoint return?",
+        "Demonstrate that the delivered workflow satisfies: The endpoint must validate the request and return consistent error responses.",
+        "Demonstrate that the delivered workflow satisfies: We need to confirm the existing authentication and authorization middleware.",
+        "Demonstrate that the delivered workflow satisfies: Only authorized users should access project details."
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-72700cc2d7d1",
+        "Clarify feasibility for req-8c71d6ac2428",
+        "Clarify feasibility for req-ff5370931857",
+        "Clarify feasibility for req-43a5fd2ae5df",
+        "Clarify feasibility for req-351698b87189"
+      ]
+    },
+    "estimates": [
+      {
+        "requirement_id": "req-72700cc2d7d1",
+        "task": "We need a new REST API endpoint to retrieve project details.",
+        "low_hours": 12,
+        "likely_hours": 24,
+        "high_hours": 40,
+        "rationale": "Integration work requires provider discovery, credentials, mapping, and end-to-end verification.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-8c71d6ac2428",
+        "task": "What fields should the endpoint return?",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-ff5370931857",
+        "task": "The endpoint must validate the request and return consistent error responses.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-43a5fd2ae5df",
+        "task": "We need to confirm the existing authentication and authorization middleware.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      },
+      {
+        "requirement_id": "req-351698b87189",
+        "task": "Only authorized users should access project details.",
+        "low_hours": 4,
+        "likely_hours": 8,
+        "high_hours": 16,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-72700cc2d7d1",
+          "req-8c71d6ac2428",
+          "req-ff5370931857",
+          "req-43a5fd2ae5df",
+          "req-351698b87189"
+        ],
+        "human_review_required": true
+      }
+    ],
+    "total_likely_hours": 56,
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "approval_status": "pending",
+    "project_id": "browser-project",
+    "approved_by": null,
+    "approved_at": null
   }
 }

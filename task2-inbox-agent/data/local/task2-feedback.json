@@ -196,6 +196,132 @@
       },
       "category": "how-to",
       "risk": "low"
+    },
+    {
+      "eventId": "review-8",
+      "emailId": "email-019",
+      "action": "pending",
+      "generatedDraft": "Hello,\n\nThanks for reaching out. I can help clarify the next step.\n\nCould you tell us which account page or action you are trying to complete? If you see an error message, please include its exact text.\n\nWith those details, we can identify the appropriate next step or refer the issue to a specialist.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nThanks for reaching out. I can help clarify the next step.\n\nCould you tell us which account page or action you are trying to complete? If you see an error message, please include its exact text.\n\nWith those details, we can identify the appropriate next step or refer the issue to a specialist.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T11:34:33.802Z",
+      "evidence": [],
+      "evidenceStatus": "insufficient",
+      "finalTextChanged": false,
+      "outcome": "pending",
+      "originalEmail": {
+        "subject": "Account help needed 7",
+        "body": "Please explain the next step for our account and what information you need.",
+        "from": "customer19@example.test"
+      },
+      "category": "how-to",
+      "risk": "medium"
+    },
+    {
+      "eventId": "review-9",
+      "emailId": "email-019",
+      "action": "rejected",
+      "generatedDraft": "Hello,\n\nThanks for reaching out. I can help clarify the next step.\n\nCould you tell us which account page or action you are trying to complete? If you see an error message, please include its exact text.\n\nWith those details, we can identify the appropriate next step or refer the issue to a specialist.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nThanks for reaching out. I can help clarify the next step.\n\nCould you tell us which account page or action you are trying to complete? If you see an error message, please include its exact text.\n\nWith those details, we can identify the appropriate next step or refer the issue to a specialist.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T11:34:37.101Z",
+      "evidence": [],
+      "evidenceStatus": "insufficient",
+      "finalTextChanged": false,
+      "outcome": "rejected",
+      "originalEmail": {
+        "subject": "Account help needed 7",
+        "body": "Please explain the next step for our account and what information you need.",
+        "from": "customer19@example.test"
+      },
+      "category": "how-to",
+      "risk": "medium"
+    },
+    {
+      "eventId": "review-10",
+      "emailId": "email-010",
+      "action": "pending",
+      "generatedDraft": "Hello,\n\nRegarding your \"Account next step 10\" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding your \"Account next step 10\" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T19:18:05.198Z",
+      "evidence": [
+        {
+          "title": "Home | Support",
+          "url": "https://support.brilliantdirectories.com/support/home",
+          "section": "What Do You Need Help With?",
+          "chunk_id": "article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": false,
+      "outcome": "pending",
+      "originalEmail": {
+        "subject": "Account next step 10",
+        "body": "Please explain the next step for our account and what information you need.",
+        "from": "customer10@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    },
+    {
+      "eventId": "review-11",
+      "emailId": "email-010",
+      "action": "pending",
+      "generatedDraft": "Hello,\n\nRegarding your \"Account next step 10\" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding your \"Account next step 10\" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T19:18:10.448Z",
+      "evidence": [
+        {
+          "title": "Home | Support",
+          "url": "https://support.brilliantdirectories.com/support/home",
+          "section": "What Do You Need Help With?",
+          "chunk_id": "article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": true,
+      "outcome": "pending",
+      "originalEmail": {
+        "subject": "Account next step 10",
+        "body": "Please explain the next step for our account and what information you need.",
+        "from": "customer10@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
+    },
+    {
+      "eventId": "review-12",
+      "emailId": "email-010",
+      "action": "approved",
+      "generatedDraft": "Hello,\n\nRegarding your \"Account next step 10\" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nSupport Team",
+      "finalContent": "Hello,\n\nRegarding your \"Account next step 10\" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nSupport Team",
+      "promptVersion": "draft-v1",
+      "modelVersion": "task1-contract",
+      "createdAt": "2026-10-17T19:18:13.095Z",
+      "evidence": [
+        {
+          "title": "Home | Support",
+          "url": "https://support.brilliantdirectories.com/support/home",
+          "section": "What Do You Need Help With?",
+          "chunk_id": "article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb"
+        }
+      ],
+      "evidenceStatus": "supported",
+      "finalTextChanged": false,
+      "outcome": "approved",
+      "originalEmail": {
+        "subject": "Account next step 10",
+        "body": "Please explain the next step for our account and what information you need.",
+        "from": "customer10@example.test"
+      },
+      "category": "how-to",
+      "risk": "low"
     }
   ],
   "revisions": []
