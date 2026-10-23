@@ -13,6 +13,7 @@ import json
 from threading import Lock
 from typing import Any, Callable, Iterable, Protocol
 from uuid import uuid4
+from .management import SitemapManager
 
 
 MAX_BODY_BYTES = 1_000_000
@@ -68,6 +69,16 @@ class IngestionService(Protocol):
     def run(self, request_id: str) -> IngestionStatus: ...
 
     def status(self) -> IngestionStatus: ...
+
+
+class SitemapService(Protocol):
+    def add(self, owner_id: str, root_url: str, interval: str, threshold: int, action: str) -> Any: ...
+    def list(self, owner_id: str) -> tuple[Any, ...]: ...
+    def get(self, owner_id: str, sitemap_id: str) -> Any: ...
+    def refresh(self, owner_id: str, sitemap_id: str) -> Any: ...
+    def runs(self, owner_id: str, sitemap_id: str, limit: int = 20) -> tuple[Any, ...]: ...
+    def pending(self, owner_id: str, sitemap_id: str) -> tuple[dict[str, object], ...]: ...
+    def urls(self, owner_id: str, sitemap_id: str, run_id: str | None = None, limit: int = 500, offset: int = 0) -> tuple[dict[str, object], ...]: ...
 
 
 class EscalationService(Protocol):
@@ -148,6 +159,7 @@ class Task1Api:
         query_service: QueryService | None = None,
         ingestion_service: IngestionService | None = None,
         escalation_service: EscalationService | None = None,
+        sitemap_service: SitemapService | None = None,
         query_timeout_seconds: float = 10.0,
         clock: Callable[[], str] | None = None,
     ) -> None:
@@ -157,6 +169,7 @@ class Task1Api:
         self.ingestion_service = ingestion_service or NoopIngestionService()
         self.clock = clock or _now
         self.escalation_service = escalation_service or InMemoryEscalationService(self.clock)
+        self.sitemap_service = sitemap_service
         self.query_timeout_seconds = query_timeout_seconds
 
     def dispatch(
@@ -177,20 +190,87 @@ class Task1Api:
                 return 200, _ingestion_payload(status), request_id
             if method == "GET" and path == "/ingestion/status":
                 return 200, _ingestion_payload(self.ingestion_service.status()), request_id
+            if method == "POST" and path == "/sitemaps/list":
+                return self._sitemaps(payload, request_id)
+            if method == "POST" and path == "/sitemaps":
+                return self._add_sitemap(payload, request_id)
+            if method == "POST" and path.startswith("/sitemaps/") and path.endswith("/refresh"):
+                sitemap_id = path[len("/sitemaps/") : -len("/refresh")].strip("/")
+                return self._refresh_sitemap(sitemap_id, payload, request_id)
+            if method == "POST" and path.startswith("/sitemaps/") and path.endswith("/runs"):
+                sitemap_id = path[len("/sitemaps/") : -len("/runs")].strip("/")
+                return self._sitemap_runs(sitemap_id, payload, request_id)
+            if method == "POST" and path.startswith("/sitemaps/") and path.endswith("/pending"):
+                sitemap_id = path[len("/sitemaps/") : -len("/pending")].strip("/")
+                return self._sitemap_pending(sitemap_id, payload, request_id)
+            if method == "POST" and path.startswith("/sitemaps/") and path.endswith("/urls"):
+                sitemap_id = path[len("/sitemaps/") : -len("/urls")].strip("/")
+                return self._sitemap_urls(sitemap_id, payload, request_id)
             if method == "POST" and path == "/escalations":
                 return self._create_escalation(payload, request_id)
             if method == "POST" and path.startswith("/escalations/") and path.endswith("/resolve"):
                 escalation_id = path[len("/escalations/") : -len("/resolve")].strip("/")
                 return self._resolve_escalation(escalation_id, payload, request_id)
-            if path in {"/query", "/ingestion/run", "/ingestion/status", "/escalations", "/health"} or path.startswith("/escalations/"):
+            if path in {"/query", "/ingestion/run", "/ingestion/status", "/escalations", "/health", "/sitemaps", "/sitemaps/list"} or path.startswith("/escalations/") or path.startswith("/sitemaps/"):
                 return 405, _error("method_not_allowed", "HTTP method is not allowed", request_id), request_id
             return 404, _error("not_found", "Endpoint was not found", request_id), request_id
         except ServiceUnavailableError as exc:
             return 503, _error(exc.code, str(exc), request_id), request_id
+        except KeyError as exc:
+            return 404, _error("not_found", str(exc), request_id), request_id
         except ValueError as exc:
             return 400, _error("invalid_request", str(exc), request_id), request_id
+        except RuntimeError as exc:
+            return 409, _error("conflict", str(exc), request_id), request_id
         except Exception:
             return 500, _error("internal_error", "The service could not complete the request", request_id), request_id
+
+    def _require_sitemaps(self) -> SitemapService:
+        if self.sitemap_service is None:
+            raise ServiceUnavailableError("sitemap management is not configured")
+        return self.sitemap_service
+
+    @staticmethod
+    def _owner(payload: dict[str, Any] | None) -> str:
+        return _required_string(payload, "owner_id", 200)
+
+    def _sitemaps(self, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        records = self._require_sitemaps().list(self._owner(payload))
+        return 200, {"sitemaps": [_sitemap_payload(item) for item in records], "request_id": request_id}, request_id
+
+    def _add_sitemap(self, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        if payload is None:
+            raise ValueError("request body is required")
+        service = self._require_sitemaps()
+        record = service.add(
+            self._owner(payload),
+            _required_string(payload, "root_url", 2_000),
+            str(payload.get("interval", "daily")),
+            int(payload.get("threshold", 3)),
+            str(payload.get("action", "review")),
+        )
+        return 201, {"sitemap": _sitemap_payload(record), "request_id": request_id}, request_id
+
+    def _refresh_sitemap(self, sitemap_id: str, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        run = self._require_sitemaps().refresh(self._owner(payload), sitemap_id)
+        return 200, {"run": _refresh_payload(run), "request_id": request_id}, request_id
+
+    def _sitemap_runs(self, sitemap_id: str, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        runs = self._require_sitemaps().runs(self._owner(payload), sitemap_id)
+        return 200, {"runs": [_refresh_payload(item) for item in runs], "request_id": request_id}, request_id
+
+    def _sitemap_pending(self, sitemap_id: str, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        pending = self._require_sitemaps().pending(self._owner(payload), sitemap_id)
+        return 200, {"pending": list(pending), "request_id": request_id}, request_id
+
+    def _sitemap_urls(self, sitemap_id: str, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        payload = payload or {}
+        urls = self._require_sitemaps().urls(
+            self._owner(payload), sitemap_id,
+            payload.get("run_id") if isinstance(payload.get("run_id"), str) else None,
+            int(payload.get("limit", 500)), int(payload.get("offset", 0)),
+        )
+        return 200, {"urls": list(urls), "request_id": request_id}, request_id
 
     def _query(self, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
         question = _required_string(payload, "question", 10_000)
@@ -299,6 +379,12 @@ def openapi_document() -> dict[str, Any]:
             "/escalations": {"post": {"operationId": "createEscalation", "responses": {"201": {"description": "Created escalation"}}}},
             "/escalations/{id}/resolve": {"post": {"operationId": "resolveEscalation", "responses": {"200": {"description": "Resolved escalation"}, "404": {"description": "Not found"}}}},
             "/health": {"get": {"operationId": "health", "responses": {"200": {"description": "Healthy"}}}},
+            "/sitemaps/list": {"post": {"operationId": "listSitemaps", "responses": {"200": {"description": "Owned sitemap configurations"}}}},
+            "/sitemaps": {"post": {"operationId": "addSitemap", "responses": {"201": {"description": "Created sitemap configuration"}}}},
+            "/sitemaps/{id}/refresh": {"post": {"operationId": "refreshSitemap", "responses": {"200": {"description": "Refresh run summary"}}}},
+            "/sitemaps/{id}/runs": {"post": {"operationId": "listSitemapRuns", "responses": {"200": {"description": "Refresh history"}}}},
+            "/sitemaps/{id}/pending": {"post": {"operationId": "pendingSitemapActions", "responses": {"200": {"description": "Pending lifecycle actions"}}}},
+            "/sitemaps/{id}/urls": {"post": {"operationId": "listRefreshUrls", "responses": {"200": {"description": "Persisted URL results"}}}},
         },
     }
 
@@ -336,6 +422,29 @@ def _ingestion_payload(status: IngestionStatus) -> dict[str, Any]:
 
 def _escalation_payload(record: Escalation, request_id: str) -> dict[str, Any]:
     return {"escalation_id": record.escalation_id, "question": record.question, "reason": record.reason, "evidence": [_citation_payload(item) for item in record.evidence], "status": record.status, "created_at": record.created_at, "resolved_at": record.resolved_at, "reviewer_answer": record.reviewer_answer, "request_id": request_id}
+
+
+def _sitemap_payload(record: Any) -> dict[str, Any]:
+    return {
+        "sitemap_id": record.sitemap_id, "owner_id": record.owner_id, "root_url": record.root_url,
+        "interval": record.interval, "threshold": record.threshold, "action": record.action,
+        "active": record.active, "created_at": record.created_at, "last_attempted": record.last_attempted,
+        "last_successful": record.last_successful, "next_scheduled": record.next_scheduled,
+        "status": record.status, "failure_reason": record.failure_reason,
+    }
+
+
+def _refresh_payload(record: Any) -> dict[str, Any]:
+    return {
+        "run_id": record.run_id, "sitemap_id": record.sitemap_id, "started_at": record.started_at,
+        "completed_at": record.completed_at, "status": record.status,
+        "discovered_count": record.discovered_count, "unique_count": record.unique_count,
+        "duplicate_count": record.duplicate_count, "error_count": record.error_count,
+        "pages_processed": record.pages_processed, "pages_total": record.pages_total,
+        "first_fetched_url": record.first_fetched_url,
+        "last_fetched_url": record.last_fetched_url,
+        "errors": list(record.errors),
+    }
 
 
 def _error(code: str, message: str, request_id: str) -> dict[str, str]:

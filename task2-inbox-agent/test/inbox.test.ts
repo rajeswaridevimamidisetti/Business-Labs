@@ -309,6 +309,20 @@ test("deterministic classification recognizes all dataset categories", () => {
   assert.deepEqual(classified, new Set(["how-to", "troubleshooting", "project-request", "refund-cancellation", "complaint", "quote-request", "follow-up"]));
 });
 
+test("label policies persist independently and dry-run blocks unsafe automation", () => {
+  const directory = mkdtempSync(join(tmpdir(), "inbox-policy-"));
+  const file = join(directory, "eligibility.json");
+  const tracker = new EligibilityTracker(20, () => "now", file);
+  tracker.setPolicy("how-to", "General Settings", 2, true);
+  const decision = tracker.decide("how-to", { humanApprovalRequired: true, evidenceStatus: "supported", risk: "low" }, false);
+  assert.equal(decision.allowed, false);
+  assert.equal(decision.dryRun, true);
+  const restarted = new EligibilityTracker(20, () => "now", file);
+  assert.equal(restarted.policy("how-to")?.parentSettingType, "General Settings");
+  assert.equal(restarted.decisionsHistory().length, 1);
+  rmSync(directory, { recursive: true, force: true });
+});
+
 test("classification policy is passed to the model", async () => {
   let policy = "";
   await classifyEmail(syntheticEmails()[0], { classify: async (_prompt, receivedPolicy) => { policy = receivedPolicy; return { category: "how-to", subcategory: "setup", urgency: "normal", risk: "low", productKnowledgeRequired: true, humanReviewRequired: false, promptVersion: "v1" }; } });

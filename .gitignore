@@ -14,6 +14,10 @@ build/
 .coverage
 htmlcov/
 data/local/
+task2-inbox-agent/data/local/
+google-oauth-client.json
+client_secret_*.json
+*.enc
 *.sqlite3
 *.db
 *.log

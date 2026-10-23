@@ -2,26 +2,11 @@
 
 ## Current workflow
 
-The local service exposes backend-provided synthetic emails, generates a
-draft through the Task 1 HTTP contract, and records review actions. The
-browser console uses the same `/v1/emails`, `/v1/drafts`, and `/v1/reviews`
-routes through the Vite proxy.
-
-The dataset contains 50 cases:
-
-| Category | Count |
-|---|---:|
-| How-to | 12 |
-| Troubleshooting | 10 |
-| Project request | 6 |
-| Refund/cancellation | 6 |
-| Complaint | 6 |
-| Quote request | 5 |
-| Follow-up | 5 |
-
-Forty cases are development cases and ten are held out. Each case has a
-stable ID, varied subject/message, expected category and outcome, important
-facts, evidence expectation, risk, and expected handling.
+The local service reads messages only after an authenticated user completes
+Google OAuth. Gmail message metadata is synchronized into an owner-scoped
+local store, and the browser console uses `/v1/gmail/messages/local`,
+`/v1/drafts`, and `/v1/reviews` through the Vite proxy. An empty mailbox is
+reported honestly; no synthetic inbox is provided.
 
 ## Evidence-grounded drafts
 
@@ -49,11 +34,147 @@ recorded through `/v1/reviews` and persisted to
 Approval is not email delivery; no email provider or real send integration is
 configured.
 
+Draft delivery state is persisted separately in SQLite at
+`TASK2_DATABASE_URL` (default `sqlite://data/local/task2.sqlite3`). The
+database contains immutable draft versions, normalized approval integrity
+hashes, Gmail account binding, audit events, and idempotent send-attempt
+records. Draft edits create a new version and clear approval. Send claims use
+an immediate transaction and a unique `(owner, email, version)` claim, so
+duplicate requests cannot claim the same approved version concurrently.
+Attempts left in `sending` during a process restart are recovered as
+`outcome_unknown` and must be reconciled rather than retried automatically. A
+provider message ID is retained when Gmail returns one. Reconciliation fetches
+that exact Gmail message and marks an attempt `sent` only when the provider
+recipient and subject match the approved draft. If no ID exists or metadata
+does not match, the attempt remains `outcome_unknown`; Gmail does not provide a
+general idempotency key for `messages.send`, so manual evidence is required.
+The
+schema migration is additive and runs on startup; back up the SQLite file
+before deployment or migration rollback. A rollback must restore the backup
+and the application version together—never drop these tables on a live
+database.
+
 The 20-case eligibility tracker is a separate, durable state machine in
 `src/eligibility.ts`. It counts only explicit `sent` events with unchanged
 content, low risk, and a passing quality check. Approval alone cannot qualify
 a category. Autonomy is disabled unless an authorized delivery integration
-explicitly emits a sent event; the current service has no such integration.
+explicitly emits a sent event.
+
+## Gmail OAuth, synchronization boundary, and safe test mode
+
+The Gmail connection uses Google's OAuth 2.0 authorization-code flow. Configure
+the following environment variables (never commit the real values):
+
+```powershell
+$env:GOOGLE_OAUTH_CLIENT_JSON_PATH = "C:\Users\<YOUR_WINDOWS_USERNAME>\AppData\Local\Business-Labs\google-oauth-client.json"
+$env:GOOGLE_OAUTH_CLIENT_ID = "<Google web client id>"
+$env:GOOGLE_OAUTH_CLIENT_SECRET = "<Google client secret>"
+$env:GOOGLE_OAUTH_REDIRECT_URI = "http://127.0.0.1:8002/v1/gmail/oauth/callback"
+$env:GMAIL_TOKEN_ENCRYPTION_KEY = "<base64 encoded 32-byte key>"
+$env:GMAIL_TOKEN_PATH = "data/local/gmail-tokens.enc"
+$env:GMAIL_LIVE_SEND_ENABLED = "false"
+```
+
+The downloaded Google Web application JSON is preferred when
+`GOOGLE_OAUTH_CLIENT_JSON_PATH` is set. Its `client_id`, `client_secret`,
+`redirect_uris`, `auth_uri`, and `token_uri` are used; the environment client
+ID and secret remain a fallback when no JSON path is configured. The selected
+configuration must contain the exact callback URI below. Missing, malformed,
+unsupported, or unreadable JSON fails closed with a configuration error and
+never prints credentials.
+
+In Google Cloud, enable Gmail API, configure the OAuth consent screen, create a
+Web application OAuth client, and add exactly
+`http://127.0.0.1:8002/v1/gmail/oauth/callback` as an authorized redirect URI.
+The application requests `gmail.readonly` for inbox synchronization. Gmail
+send scope is not requested while live sending is disabled; a separately
+authorized send configuration would be required before that endpoint could
+be enabled. Click
+**Connect Gmail** in the inbox UI, review the Google account identity shown after
+callback, and use **Disconnect** to remove the encrypted local token record.
+
+`GET /v1/gmail/oauth/start` starts the flow and
+`GET /v1/gmail/oauth/callback` validates a one-time, expiring server-side state
+value before exchanging the authorization code. Tokens are encrypted with
+AES-256-GCM when `GMAIL_TOKEN_ENCRYPTION_KEY` and `GMAIL_TOKEN_PATH` are set;
+they are never returned by the API. `GET /v1/gmail/status` reports only
+configuration and connected-account metadata. Protected routes fail closed
+unless they receive an expiring gateway-issued `Authorization: Bearer`
+session signed with `TASK2_AUTH_SIGNING_SECRET`. The signed subject is the
+only owner identity used for drafts, approvals, Gmail tokens, sync records, and
+send attempts; frontend-supplied owner/account IDs are ignored. Health and the
+OAuth callback are public because Google must redirect to the callback. This
+repository does not contain an identity provider or session issuer, so the
+deployment must provide that gateway before the frontend can use protected
+routes. Do not use `TASK2_OWNER_ID` as authentication.
+
+`GET /v1/gmail/messages` reads message metadata only when connected.
+`POST /v1/gmail/sync` incrementally imports one Gmail page per call into
+`GMAIL_SYNC_PATH` (default `data/local/gmail-sync.json`). Stable Gmail message
+IDs are unique per owner, retries are idempotent, and
+`GET /v1/gmail/messages/local` returns only locally persisted messages.
+`GET /v1/gmail/sync/status` exposes sync state and counts without credentials.
+
+## Real complaint processing
+
+After Gmail OAuth and synchronization, the frontend can analyze a selected
+message through `POST /v1/complaints/{gmailMessageId}/analyze`. The service
+fetches the full message body from Gmail, sends it to the configured
+server-side Claude provider, validates the structured response, and persists
+the original sender, subject, received timestamp, body, analysis, processing
+status, and errors in the existing SQLite database. A generated reply is
+stored as a normal immutable draft version and remains pending human review.
+Edits create a new version and invalidate approval. No automatic send occurs.
+
+Configure `GEMINI_API_KEY` and `GEMINI_MODEL` on the server. Gemini is selected
+when either Gemini variable is present; otherwise the legacy Claude adapter is
+used when its variables are configured. If the selected provider is missing or
+still a placeholder, analysis fails closed with an explicit configuration
+error; the UI must not present an AI result. Provider output is treated as
+untrusted and must match the validated JSON schema. Never place the key in
+frontend variables or logs.
+`POST /v1/gmail/send` requires an approved persisted draft and defaults to dry-run;
+pass `{"dryRun":false}` only in an explicitly authorized test environment with
+`GMAIL_LIVE_SEND_ENABLED=true`. OAuth connection and initial reads never send
+mail. Dry-run and disabled-live responses include a `preview` object containing
+the recipient, subject, and body that would be sent; they do not call Gmail's
+`messages.send` endpoint. Without valid Google credentials, live Gmail behavior
+remains blocked and is not claimed. A live request also requires a unique
+`idempotencyKey` (or `Idempotency-Key` header). Network or Gmail errors after
+the send call are recorded as `outcome_unknown`; the service never blindly retries
+them.
+
+### Local PowerShell startup and verification
+
+From the repository root, set the configuration in the same PowerShell session:
+
+```powershell
+$env:GOOGLE_OAUTH_CLIENT_JSON_PATH = "C:\Users\<YOUR_WINDOWS_USERNAME>\AppData\Local\Business-Labs\google-oauth-client.json"
+# Generate this once, store it in the local .env, and reuse it on future runs.
+$env:GMAIL_TOKEN_ENCRYPTION_KEY = node -e "process.stdout.write(require('crypto').randomBytes(32).toString('base64'))"
+$env:GMAIL_LIVE_SEND_ENABLED = "false"
+Set-Location task2-inbox-agent
+npm run typecheck
+npm test
+npm start
+```
+
+Do not regenerate `GMAIL_TOKEN_ENCRYPTION_KEY` if
+`GMAIL_TOKEN_PATH` already contains encrypted tokens; changing the key makes
+those tokens unreadable. Rotate only through an explicit migration/reconnect
+procedure. The development `.env` currently contains a persistent key value
+without exposing it in this documentation.
+
+Start the frontend separately using the repository's existing frontend
+commands, then click **Connect Gmail**. After Google's consent screen, verify
+that the returned account address is the intended account in the Inbox Agent
+panel. Test read-only retrieval through `GET /v1/gmail/messages` before
+considering any send test. If Google reports an invalid redirect URI, confirm
+that the Cloud Console contains exactly
+`http://127.0.0.1:8002/v1/gmail/oauth/callback` and that
+`GOOGLE_OAUTH_CLIENT_JSON_PATH` points to the downloaded Web client JSON.
+Keep the JSON and encrypted token file outside Git; the repository ignores
+common downloaded client-secret names and encrypted token files.
 
 ## Checks
 
@@ -61,6 +182,14 @@ From this directory:
 
 ```powershell
 npm run typecheck
+npm test
+```
+
+The startup migration can be exercised against a disposable database without
+touching local mailbox data:
+
+```powershell
+$env:TASK2_DATABASE_URL = "sqlite://$((New-Item -ItemType Directory -Force $env:TEMP\task2-db-test).FullName)\task2.sqlite3"
 npm test
 ```
 

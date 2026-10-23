@@ -19,7 +19,7 @@ from urllib import request as urllib_request
 from urllib.parse import urlsplit
 from urllib import robotparser
 
-from .sitemap import SITEMAP_URL, SitemapEntry, SitemapParseError, parse_sitemap
+from .sitemap import SITEMAP_URL, SitemapEntry, SitemapParseError, parse_sitemap, validate_sitemap_url
 
 
 class Fetcher(Protocol):
@@ -34,10 +34,11 @@ class FetchResponse:
 
 
 class FetchFailure(RuntimeError):
-    def __init__(self, message: str, attempts: int, transient: bool) -> None:
+    def __init__(self, message: str, attempts: int, transient: bool, status_code: int | None = None) -> None:
         super().__init__(message)
         self.attempts = attempts
         self.transient = transient
+        self.status_code = status_code
 
 
 @dataclass(frozen=True)
@@ -49,6 +50,8 @@ class CrawlConfig:
     max_retries: int = 2
     backoff_seconds: float = 0.5
     user_agent: str = "BusinessLabsKnowledgeBrain/0.1"
+    max_sitemap_depth: int = 8
+    max_sitemap_documents: int = 1_000
 
     def __post_init__(self) -> None:
         if self.max_articles < 1:
@@ -61,6 +64,10 @@ class CrawlConfig:
             raise ValueError("delays cannot be negative")
         if self.max_retries < 0:
             raise ValueError("max_retries cannot be negative")
+        if self.max_sitemap_depth < 0:
+            raise ValueError("max_sitemap_depth cannot be negative")
+        if self.max_sitemap_documents < 1:
+            raise ValueError("max_sitemap_documents must be positive")
 
 
 @dataclass(frozen=True)
@@ -69,6 +76,7 @@ class PageOutcome:
     status: str
     attempts: int
     error_summary: str | None = None
+    http_status: int | None = None
 
 
 @dataclass(frozen=True)
@@ -78,6 +86,21 @@ class CrawlResult:
     outcomes: tuple[PageOutcome, ...]
     removed_count: int
     discovery_complete: bool
+    discovery_summary: tuple["SitemapSummary", ...] = ()
+    discovered_urls: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class SitemapSummary:
+    sitemap_url: str
+    depth: int
+    child_sitemaps: tuple[str, ...]
+    listed_url_count: int
+    first_url: str | None
+    last_url: str | None
+    skipped_count: int = 0
+    error: str | None = None
+    duplicate_count: int = 0
 
 
 class ManifestStore:
@@ -110,7 +133,27 @@ class ManifestStore:
             );
             """
         )
+        self._ensure_health_columns()
         self.connection.commit()
+
+    def _ensure_health_columns(self) -> None:
+        existing = {
+            row["name"]
+            for row in self.connection.execute("PRAGMA table_info(sources)").fetchall()
+        }
+        columns = {
+            "first_discovered_at": "TEXT",
+            "last_seen_at": "TEXT",
+            "last_status_code": "INTEGER",
+            "consecutive_missing_checks": "INTEGER NOT NULL DEFAULT 0",
+            "consecutive_failure_checks": "INTEGER NOT NULL DEFAULT 0",
+            "lifecycle_status": "TEXT NOT NULL DEFAULT 'active'",
+            "quarantine_reason": "TEXT",
+            "quarantined_at": "TEXT",
+        }
+        for name, definition in columns.items():
+            if name not in existing:
+                self.connection.execute(f"ALTER TABLE sources ADD COLUMN {name} {definition}")
 
     def close(self) -> None:
         self.connection.close()
@@ -126,6 +169,16 @@ class ManifestStore:
                 updated_at = excluded.updated_at
             """,
             (url, now),
+        )
+        self.connection.execute(
+            """
+            UPDATE sources
+            SET first_discovered_at = COALESCE(first_discovered_at, ?),
+                last_seen_at = ?, consecutive_missing_checks = 0,
+                lifecycle_status = CASE WHEN lifecycle_status = 'quarantined' THEN lifecycle_status ELSE 'active' END
+            WHERE url = ?
+            """,
+            (_now(), _now(), url),
         )
         self.connection.commit()
 
@@ -169,10 +222,28 @@ class ManifestStore:
             """,
             (url, status, attempts, response.last_modified, content_hash, now, now),
         )
+        self.connection.execute(
+            """
+            UPDATE sources
+            SET first_discovered_at = COALESCE(first_discovered_at, ?),
+                last_seen_at = ?, last_status_code = ?,
+                consecutive_missing_checks = 0, consecutive_failure_checks = 0,
+            lifecycle_status = 'active',
+                quarantine_reason = NULL, quarantined_at = NULL
+            WHERE url = ?
+            """,
+            (now, now, response.status_code, url),
+        )
         self.connection.commit()
         return status
 
-    def record_failure(self, url: str, attempts: int, error_summary: str) -> None:
+    def record_failure(
+        self,
+        url: str,
+        attempts: int,
+        error_summary: str,
+        status_code: int | None = None,
+    ) -> None:
         now = _now()
         self.connection.execute(
             """
@@ -187,6 +258,16 @@ class ManifestStore:
             """,
             (url, attempts, error_summary[:500], now),
         )
+        self.connection.execute(
+            """
+            UPDATE sources
+            SET first_discovered_at = COALESCE(first_discovered_at, ?),
+                last_status_code = COALESCE(?, last_status_code),
+                consecutive_failure_checks = consecutive_failure_checks + 1
+            WHERE url = ?
+            """,
+            (now, status_code, url),
+        )
         self.connection.commit()
 
     def mark_removed(self, discovered_urls: set[str]) -> int:
@@ -199,6 +280,15 @@ class ManifestStore:
             """
             UPDATE sources SET status = 'removed', active = 0,
                 error_summary = 'not present in sitemap', updated_at = ?
+            WHERE url = ?
+            """,
+            [(now, url) for url in removed],
+        )
+        self.connection.executemany(
+            """
+            UPDATE sources
+            SET last_seen_at = ?, consecutive_missing_checks = consecutive_missing_checks + 1,
+                lifecycle_status = CASE WHEN lifecycle_status = 'active' THEN 'pending_missing' ELSE lifecycle_status END
             WHERE url = ?
             """,
             [(now, url) for url in removed],
@@ -270,10 +360,16 @@ class _RateLimiter:
 
 
 def urllib_fetcher(user_agent: str) -> Fetcher:
+    class NoRedirect(urllib_request.HTTPRedirectHandler):
+        def redirect_request(self, req, fp, code, msg, headers, newurl):
+            return None
+
+    opener = urllib_request.build_opener(NoRedirect)
+
     def fetch(url: str, timeout_seconds: float) -> FetchResponse:
         request = urllib_request.Request(url, headers={"User-Agent": user_agent})
         try:
-            with urllib_request.urlopen(request, timeout=timeout_seconds) as response:
+            with opener.open(request, timeout=timeout_seconds) as response:
                 return FetchResponse(
                     response.status,
                     response.read(),
@@ -282,7 +378,7 @@ def urllib_fetcher(user_agent: str) -> Fetcher:
         except urllib_error.HTTPError as exc:
             transient = exc.code in {408, 429} or 500 <= exc.code < 600
             raise FetchFailure(
-                f"HTTP {exc.code} for {url}", 1, transient
+                f"HTTP {exc.code} for {url}", 1, transient, exc.code
             ) from exc
         except (TimeoutError, urllib_error.URLError) as exc:
             raise FetchFailure(f"network failure for {url}: {exc}", 1, True) from exc
@@ -307,9 +403,25 @@ class CrawlRunner:
         self.manifest = manifest
         self.sleep = sleep
         self.rate_limiter = _RateLimiter(self.config.request_delay_seconds, sleep)
+        self.last_discovery_summary: tuple[SitemapSummary, ...] = ()
 
-    def run(self, sitemap_url: str = SITEMAP_URL) -> CrawlResult:
-        sitemap_entries, discovery_complete = self._discover(sitemap_url)
+    def run(self, sitemap_url: str | Iterable[str] = SITEMAP_URL) -> CrawlResult:
+        roots = [sitemap_url] if isinstance(sitemap_url, str) else list(sitemap_url)
+        if not roots or any(not isinstance(root, str) or not root.strip() for root in roots):
+            raise ValueError("at least one sitemap URL is required")
+        sitemap_entries: list[SitemapEntry] = []
+        discovery_complete = True
+        summaries: list[SitemapSummary] = []
+        for root in roots:
+            discovered, complete, root_summaries = self._discover(root)
+            sitemap_entries.extend(discovered)
+            discovery_complete = discovery_complete and complete
+            summaries.extend(root_summaries)
+        self.last_discovery_summary = tuple(summaries)
+        deduplicated: dict[str, SitemapEntry] = {}
+        for entry in sitemap_entries:
+            deduplicated.setdefault(entry.url, entry)
+        sitemap_entries = list(deduplicated.values())
         by_url = {entry.url: entry for entry in sitemap_entries}
         discovered_urls = set(by_url)
         selected = list(by_url.values())[: self.config.max_articles]
@@ -324,14 +436,14 @@ class CrawlRunner:
                 try:
                     response, attempts = future.result()
                 except FetchFailure as exc:
-                    self.manifest.record_failure(entry.url, exc.attempts, str(exc))
-                    outcomes.append(PageOutcome(entry.url, "failed", exc.attempts, str(exc)))
+                    self.manifest.record_failure(entry.url, exc.attempts, str(exc), exc.status_code)
+                    outcomes.append(PageOutcome(entry.url, "failed", exc.attempts, str(exc), exc.status_code))
                 except Exception as exc:
                     self.manifest.record_failure(entry.url, 1, str(exc))
                     outcomes.append(PageOutcome(entry.url, "failed", 1, str(exc)))
                 else:
                     status = self.manifest.record_success(entry.url, response, attempts)
-                    outcomes.append(PageOutcome(entry.url, status, attempts))
+                    outcomes.append(PageOutcome(entry.url, status, attempts, None, response.status_code))
 
         removed_count = self.manifest.mark_removed(discovered_urls) if discovery_complete else 0
         outcomes.sort(key=lambda outcome: outcome.url)
@@ -341,30 +453,70 @@ class CrawlRunner:
             outcomes=tuple(outcomes),
             removed_count=removed_count,
             discovery_complete=discovery_complete,
+            discovery_summary=tuple(summaries),
+            discovered_urls=tuple(discovered_urls),
         )
 
-    def _discover(self, sitemap_url: str) -> tuple[list[SitemapEntry], bool]:
-        response, _ = self._fetch_with_retry(sitemap_url)
-        parsed = parse_sitemap(response.content)
-        if parsed.kind == "urlset":
-            return list(parsed.entries), True
-
+    def _discover(self, sitemap_url: str) -> tuple[list[SitemapEntry], bool, list[SitemapSummary]]:
         entries: list[SitemapEntry] = []
         complete = True
-        for child in parsed.child_sitemaps:
-            try:
-                child_response, _ = self._fetch_with_retry(child.url)
-                child_result = parse_sitemap(child_response.content)
-                if child_result.kind != "urlset":
-                    complete = False
-                    continue
-                entries.extend(child_result.entries)
-            except (FetchFailure, SitemapParseError):
+        summaries: list[SitemapSummary] = []
+        visited: set[str] = set()
+        root_parts = urlsplit(sitemap_url)
+        allowed_hosts = {root_parts.hostname} if root_parts.hostname else None
+        try:
+            normalized_root = validate_sitemap_url(
+                sitemap_url,
+                allowed_hosts=allowed_hosts,
+                allow_http=root_parts.scheme.lower() == "http",
+            )
+        except ValueError as exc:
+            return [], False, [SitemapSummary(sitemap_url, 0, (), 0, None, None, error=str(exc))]
+        stack: list[tuple[str, int]] = [(normalized_root, 0)]
+        documents = 0
+        while stack:
+            current_url, depth = stack.pop()
+            if current_url in visited:
                 complete = False
+                summaries.append(SitemapSummary(current_url, depth, (), 0, None, None, error="circular_reference"))
+                continue
+            if depth > self.config.max_sitemap_depth or documents >= self.config.max_sitemap_documents:
+                complete = False
+                summaries.append(SitemapSummary(current_url, depth, (), 0, None, None, error="sitemap_limit_exceeded"))
+                continue
+            visited.add(current_url)
+            documents += 1
+            try:
+                response, _ = self._fetch_with_retry(current_url)
+                parsed = parse_sitemap(
+                    response.content,
+                    allowed_hosts=allowed_hosts,
+                    allow_http=root_parts.scheme.lower() == "http",
+                )
+            except (FetchFailure, SitemapParseError) as exc:
+                complete = False
+                summaries.append(SitemapSummary(current_url, depth, (), 0, None, None, error=str(exc)))
+                continue
+            if parsed.kind == "urlset":
+                entries.extend(parsed.entries)
+                urls = tuple(entry.url for entry in parsed.entries)
+                summaries.append(SitemapSummary(
+                    current_url, depth, (), len(urls), urls[0] if urls else None,
+                    urls[-1] if urls else None, len(parsed.skipped),
+                    duplicate_count=sum(1 for item in parsed.skipped if item.reason == "duplicate_url"),
+                ))
+                continue
+            children = tuple(child.url for child in parsed.child_sitemaps)
+            summaries.append(SitemapSummary(
+                current_url, depth, children, 0, None, None, len(parsed.skipped),
+                duplicate_count=sum(1 for item in parsed.skipped if item.reason == "duplicate_url"),
+            ))
+            for child in reversed(parsed.child_sitemaps):
+                stack.append((child.url, depth + 1))
         deduplicated: dict[str, SitemapEntry] = {}
         for entry in entries:
             deduplicated.setdefault(entry.url, entry)
-        return list(deduplicated.values()), complete
+        return list(deduplicated.values()), complete, summaries
 
     def _fetch_page(self, entry: SitemapEntry) -> tuple[FetchResponse, int]:
         response, attempts = self._fetch_with_retry(entry.url)
@@ -387,7 +539,7 @@ class CrawlRunner:
                 transient = response.status_code in {408, 429} or 500 <= response.status_code < 600
                 last_error = f"HTTP {response.status_code} for {url}"
                 if not transient:
-                    raise FetchFailure(last_error, attempts, False)
+                    raise FetchFailure(last_error, attempts, False, response.status_code)
             except FetchFailure as exc:
                 attempts = max(attempts, exc.attempts)
                 last_error = str(exc)

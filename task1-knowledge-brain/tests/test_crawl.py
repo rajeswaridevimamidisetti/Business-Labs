@@ -178,6 +178,45 @@ class CrawlRunnerTest(unittest.TestCase):
             self.assertTrue(any(delay > 0 for delay in delays))
             manifest.close()
 
+    def test_nested_index_is_traversed_to_multiple_levels_and_summarized(self) -> None:
+        child = "https://support.brilliantdirectories.com/support/child.xml"
+        grandchild = "https://support.brilliantdirectories.com/support/grandchild.xml"
+        fetcher = MappingFetcher(
+            {
+                ROOT: FetchResponse(200, f"<sitemapindex><sitemap><loc>{child}</loc></sitemap></sitemapindex>".encode()),
+                child: FetchResponse(200, f"<sitemapindex><sitemap><loc>{grandchild}</loc></sitemap></sitemapindex>".encode()),
+                grandchild: FetchResponse(200, urlset(PAGE_A, PAGE_B)),
+                PAGE_A: FetchResponse(200, b"a"),
+                PAGE_B: FetchResponse(200, b"b"),
+            }
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            runner, manifest = self.make_runner(fetcher, str(Path(directory) / "manifest.db"))
+            result = runner.run()
+            self.assertEqual(result.discovered_count, 2)
+            self.assertEqual(result.discovery_summary[-1].first_url, PAGE_A)
+            self.assertEqual(result.discovery_summary[-1].last_url, PAGE_B)
+            self.assertEqual(fetcher.calls.count(grandchild), 1)
+            manifest.close()
+
+    def test_failed_discovery_does_not_mark_existing_urls_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            database = str(Path(directory) / "manifest.db")
+            first, manifest = self.make_runner(
+                MappingFetcher({ROOT: FetchResponse(200, urlset(PAGE_A)), PAGE_A: FetchResponse(200, b"a")}),
+                database,
+            )
+            first.run()
+            manifest.close()
+            second, resumed = self.make_runner(
+                MappingFetcher({ROOT: RuntimeError("network down")}),
+                database,
+            )
+            result = second.run()
+            self.assertFalse(result.discovery_complete)
+            self.assertEqual(resumed.source(PAGE_A)["consecutive_missing_checks"], 0)
+            resumed.close()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -67,6 +67,8 @@ export interface Draft {
   evidenceStatus?: EvidenceStatus;
   generatedAt?: string;
   modelVersion?: string;
+  recipient?: string;
+  subject?: string;
 }
 
 export interface FeedbackEvent {

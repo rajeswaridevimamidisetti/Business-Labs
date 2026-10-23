@@ -71,6 +71,16 @@ class SitemapParserTest(unittest.TestCase):
         with self.assertRaises(SitemapParseError):
             parse_sitemap("<feed><entry /></feed>")
 
+    def test_custom_public_host_can_be_allowed_but_private_hosts_are_rejected(self) -> None:
+        result = parse_sitemap(
+            "<urlset><url><loc>http://docs.example.test/help</loc></url>"
+            "<url><loc>http://127.0.0.1/admin</loc></url></urlset>",
+            allowed_hosts={"docs.example.test"},
+            allow_http=True,
+        )
+        self.assertEqual([entry.url for entry in result.entries], ["http://docs.example.test/help"])
+        self.assertEqual(result.skipped[0].reason, "private_host")
+
 
 if __name__ == "__main__":
     unittest.main()

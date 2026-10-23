@@ -2,6 +2,7 @@ from io import BytesIO
 import json
 import time
 import unittest
+from types import SimpleNamespace
 
 from knowledge_brain.api import (
     IngestionStatus,
@@ -47,7 +48,9 @@ class ApiContractTest(unittest.TestCase):
         self.assertEqual(request_id, "req-health")
         self.assertEqual(set(openapi_document()["paths"]), {
             "/query", "/ingestion/run", "/ingestion/status", "/escalations",
-            "/escalations/{id}/resolve", "/health",
+            "/escalations/{id}/resolve", "/health", "/sitemaps/list", "/sitemaps",
+            "/sitemaps/{id}/refresh", "/sitemaps/{id}/runs", "/sitemaps/{id}/pending",
+            "/sitemaps/{id}/urls",
         })
 
     def test_query_returns_grounded_fields_without_confidence(self) -> None:
@@ -125,6 +128,49 @@ class ApiContractTest(unittest.TestCase):
         self.assertEqual(resolve_status, 200)
         self.assertEqual(resolved["status"], "resolved")
         self.assertEqual(resolved["reviewer_answer"], "A reviewed answer.")
+
+    def test_sitemap_management_routes_preserve_owner_and_refresh_summary(self) -> None:
+        record = SimpleNamespace(
+            sitemap_id="sm-1", owner_id="owner-1", root_url="https://docs.example.test/sitemap.xml",
+            interval="daily", threshold=3, action="review", active=True, created_at="now",
+            last_attempted=None, last_successful=None, next_scheduled="later",
+            status="idle", failure_reason=None,
+        )
+        run = SimpleNamespace(
+            run_id="run-1", sitemap_id="sm-1", started_at="start", completed_at="end",
+            status="completed", discovered_count=2, unique_count=1, duplicate_count=1,
+            error_count=0, pages_processed=1, pages_total=1, errors=(),
+            first_fetched_url="https://docs.example.test/page",
+            last_fetched_url="https://docs.example.test/page",
+        )
+
+        class Sitemaps:
+            def add(self, owner_id, root_url, interval, threshold, action):
+                self.owner_id = owner_id
+                return record
+            def list(self, owner_id):
+                assert owner_id == "owner-1"
+                return (record,)
+            def get(self, owner_id, sitemap_id):
+                return record
+            def refresh(self, owner_id, sitemap_id):
+                return run
+            def runs(self, owner_id, sitemap_id, limit=20):
+                return (run,)
+            def pending(self, owner_id, sitemap_id):
+                return ()
+
+        api = Task1Api(sitemap_service=Sitemaps())
+        created, body, _ = api.dispatch("POST", "/sitemaps", {
+            "owner_id": "owner-1", "root_url": record.root_url,
+        }, "req-sitemap")
+        refreshed, refresh_body, _ = api.dispatch("POST", "/sitemaps/sm-1/refresh", {
+            "owner_id": "owner-1",
+        }, "req-refresh")
+        self.assertEqual(created, 201)
+        self.assertEqual(body["sitemap"]["sitemap_id"], "sm-1")
+        self.assertEqual(refreshed, 200)
+        self.assertEqual(refresh_body["run"]["duplicate_count"], 1)
 
     def test_wsgi_adapter_is_independent_of_internal_modules(self) -> None:
         app = create_wsgi_app(Task1Api())

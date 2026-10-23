@@ -39,6 +39,67 @@ Citation fields are `title` (string), `url` (string), `section` (string or null)
 
 `200` is used for `answered` and explicit `insufficient_evidence` results. `503` indicates an unavailable model or retrieval service. `504` indicates the configured query timeout. The service must not fabricate an answer for either failure state.
 
+## Sitemap management
+
+Sitemap management is persisted in the same SQLite database as the ingestion
+manifest. The current local boundary uses an explicit `owner_id` field; it is
+not an authentication mechanism and the service must remain loopback-only until
+an authenticated gateway is deployed.
+
+### `POST /sitemaps`
+
+Creates an owned sitemap configuration. The root URL must be HTTP or HTTPS,
+must not contain credentials, and must not resolve to a loopback, private,
+reserved, link-local, or cloud-metadata address.
+
+```json
+{
+  "owner_id": "demo-user",
+  "root_url": "https://docs.example.com/sitemap.xml",
+  "interval": "daily",
+  "threshold": 3,
+  "action": "review"
+}
+```
+
+Allowed intervals are `daily`, `weekly`, `15-days`, and `30-days`. Allowed
+actions are `review`, `quarantine`, and `archive`; thresholds are `1`, `2`,
+`3`, `7`, `15`, and `30`.
+
+### `POST /sitemaps/list`
+
+Returns active configurations for the supplied `owner_id`.
+
+### `POST /sitemaps/{id}/refresh`
+
+Runs a bounded, idempotent refresh for one sitemap. The response includes
+start/end timestamps, listed and unique URL totals, duplicate counts, error
+counts, processed/total page counts, and safe error summaries. Sitemap
+membership is stored separately from page HTTP status.
+
+### `POST /sitemaps/{id}/runs`
+
+Returns recent refresh history for the owner.
+
+### `POST /sitemaps/{id}/pending`
+
+Returns URLs approaching their configured threshold, including current count,
+threshold, lifecycle status, reason, and intended action. Failed sitemap
+discovery does not increment missing checks.
+
+### `POST /sitemaps/{id}/urls`
+
+Returns persisted URL-level results for a refresh. Supply `run_id` to select a
+specific run, plus optional `limit` (1-2000) and `offset` for bounded loading.
+Each result reports fetch status, HTTP status when available, sitemap
+membership, lifecycle state, fetch timestamp, and a safe error summary.
+
+The local server runs a dependency-free background scheduler. It polls due
+configurations, prevents overlapping refreshes per sitemap, records failures,
+and computes the next run from the selected interval. Historical article
+versions and URL records are retained; quarantine/archive actions do not
+delete them.
+
 ## `POST /ingestion/run`
 
 Starts or reports an ingestion run. The current foundation delegates this to the injected ingestion service.

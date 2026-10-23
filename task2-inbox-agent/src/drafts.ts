@@ -53,5 +53,7 @@ export function createDraft(email: IncomingEmail, classification: Classification
     evidenceStatus,
     generatedAt: now,
     modelVersion: "task1-contract",
+    recipient: email.from,
+    subject: `Re: ${email.subject}`,
   };
 }

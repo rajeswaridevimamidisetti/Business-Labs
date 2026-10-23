@@ -16,6 +16,11 @@
     "/ingestion/status": {"get": {"summary": "Get ingestion status", "responses": {"200": {"description": "Ingestion status"}}}},
     "/escalations": {"post": {"summary": "Create human review task", "responses": {"201": {"description": "Created"}}}},
     "/escalations/{id}/resolve": {"post": {"summary": "Resolve human review task", "responses": {"200": {"description": "Resolved"}, "404": {"description": "Not found"}}}},
-    "/health": {"get": {"summary": "Health status", "responses": {"200": {"description": "Healthy"}}}}
+    "/health": {"get": {"summary": "Health status", "responses": {"200": {"description": "Healthy"}}}},
+    "/sitemaps": {"post": {"summary": "Create an owned sitemap configuration", "responses": {"201": {"description": "Created"}}}},
+    "/sitemaps/list": {"post": {"summary": "List owned sitemap configurations", "responses": {"200": {"description": "Configurations"}}}},
+    "/sitemaps/{id}/refresh": {"post": {"summary": "Refresh one sitemap", "responses": {"200": {"description": "Refresh run summary"}, "409": {"description": "Refresh already running"}}}},
+    "/sitemaps/{id}/runs": {"post": {"summary": "List sitemap refresh history", "responses": {"200": {"description": "Refresh history"}}}},
+    "/sitemaps/{id}/pending": {"post": {"summary": "List pending URL lifecycle actions", "responses": {"200": {"description": "Pending actions"}}}}
   }
 }
