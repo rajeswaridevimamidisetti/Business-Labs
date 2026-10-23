@@ -3153,6 +3153,111 @@
     "total_likely_hours": 56,
     "version": 1
   },
+  "proposal-browser-1792790717528:v1": {
+    "approval_status": "pending",
+    "approved_at": null,
+    "approved_by": null,
+    "estimates": [
+      {
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-b3ebc3add369",
+          "req-6fe61966e760"
+        ],
+        "high_hours": 20,
+        "human_review_required": true,
+        "likely_hours": 10,
+        "low_hours": 4,
+        "rationale": "A bounded configuration or workflow change is expected, pending validation of the existing setup.",
+        "requirement_id": "req-b3ebc3add369",
+        "task": "Desktop layout should remain unchanged."
+      },
+      {
+        "assumptions": [
+          "Requirements remain stable"
+        ],
+        "dependencies": [
+          "req-b3ebc3add369",
+          "req-6fe61966e760"
+        ],
+        "high_hours": 16,
+        "human_review_required": true,
+        "likely_hours": 8,
+        "low_hours": 4,
+        "rationale": "Small initial work package; validate details against the confirmed acceptance criteria.",
+        "requirement_id": "req-6fe61966e760",
+        "task": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+      }
+    ],
+    "pricing_assumption": "Pricing is intentionally configurable and is not an approved commercial quote.",
+    "project_id": "browser-project",
+    "proposal_id": "proposal-browser-1792790717528",
+    "scope": {
+      "acceptance_criteria": [
+        "Demonstrate that the delivered workflow satisfies: Desktop layout should remain unchanged.",
+        "Demonstrate that the delivered workflow satisfies: We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+      ],
+      "agreed_requirements": [
+        {
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: Desktop layout should remain unchanged."
+          ],
+          "dependencies": [],
+          "description": "Desktop layout should remain unchanged.",
+          "estimate_status": "pending",
+          "existing_solution_status": "unverified",
+          "explicit": false,
+          "priority": "normal",
+          "requirement_id": "req-b3ebc3add369",
+          "source_passage": "Desktop layout should remain unchanged.",
+          "source_segment_id": "browser-1792790717528-seg-10",
+          "status": "unclear"
+        },
+        {
+          "acceptance_criteria": [
+            "Demonstrate that the delivered workflow satisfies: We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+          ],
+          "dependencies": [],
+          "description": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix.",
+          "estimate_status": "pending",
+          "existing_solution_status": "unverified",
+          "explicit": true,
+          "priority": "normal",
+          "requirement_id": "req-6fe61966e760",
+          "source_passage": "We need to inspect the responsive CSS and reproduce the issue before estimating the fix.",
+          "source_segment_id": "browser-1792790717528-seg-12",
+          "status": "confirmed"
+        }
+      ],
+      "assumptions": [
+        "Client supplies access, content, credentials and acceptance decisions"
+      ],
+      "client_responsibilities": [
+        "Provide timely feedback and test data"
+      ],
+      "current_problem": "The current workflow does not fully support the outcomes recorded in the transcript.",
+      "deliverables": [
+        "We need to inspect the responsive CSS and reproduce the issue before estimating the fix."
+      ],
+      "dependencies": [
+        "req-b3ebc3add369",
+        "req-6fe61966e760"
+      ],
+      "exclusions": [
+        "Unverified integrations and requirements without approval"
+      ],
+      "open_questions_and_risks": [
+        "Clarify feasibility for req-b3ebc3add369",
+        "Clarify feasibility for req-6fe61966e760"
+      ],
+      "project_objective": "Deliver the client-confirmed workflow improvements described in the meeting.",
+      "proposed_solution": "Implement confirmed requirements with traceable evidence; keep unresolved items out of commitment until clarified."
+    },
+    "total_likely_hours": 18,
+    "version": 1
+  },
   "proposal-smoke-meeting:v1": {
     "approval_status": "pending",
     "approved_at": null,

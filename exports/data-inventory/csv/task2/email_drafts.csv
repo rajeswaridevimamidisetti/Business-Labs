@@ -1,0 +1,211 @@
+﻿owner_id,email_id,version,payload_json,recipient,subject,body,gmail_account,review_status,approval_hash,created_at,updated_at
+demo-user,email-001,1,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T11:33:42.329Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T11:33:42.329Z,2026-10-23T11:33:42.329Z
+local-smoke,email-001,1,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:37:56.966Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:37:56.966Z,2026-10-23T12:37:56.966Z
+local-smoke,email-001,2,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:38:05.688Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:38:05.688Z,2026-10-23T12:38:05.688Z
+local-smoke,email-001,3,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:38:19.752Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:38:19.752Z,2026-10-23T12:38:19.752Z
+local-smoke,email-001,4,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:38:19.809Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:38:19.809Z,2026-10-23T12:38:19.809Z
+local-smoke,email-001,5,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:38:25.060Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:38:25.060Z,2026-10-23T12:38:25.060Z
+local-smoke,email-001,6,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:38:25.096Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:38:25.096Z,2026-10-23T12:38:25.096Z
+local-smoke,email-001,7,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:45:11.412Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:45:11.412Z,2026-10-23T12:45:11.412Z
+local-smoke,email-001,8,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:45:11.448Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:45:11.448Z,2026-10-23T12:45:11.448Z
+local-smoke,email-001,9,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:52:09.304Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:52:09.304Z,2026-10-23T12:52:09.304Z
+local-smoke,email-001,10,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T12:52:09.365Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T12:52:09.365Z,2026-10-23T12:52:09.365Z
+local-smoke,email-001,11,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:03:45.637Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:03:45.637Z,2026-10-23T13:03:45.637Z
+local-smoke,email-001,12,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:03:45.695Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:03:45.695Z,2026-10-23T13:03:45.695Z
+local-smoke,email-001,13,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:05:26.755Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:05:26.755Z,2026-10-23T13:05:26.755Z
+local-smoke,email-001,14,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:05:26.791Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:05:26.791Z,2026-10-23T13:05:26.791Z
+local-smoke,email-001,15,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:08:21.701Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:08:21.701Z,2026-10-23T13:08:21.701Z
+local-smoke,email-001,16,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:08:21.767Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:08:21.767Z,2026-10-23T13:08:21.767Z
+local-smoke,email-001,17,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:09:29.743Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:09:29.743Z,2026-10-23T13:09:29.743Z
+local-smoke,email-001,18,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:09:29.788Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:09:29.788Z,2026-10-23T13:09:29.788Z
+local-smoke,email-001,19,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:10:02.764Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:10:02.764Z,2026-10-23T13:10:02.764Z
+local-smoke,email-001,20,"{""emailId"":""email-001"",""classification"":{""category"":""how-to"",""subcategory"":""rule-based"",""urgency"":""normal"",""risk"":""low"",""productKnowledgeRequired"":true,""humanReviewRequired"":false,""promptVersion"":""classification-rules-v1""},""requestSummary"":""Please explain the next step for our account and what information you need."",""suggestedReply"":""Hello,\n\nRegarding your \""Account next step 1\"" (how-to):\n\nHome | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?\n\nPlease let us know if you need anything else.\n\nBest regards,\nSupport Team"",""evidence"":[{""title"":""Home | Support"",""url"":""https://support.brilliantdirectories.com/support/home"",""section"":""What Do You Need Help With?"",""chunk_id"":""article-bf3bd7bcba003bc8:7d6b8011c033:633ebbe650cb""}],""risk"":""low"",""humanApprovalRequired"":false,""nextAction"":""human_review"",""promptVersion"":""draft-v1"",""evidenceStatus"":""supported"",""generatedAt"":""2026-10-23T13:10:02.808Z"",""modelVersion"":""task1-contract"",""recipient"":""customer1@example.test"",""subject"":""Re: Account next step 1""}",customer1@example.test,Re: Account next step 1,"Hello,
+
+Regarding your ""Account next step 1"" (how-to):
+
+Home | Support | Brilliant Directories Documentation | BD Support What Do You Need Help With?
+
+Please let us know if you need anything else.
+
+Best regards,
+Support Team",,pending,,2026-10-23T13:10:02.808Z,2026-10-23T13:10:02.808Z

@@ -1,0 +1,17 @@
+{
+  "import_id": "sitemap_import_a4b33b4b5bf2498b8f8e4b580c5bce33",
+  "source_url": "https://support.brilliantdirectories.com/support/sitemap.xml",
+  "source_path": null,
+  "extracted_at": "2026-10-23T20:33:37.506893+00:00",
+  "total_sitemap_urls": 1699,
+  "unique_sitemap_urls": 1699,
+  "article_urls_identified": 1540,
+  "unique_article_urls_saved": 1540,
+  "duplicate_urls_removed": 0,
+  "rejected_urls": 0,
+  "rejected_by_reason": {},
+  "rejected_values": [],
+  "all_urls_path": "data\\sitemap-urls.txt",
+  "article_urls_path": "data\\article-urls.txt",
+  "documents_fetched": 1
+}

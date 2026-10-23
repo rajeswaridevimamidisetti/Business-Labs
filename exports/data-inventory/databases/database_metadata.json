@@ -1,0 +1,16 @@
+[
+  {
+    "label": "manifest.sqlite3",
+    "task": "task1",
+    "path": "c:\\Users\\kishore\\Desktop\\raji\\labs\\Business-Labs\\task1-knowledge-brain\\data\\manifest.sqlite3",
+    "size_bytes": 5959680,
+    "description": "Task1 Knowledge Brain \u2013 sitemap configs, article sources, refresh history, article versions"
+  },
+  {
+    "label": "task2.sqlite3",
+    "task": "task2",
+    "path": "c:\\Users\\kishore\\Desktop\\raji\\labs\\Business-Labs\\task2-inbox-agent\\data\\local\\task2.sqlite3",
+    "size_bytes": 106496,
+    "description": "Task2 Inbox Agent \u2013 email drafts, audit events, complaint records, send attempts"
+  }
+]

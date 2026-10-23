@@ -1,0 +1,474 @@
+{
+  "evaluation_type": "offline_deterministic_inventory",
+  "status": "executed",
+  "timestamp": "2026-10-17T10:53:21.545292+00:00",
+  "provider_called": false,
+  "tasks": {
+    "task1": [
+      {
+        "case_id": "task1-01",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-02",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-03",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-04",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-05",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-06",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-07",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-08",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-09",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-10",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-11",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-12",
+        "status": "verified",
+        "assertions": [
+          "status_answered",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task1-13",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_citation"
+        ]
+      },
+      {
+        "case_id": "task1-14",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_citation"
+        ]
+      },
+      {
+        "case_id": "task1-15",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_citation"
+        ]
+      },
+      {
+        "case_id": "task1-16",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_citation"
+        ]
+      },
+      {
+        "case_id": "task1-17",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_citation"
+        ]
+      },
+      {
+        "case_id": "task1-18",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_citation"
+        ]
+      },
+      {
+        "case_id": "task1-19",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_citation"
+        ]
+      },
+      {
+        "case_id": "task1-20",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_citation"
+        ]
+      }
+    ],
+    "task2": [
+      {
+        "case_id": "task2-01",
+        "status": "verified",
+        "assertions": [
+          "uses_evidence",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task2-02",
+        "status": "verified",
+        "assertions": [
+          "uses_evidence",
+          "has_citation"
+        ]
+      },
+      {
+        "case_id": "task2-03",
+        "status": "verified",
+        "assertions": [
+          "asks_goal",
+          "no_fabrication"
+        ]
+      },
+      {
+        "case_id": "task2-04",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_fabrication"
+        ]
+      },
+      {
+        "case_id": "task2-05",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "no_fabrication"
+        ]
+      },
+      {
+        "case_id": "task2-06",
+        "status": "verified",
+        "assertions": [
+          "mentions_issue",
+          "asks_relevant_details"
+        ]
+      },
+      {
+        "case_id": "task2-07",
+        "status": "verified",
+        "assertions": [
+          "mentions_issue",
+          "asks_error_text"
+        ]
+      },
+      {
+        "case_id": "task2-08",
+        "status": "verified",
+        "assertions": [
+          "asks_account_area",
+          "avoids_irrelevant_questions"
+        ]
+      },
+      {
+        "case_id": "task2-09",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "escalates"
+        ]
+      },
+      {
+        "case_id": "task2-10",
+        "status": "verified",
+        "assertions": [
+          "acknowledges_impact",
+          "escalates"
+        ]
+      },
+      {
+        "case_id": "task2-11",
+        "status": "verified",
+        "assertions": [
+          "acknowledges_impact",
+          "escalates"
+        ]
+      },
+      {
+        "case_id": "task2-12",
+        "status": "verified",
+        "assertions": [
+          "acknowledges_impact",
+          "no_promise"
+        ]
+      },
+      {
+        "case_id": "task2-13",
+        "status": "verified",
+        "assertions": [
+          "acknowledges_impact",
+          "requests_incident_details"
+        ]
+      },
+      {
+        "case_id": "task2-14",
+        "status": "verified",
+        "assertions": [
+          "does_not_promise_refund",
+          "human_review"
+        ]
+      },
+      {
+        "case_id": "task2-15",
+        "status": "verified",
+        "assertions": [
+          "human_review",
+          "safe_action"
+        ]
+      },
+      {
+        "case_id": "task2-16",
+        "status": "verified",
+        "assertions": [
+          "captures_request",
+          "human_review"
+        ]
+      },
+      {
+        "case_id": "task2-17",
+        "status": "verified",
+        "assertions": [
+          "captures_request",
+          "human_review"
+        ]
+      },
+      {
+        "case_id": "task2-18",
+        "status": "verified",
+        "assertions": [
+          "does_not_invent_price",
+          "human_review"
+        ]
+      },
+      {
+        "case_id": "task2-19",
+        "status": "verified",
+        "assertions": [
+          "does_not_claim_status",
+          "human_review"
+        ]
+      },
+      {
+        "case_id": "task2-20",
+        "status": "verified",
+        "assertions": [
+          "abstains",
+          "human_review"
+        ]
+      }
+    ],
+    "task3": [
+      {
+        "case_id": "task3-01",
+        "status": "verified",
+        "assertions": [
+          "requirement_extracted"
+        ]
+      },
+      {
+        "case_id": "task3-02",
+        "status": "verified",
+        "assertions": [
+          "open_question"
+        ]
+      },
+      {
+        "case_id": "task3-03",
+        "status": "verified",
+        "assertions": [
+          "source_traceable"
+        ]
+      },
+      {
+        "case_id": "task3-04",
+        "status": "verified",
+        "assertions": [
+          "deadline_preserved"
+        ]
+      },
+      {
+        "case_id": "task3-05",
+        "status": "verified",
+        "assertions": [
+          "not_confirmed"
+        ]
+      },
+      {
+        "case_id": "task3-06",
+        "status": "verified",
+        "assertions": [
+          "conflict_review"
+        ]
+      },
+      {
+        "case_id": "task3-07",
+        "status": "verified",
+        "assertions": [
+          "citation_preserved"
+        ]
+      },
+      {
+        "case_id": "task3-08",
+        "status": "verified",
+        "assertions": [
+          "needs_clarification"
+        ]
+      },
+      {
+        "case_id": "task3-09",
+        "status": "verified",
+        "assertions": [
+          "failure_is_visible"
+        ]
+      },
+      {
+        "case_id": "task3-10",
+        "status": "verified",
+        "assertions": [
+          "source_segment_id"
+        ]
+      },
+      {
+        "case_id": "task3-11",
+        "status": "verified",
+        "assertions": [
+          "testable_acceptance"
+        ]
+      },
+      {
+        "case_id": "task3-12",
+        "status": "verified",
+        "assertions": [
+          "range_is_valid"
+        ]
+      },
+      {
+        "case_id": "task3-13",
+        "status": "verified",
+        "assertions": [
+          "total_matches_tasks"
+        ]
+      },
+      {
+        "case_id": "task3-14",
+        "status": "verified",
+        "assertions": [
+          "added_change"
+        ]
+      },
+      {
+        "case_id": "task3-15",
+        "status": "verified",
+        "assertions": [
+          "removed_change"
+        ]
+      },
+      {
+        "case_id": "task3-16",
+        "status": "verified",
+        "assertions": [
+          "modified_change"
+        ]
+      },
+      {
+        "case_id": "task3-17",
+        "status": "verified",
+        "assertions": [
+          "review_required"
+        ]
+      },
+      {
+        "case_id": "task3-18",
+        "status": "verified",
+        "assertions": [
+          "baseline_required"
+        ]
+      },
+      {
+        "case_id": "task3-19",
+        "status": "verified",
+        "assertions": [
+          "send_blocked_until_approved"
+        ]
+      },
+      {
+        "case_id": "task3-20",
+        "status": "verified",
+        "assertions": [
+          "all_segments_retained"
+        ]
+      }
+    ]
+  }
+}

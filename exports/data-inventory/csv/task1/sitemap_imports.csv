@@ -1,0 +1,4 @@
+﻿import_id,source_url,source_path,extracted_at,total_sitemap_urls,unique_sitemap_urls,article_urls_identified,unique_article_urls_saved,duplicate_urls_removed,rejected_urls,rejected_by_reason_json,documents_fetched
+sitemap_import_f1f13f6c211b4b0199ff251997289d49,https://support.brilliantdirectories.com/support/sitemap.xml,,2026-10-23T20:08:14.306556+00:00,1699,1699,1540,1540,0,0,{},1
+sitemap_import_7d1d2162a6a349bd9db916a9b56c7270,https://support.brilliantdirectories.com/support/sitemap.xml,,2026-10-23T20:33:23.175254+00:00,1699,1699,1540,1540,0,0,{},1
+sitemap_import_a4b33b4b5bf2498b8f8e4b580c5bce33,https://support.brilliantdirectories.com/support/sitemap.xml,,2026-10-23T20:33:37.506893+00:00,1699,1699,1540,1540,0,0,{},1
