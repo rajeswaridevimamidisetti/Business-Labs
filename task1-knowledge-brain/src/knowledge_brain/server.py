@@ -74,6 +74,8 @@ def main() -> None:
     from .indexed import IndexedQueryService
 
     database_path = os.getenv("TASK1_MANIFEST_DB", "data/manifest.sqlite3")
+    manifest = ManifestStore(database_path)
+    manifest.close()
     query_service = IndexedQueryService(database_path)
     ingestion = LocalIngestionService(database_path)
     api = Task1Api(

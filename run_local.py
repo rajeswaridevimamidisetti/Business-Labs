@@ -28,14 +28,14 @@ if __name__ == "__main__":
     if full_stack:
         if not (root / "frontend" / "node_modules" / "vite").exists():
             raise SystemExit("Frontend dependencies are missing. Run 'npm install' in frontend first.")
-        if not (root / "task2-inbox-agent" / "node_modules" / "tsx").exists():
-            raise SystemExit("Task 2 dependencies are missing. Run 'npm install' in task2-inbox-agent first.")
         if not (root / "frontend" / "package.json").exists():
             raise SystemExit("Frontend package.json is missing.")
         if not shutil.which("node.exe" if os.name == "nt" else "node"):
             raise SystemExit("Node.js is required for --full-stack.")
         if not shutil.which("npm.cmd" if os.name == "nt" else "npm"):
             raise SystemExit("npm is required for --full-stack.")
+    if not (root / "task2-inbox-agent" / "node_modules" / "tsx").exists():
+        raise SystemExit("Task 2 dependencies are missing. Run 'npm install' in task2-inbox-agent first.")
     ports = [8001, 8002, 8003] + ([5173] if full_stack else [])
     occupied = [port for port in ports if not _port_available(port)]
     if occupied:
@@ -116,7 +116,15 @@ if __name__ == "__main__":
         if (
             not task2_is_safe(task2_result)
             or not task2_is_safe(task2_ui_result)
-            or task3_result.get("feasibility") != "verified"
+            or task3_result.get("feasibility") not in {"verified", "unverified"}
+            or (
+                task3_result.get("feasibility") == "verified"
+                and not task3_result.get("evidence")
+            )
+            or (
+                task3_result.get("feasibility") == "unverified"
+                and task3_result.get("evidence")
+            )
             or not task3_scope.get("proposal")
         ):
             raise RuntimeError(f"downstream evidence smoke failed: {task2_result}, {task2_ui_result}, {task3_result}, {task3_scope}")
