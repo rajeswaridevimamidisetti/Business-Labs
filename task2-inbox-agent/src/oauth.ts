@@ -5,6 +5,8 @@ import { dirname } from "node:path";
 const GOOGLE_AUTH = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN = "https://oauth2.googleapis.com/token";
 const STATE_TTL_MS = 10 * 60 * 1000;
+export const GMAIL_READ_SCOPE = "https://www.googleapis.com/auth/gmail.readonly";
+export const GMAIL_SEND_SCOPE = "https://www.googleapis.com/auth/gmail.send";
 
 export function loadOAuthConfig(
   environment: NodeJS.ProcessEnv = process.env,
@@ -64,6 +66,7 @@ export interface OAuthConfig {
   encryptionKey?: string;
   tokenPath?: string;
   fetcher?: typeof fetch;
+  requestedScopes?: readonly string[];
 }
 
 export interface StoredToken {
@@ -103,7 +106,8 @@ export class GmailOAuth {
     url.searchParams.set("client_id", this.config.clientId!);
     url.searchParams.set("redirect_uri", this.config.redirectUri!);
     url.searchParams.set("response_type", "code");
-    url.searchParams.set("scope", "https://www.googleapis.com/auth/gmail.readonly");
+    url.searchParams.set("scope", (this.config.requestedScopes ?? [GMAIL_READ_SCOPE]).join(" "));
+    url.searchParams.set("include_granted_scopes", "true");
     url.searchParams.set("access_type", "offline");
     url.searchParams.set("prompt", "consent");
     url.searchParams.set("state", state);
@@ -129,6 +133,12 @@ export class GmailOAuth {
     if (!response.ok) throw new Error("Google OAuth token exchange failed");
     const payload = await response.json() as { access_token?: string; refresh_token?: string; expires_in?: number; scope?: string };
     if (!payload.access_token) throw new Error("Google OAuth response did not include an access token");
+    const scopes = payload.scope?.split(/\s+/).filter(Boolean) ?? [];
+    const requiredScopes = this.config.requestedScopes ?? [GMAIL_READ_SCOPE];
+    const missingScopes = requiredScopes.filter((scope) => !scopes.includes(scope));
+    if (missingScopes.length > 0) {
+      throw new Error(`Gmail authorization is missing required scopes; reconnect and approve Gmail access (${missingScopes.join(", ")})`);
+    }
     const previous = this.tokens.get(pending.ownerId);
     const token: StoredToken = {
       ownerId: pending.ownerId,
@@ -136,7 +146,7 @@ export class GmailOAuth {
       refreshToken: payload.refresh_token ?? previous?.refreshToken,
       expiresAt: payload.expires_in ? Date.now() + payload.expires_in * 1000 : undefined,
       emailAddress: "",
-      scopes: payload.scope?.split(/\s+/).filter(Boolean),
+      scopes,
     };
     this.tokens.set(token.ownerId, token);
     this.persist();
@@ -145,6 +155,13 @@ export class GmailOAuth {
 
   get(ownerId: string): StoredToken | undefined {
     return this.tokens.get(ownerId);
+  }
+
+  missingScopes(ownerId: string): string[] {
+    const token = this.tokens.get(ownerId);
+    const requiredScopes = this.config.requestedScopes ?? [GMAIL_READ_SCOPE];
+    if (!token) return [...requiredScopes];
+    return requiredScopes.filter((scope) => !token.scopes?.includes(scope));
   }
 
   async credentials(ownerId: string, requiredScope?: string): Promise<{ accessToken: string; userId: string } | undefined> {

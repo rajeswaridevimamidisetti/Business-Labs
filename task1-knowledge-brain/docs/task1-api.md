@@ -72,7 +72,10 @@ Returns active configurations for the supplied `owner_id`.
 
 ### `POST /sitemaps/{id}/refresh`
 
-Runs a bounded, idempotent refresh for one sitemap. The response includes
+Runs an idempotent refresh for one sitemap. By default the production server
+processes every URL containing `TASK1_ARTICLE_PATH_FRAGMENT`; set
+`TASK1_MAX_ARTICLES` to a positive value only for an intentional bounded run.
+The response includes
 start/end timestamps, listed and unique URL totals, duplicate counts, error
 counts, processed/total page counts, and safe error summaries. Sitemap
 membership is stored separately from page HTTP status.
@@ -94,11 +97,62 @@ specific run, plus optional `limit` (1-2000) and `offset` for bounded loading.
 Each result reports fetch status, HTTP status when available, sitemap
 membership, lifecycle state, fetch timestamp, and a safe error summary.
 
+### `POST /sitemaps/{id}/stats`
+
+Returns dashboard counts from the latest persisted refresh and current source
+records, including `total_sitemap_urls`, `article_urls_discovered`,
+`article_urls_in_database`, `successfully_extracted`, `pending_articles`,
+`failed_articles`, `skipped_articles`, `new_articles_last_run`,
+`updated_articles_last_run`, and the latest run timestamps. A count of zero
+means no persisted run has supplied that category yet; an unavailable request
+returns an API error rather than fabricated statistics.
+
+HTTP 404 responses do not increment failure counts when the URL remains in the
+current sitemap. A URL returning HTTP 301 is quarantined immediately. A URL is
+marked missing only when it is absent from a successfully discovered sitemap;
+threshold actions then apply to the consecutive missing count.
+
 The local server runs a dependency-free background scheduler. It polls due
 configurations, prevents overlapping refreshes per sitemap, records failures,
 and computes the next run from the selected interval. Historical article
 versions and URL records are retained; quarantine/archive actions do not
 delete them.
+
+### `POST /sitemap-data/stats`
+
+Returns counts from the latest local-file extraction. It requires the supplied
+`owner_id` to own an active sitemap configuration and returns `available: false`
+when no extraction has been run.
+
+### `POST /sitemap-data/urls`
+
+Returns a bounded, sorted page of persisted URLs. Request fields are
+`owner_id`, optional `search`, optional `url_type` (`all`, `article`, or
+`other`), optional legacy `article_only`, `limit` (1-500), and `offset`. The
+response includes `urls`, `total`, `limit`, and `offset`, with source URL,
+first/last seen timestamps, processing status, HTTP status, and lifecycle
+metadata when available.
+
+The extraction CLI also writes `data/sitemap-urls.txt` containing every unique
+accepted sitemap URL and `data/article-urls.txt` containing only deduplicated
+article URLs. These files are generated from the local XML input and are not
+bundled into frontend code.
+
+### `POST /sitemap-data/refresh`
+
+Runs the live sitemap discovery/import workflow for an owned configured source.
+It validates HTTPS and same-host nested sitemap URLs, persists the latest URL
+set and report, updates source refresh status, and never fetches article pages.
+Request fields are `owner_id` and `sitemap_id`. A failed HTTP request, timeout,
+unsafe child URL, or malformed XML returns a safe `502 sitemap_fetch_failed`
+error and does not report success.
+
+### `POST /sitemap-data/export`
+
+Exports the persisted current URL set. Request fields are `owner_id`, optional
+`search`, `url_type` (`all`, `article`, or `other`), and `format` (`txt` or
+`csv`). The response contains `filename`, `content_type`, and `content` for a
+browser download.
 
 ## `POST /ingestion/run`
 

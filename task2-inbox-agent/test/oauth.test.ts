@@ -7,7 +7,7 @@ import { GmailOAuth, loadOAuthConfig, OAuthConfigurationError } from "../src/oau
 
 const key = Buffer.alloc(32, 7).toString("base64");
 
-function configured(path: string, fetcher?: typeof fetch): GmailOAuth {
+function configured(path: string, fetcher?: typeof fetch, requestedScopes?: readonly string[]): GmailOAuth {
   return new GmailOAuth({
     clientId: "client-id",
     clientSecret: "client-secret",
@@ -15,16 +15,29 @@ function configured(path: string, fetcher?: typeof fetch): GmailOAuth {
     encryptionKey: key,
     tokenPath: path,
     fetcher,
+    requestedScopes,
   });
 }
 
-test("OAuth start creates a Google authorization URL with a state", () => {
+test("OAuth start requests the minimum inbox read scope with incremental authorization", () => {
   const manager = configured(join(mkdtempSync(join(tmpdir(), "oauth-")), "tokens.enc"));
   const url = new URL(manager.start("owner-a"));
   assert.equal(url.origin, "https://accounts.google.com");
   assert.equal(url.searchParams.get("client_id"), "client-id");
   assert.ok((url.searchParams.get("state") ?? "").length >= 32);
   assert.match(url.searchParams.get("scope") ?? "", /gmail\.readonly/);
+  assert.doesNotMatch(url.searchParams.get("scope") ?? "", /gmail\.send/);
+  assert.equal(url.searchParams.get("include_granted_scopes"), "true");
+});
+
+test("OAuth start requests send scope only for a send-enabled configuration", () => {
+  const manager = configured(join(mkdtempSync(join(tmpdir(), "oauth-send-")), "tokens.enc"), undefined, [
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.send",
+  ]);
+  const url = new URL(manager.start("owner-send"));
+  assert.match(url.searchParams.get("scope") ?? "", /gmail\.readonly/);
+  assert.match(url.searchParams.get("scope") ?? "", /gmail\.send/);
 });
 
 test("OAuth callback rejects a state that was not issued", async () => {
@@ -35,7 +48,7 @@ test("OAuth callback rejects a state that was not issued", async () => {
 test("OAuth tokens are encrypted at rest and can be loaded", async () => {
   const directory = mkdtempSync(join(tmpdir(), "oauth-"));
   const path = join(directory, "tokens.enc");
-  const manager = configured(path, async () => new Response(JSON.stringify({ access_token: "access-secret", refresh_token: "refresh-secret", expires_in: 3600 }), { status: 200 }));
+  const manager = configured(path, async () => new Response(JSON.stringify({ access_token: "access-secret", refresh_token: "refresh-secret", expires_in: 3600, scope: "https://www.googleapis.com/auth/gmail.readonly" }), { status: 200 }));
   const state = new URL(manager.start("owner-a")).searchParams.get("state")!;
   await manager.callback("authorization-code", state);
   const encrypted = readFileSync(path, "utf8");

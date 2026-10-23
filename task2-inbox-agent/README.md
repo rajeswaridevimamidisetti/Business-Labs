@@ -86,10 +86,11 @@ never prints credentials.
 In Google Cloud, enable Gmail API, configure the OAuth consent screen, create a
 Web application OAuth client, and add exactly
 `http://127.0.0.1:8002/v1/gmail/oauth/callback` as an authorized redirect URI.
-The application requests `gmail.readonly` for inbox synchronization. Gmail
-send scope is not requested while live sending is disabled; a separately
-authorized send configuration would be required before that endpoint could
-be enabled. Click
+The application requests `gmail.readonly` for inbox synchronization. The
+`gmail.send` scope is requested and validated only when live sending is
+explicitly enabled; live sending remains disabled in local setup. Existing
+encrypted tokens missing a scope required by the current configuration require
+reconnection. Click
 **Connect Gmail** in the inbox UI, review the Google account identity shown after
 callback, and use **Disconnect** to remove the encrypted local token record.
 
@@ -118,6 +119,13 @@ frontend JavaScript origin `http://127.0.0.1:5173`. Do not use
 IDs are unique per owner, retries are idempotent, and
 `GET /v1/gmail/messages/local` returns only locally persisted messages.
 `GET /v1/gmail/sync/status` exposes sync state and counts without credentials.
+
+After authenticating, `GET /v1/data/export` downloads a ZIP containing all
+application data files under the Task 1, Task 2, and Task 3 data directories.
+Environment files, OAuth tokens, encrypted Gmail credentials, caches,
+dependencies, and build artifacts are intentionally excluded. This is a
+complete local workspace backup; per-user filtering is not claimed for the
+currently global Task 1 and Task 3 stores.
 
 ## Real complaint processing
 

@@ -43,7 +43,8 @@ class FetchFailure(RuntimeError):
 
 @dataclass(frozen=True)
 class CrawlConfig:
-    max_articles: int = 10
+    max_articles: int | None = None
+    article_path_fragment: str | None = None
     timeout_seconds: float = 15.0
     max_concurrency: int = 2
     request_delay_seconds: float = 0.0
@@ -54,8 +55,8 @@ class CrawlConfig:
     max_sitemap_documents: int = 1_000
 
     def __post_init__(self) -> None:
-        if self.max_articles < 1:
-            raise ValueError("max_articles must be positive")
+        if self.max_articles is not None and self.max_articles < 1:
+            raise ValueError("max_articles must be positive when configured")
         if self.timeout_seconds <= 0:
             raise ValueError("timeout_seconds must be positive")
         if self.max_concurrency < 1:
@@ -88,6 +89,7 @@ class CrawlResult:
     discovery_complete: bool
     discovery_summary: tuple["SitemapSummary", ...] = ()
     discovered_urls: tuple[str, ...] = ()
+    eligible_urls: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -109,7 +111,7 @@ class ManifestStore:
     def __init__(self, database_path: str | Path) -> None:
         self.database_path = str(database_path)
         Path(self.database_path).parent.mkdir(parents=True, exist_ok=True)
-        self.connection = sqlite3.connect(self.database_path)
+        self.connection = sqlite3.connect(self.database_path, check_same_thread=False)
         self.connection.row_factory = sqlite3.Row
         self.connection.executescript(
             """
@@ -263,10 +265,14 @@ class ManifestStore:
             UPDATE sources
             SET first_discovered_at = COALESCE(first_discovered_at, ?),
                 last_status_code = COALESCE(?, last_status_code),
-                consecutive_failure_checks = consecutive_failure_checks + 1
+                consecutive_failure_checks = consecutive_failure_checks + CASE WHEN ? IN (404, 301) THEN 0 ELSE 1 END,
+                lifecycle_status = CASE WHEN ? = 301 THEN 'quarantined' ELSE lifecycle_status END,
+                active = CASE WHEN ? = 301 THEN 0 ELSE active END,
+                quarantine_reason = CASE WHEN ? = 301 THEN 'HTTP 301 redirect requires manual review' ELSE quarantine_reason END,
+                quarantined_at = CASE WHEN ? = 301 THEN ? ELSE quarantined_at END
             WHERE url = ?
             """,
-            (now, status_code, url),
+            (now, status_code, status_code, status_code, status_code, status_code, status_code, now, url),
         )
         self.connection.commit()
 
@@ -424,7 +430,11 @@ class CrawlRunner:
         sitemap_entries = list(deduplicated.values())
         by_url = {entry.url: entry for entry in sitemap_entries}
         discovered_urls = set(by_url)
-        selected = list(by_url.values())[: self.config.max_articles]
+        eligible = [
+            entry for entry in by_url.values()
+            if not self.config.article_path_fragment or self.config.article_path_fragment in entry.url
+        ]
+        selected = eligible if self.config.max_articles is None else eligible[: self.config.max_articles]
         for entry in selected:
             self.manifest.mark_started(entry.url)
 
@@ -455,6 +465,7 @@ class CrawlRunner:
             discovery_complete=discovery_complete,
             discovery_summary=tuple(summaries),
             discovered_urls=tuple(discovered_urls),
+            eligible_urls=tuple(entry.url for entry in eligible),
         )
 
     def _discover(self, sitemap_url: str) -> tuple[list[SitemapEntry], bool, list[SitemapSummary]]:
@@ -544,7 +555,7 @@ class CrawlRunner:
                 attempts = max(attempts, exc.attempts)
                 last_error = str(exc)
                 if not exc.transient:
-                    raise FetchFailure(last_error, attempts, False) from exc
+                    raise FetchFailure(last_error, attempts, False, exc.status_code) from exc
             except Exception as exc:
                 last_error = f"request failure for {url}: {exc}"
             if attempts <= self.config.max_retries:

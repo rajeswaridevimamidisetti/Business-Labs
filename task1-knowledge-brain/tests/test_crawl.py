@@ -13,6 +13,7 @@ from knowledge_brain.crawl import (
 ROOT = "https://support.brilliantdirectories.com/support/sitemap.xml"
 PAGE_A = "https://support.brilliantdirectories.com/support/a"
 PAGE_B = "https://support.brilliantdirectories.com/support/b"
+ARTICLE = "https://support.brilliantdirectories.com/support/solutions/articles/123"
 
 
 def urlset(*urls: str, last_modified: str | None = None) -> bytes:
@@ -216,6 +217,57 @@ class CrawlRunnerTest(unittest.TestCase):
             self.assertFalse(result.discovery_complete)
             self.assertEqual(resumed.source(PAGE_A)["consecutive_missing_checks"], 0)
             resumed.close()
+
+    def test_404_still_in_sitemap_does_not_count_as_source_absence(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            database = str(Path(directory) / "manifest.db")
+            first, manifest = self.make_runner(
+                MappingFetcher({ROOT: FetchResponse(200, urlset(PAGE_A)), PAGE_A: FetchResponse(200, b"a")}),
+                database,
+            )
+            first.run()
+            manifest.close()
+            second, resumed = self.make_runner(
+                MappingFetcher({ROOT: FetchResponse(200, urlset(PAGE_A)), PAGE_A: FetchResponse(404, b"")}),
+                database,
+            )
+            second.run()
+            source = resumed.source(PAGE_A)
+            self.assertEqual(source["last_status_code"], 404)
+            self.assertEqual(source["consecutive_failure_checks"], 0)
+            self.assertEqual(source["lifecycle_status"], "active")
+            resumed.close()
+
+    def test_301_is_quarantined_immediately(self) -> None:
+        fetcher = MappingFetcher({ROOT: FetchResponse(200, urlset(PAGE_A)), PAGE_A: FetchResponse(301, b"")})
+        with tempfile.TemporaryDirectory() as directory:
+            runner, manifest = self.make_runner(fetcher, str(Path(directory) / "manifest.db"))
+            runner.run()
+            source = manifest.source(PAGE_A)
+            self.assertEqual(source["lifecycle_status"], "quarantined")
+            self.assertEqual(source["active"], 0)
+            self.assertEqual(source["last_status_code"], 301)
+            manifest.close()
+
+    def test_article_filter_is_configurable_and_unlimited_by_default(self) -> None:
+        other = "https://support.brilliantdirectories.com/support/category"
+        fetcher = MappingFetcher(
+            {
+                ROOT: FetchResponse(200, urlset(ARTICLE, other)),
+                ARTICLE: FetchResponse(200, b"article"),
+            }
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            runner, manifest = self.make_runner(
+                fetcher,
+                str(Path(directory) / "manifest.db"),
+                article_path_fragment="/support/solutions/articles/",
+            )
+            result = runner.run()
+            self.assertEqual(result.discovered_count, 2)
+            self.assertEqual(len(result.outcomes), 1)
+            self.assertEqual(result.outcomes[0].url, ARTICLE)
+            manifest.close()
 
 
 if __name__ == "__main__":

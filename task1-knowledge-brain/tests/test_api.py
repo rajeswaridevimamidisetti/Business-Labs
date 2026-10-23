@@ -50,7 +50,8 @@ class ApiContractTest(unittest.TestCase):
             "/query", "/ingestion/run", "/ingestion/status", "/escalations",
             "/escalations/{id}/resolve", "/health", "/sitemaps/list", "/sitemaps",
             "/sitemaps/{id}/refresh", "/sitemaps/{id}/runs", "/sitemaps/{id}/pending",
-            "/sitemaps/{id}/urls",
+            "/sitemaps/{id}/urls", "/sitemaps/{id}/stats", "/sitemap-data/stats",
+            "/sitemap-data/urls", "/sitemap-data/refresh", "/sitemap-data/export",
         })
 
     def test_query_returns_grounded_fields_without_confidence(self) -> None:
@@ -171,6 +172,38 @@ class ApiContractTest(unittest.TestCase):
         self.assertEqual(body["sitemap"]["sitemap_id"], "sm-1")
         self.assertEqual(refreshed, 200)
         self.assertEqual(refresh_body["run"]["duplicate_count"], 1)
+
+    def test_sitemap_inventory_routes_validate_filters_and_export(self) -> None:
+        record = SimpleNamespace(sitemap_id="sm-1", owner_id="owner-1")
+
+        class Sitemaps:
+            def list(self, owner_id):
+                return (record,)
+            def extraction_stats(self, owner_id):
+                return {"available": True, "unique_sitemap_urls": 3}
+            def extraction_urls(self, owner_id, **kwargs):
+                assert kwargs["url_type"] == "article"
+                return ({"url": "https://support.example/article", "is_article": True},)
+            def extraction_url_count(self, owner_id, **kwargs):
+                return 1
+            def extraction_export(self, owner_id, **kwargs):
+                return {"filename": "article-urls.txt", "content_type": "text/plain", "content": "https://support.example/article\n"}
+            def refresh_extraction(self, owner_id, sitemap_id):
+                return {"report": {"unique_sitemap_urls": 3}}
+
+        api = Task1Api(sitemap_service=Sitemaps())
+        status, body, _ = api.dispatch("POST", "/sitemap-data/urls", {"owner_id": "owner-1", "url_type": "article", "limit": 25}, "req-urls")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["total"], 1)
+        export_status, export_body, _ = api.dispatch("POST", "/sitemap-data/export", {"owner_id": "owner-1", "url_type": "article", "format": "txt"}, "req-export")
+        self.assertEqual(export_status, 200)
+        self.assertEqual(export_body["export"]["filename"], "article-urls.txt")
+        refresh_status, refresh_body, _ = api.dispatch("POST", "/sitemap-data/refresh", {"owner_id": "owner-1", "sitemap_id": "sm-1"}, "req-refresh-discovery")
+        self.assertEqual(refresh_status, 200)
+        self.assertEqual(refresh_body["refresh"]["report"]["unique_sitemap_urls"], 3)
+        invalid_status, invalid_body, _ = api.dispatch("POST", "/sitemap-data/urls", {"owner_id": "owner-1", "url_type": "bad"}, "req-invalid-filter")
+        self.assertEqual(invalid_status, 400)
+        self.assertEqual(invalid_body["error"], "invalid_request")
 
     def test_wsgi_adapter_is_independent_of_internal_modules(self) -> None:
         app = create_wsgi_app(Task1Api())

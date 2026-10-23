@@ -21,6 +21,11 @@
     "/sitemaps/list": {"post": {"summary": "List owned sitemap configurations", "responses": {"200": {"description": "Configurations"}}}},
     "/sitemaps/{id}/refresh": {"post": {"summary": "Refresh one sitemap", "responses": {"200": {"description": "Refresh run summary"}, "409": {"description": "Refresh already running"}}}},
     "/sitemaps/{id}/runs": {"post": {"summary": "List sitemap refresh history", "responses": {"200": {"description": "Refresh history"}}}},
-    "/sitemaps/{id}/pending": {"post": {"summary": "List pending URL lifecycle actions", "responses": {"200": {"description": "Pending actions"}}}}
+    "/sitemaps/{id}/pending": {"post": {"summary": "List pending URL lifecycle actions", "responses": {"200": {"description": "Pending actions"}}}},
+    "/sitemaps/{id}/stats": {"post": {"summary": "Return persisted import dashboard statistics", "responses": {"200": {"description": "Import statistics"}}}},
+    "/sitemap-data/stats": {"post": {"summary": "Return local extraction counts", "responses": {"200": {"description": "Local extraction counts"}}}},
+    "/sitemap-data/urls": {"post": {"summary": "List persisted local sitemap URLs", "responses": {"200": {"description": "Paginated URL list"}}}},
+    "/sitemap-data/refresh": {"post": {"summary": "Refresh sitemap URLs without article extraction", "responses": {"200": {"description": "Persisted sitemap import"}, "409": {"description": "Refresh already running"}, "502": {"description": "Sitemap fetch or parse failed"}}}},
+    "/sitemap-data/export": {"post": {"summary": "Export persisted sitemap URLs as text or CSV", "responses": {"200": {"description": "Export content and filename"}}}}
   }
 }

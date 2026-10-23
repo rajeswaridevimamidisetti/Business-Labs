@@ -14,6 +14,7 @@ from threading import Lock
 from typing import Any, Callable, Iterable, Protocol
 from uuid import uuid4
 from .management import SitemapManager
+from .sitemap_import import SitemapFetchError
 
 
 MAX_BODY_BYTES = 1_000_000
@@ -79,6 +80,12 @@ class SitemapService(Protocol):
     def runs(self, owner_id: str, sitemap_id: str, limit: int = 20) -> tuple[Any, ...]: ...
     def pending(self, owner_id: str, sitemap_id: str) -> tuple[dict[str, object], ...]: ...
     def urls(self, owner_id: str, sitemap_id: str, run_id: str | None = None, limit: int = 500, offset: int = 0) -> tuple[dict[str, object], ...]: ...
+    def stats(self, owner_id: str, sitemap_id: str) -> dict[str, object]: ...
+    def refresh_extraction(self, owner_id: str, sitemap_id: str) -> dict[str, object]: ...
+    def extraction_stats(self, owner_id: str) -> dict[str, object]: ...
+    def extraction_urls(self, owner_id: str, *, search: str = "", article_only: bool = False, url_type: str = "all", limit: int = 100, offset: int = 0) -> tuple[dict[str, object], ...]: ...
+    def extraction_url_count(self, owner_id: str, *, search: str = "", article_only: bool = False, url_type: str = "all") -> int: ...
+    def extraction_export(self, owner_id: str, *, search: str = "", url_type: str = "all", file_format: str = "txt") -> dict[str, str]: ...
 
 
 class EscalationService(Protocol):
@@ -206,12 +213,23 @@ class Task1Api:
             if method == "POST" and path.startswith("/sitemaps/") and path.endswith("/urls"):
                 sitemap_id = path[len("/sitemaps/") : -len("/urls")].strip("/")
                 return self._sitemap_urls(sitemap_id, payload, request_id)
+            if method == "POST" and path.startswith("/sitemaps/") and path.endswith("/stats"):
+                sitemap_id = path[len("/sitemaps/") : -len("/stats")].strip("/")
+                return self._sitemap_stats(sitemap_id, payload, request_id)
+            if method == "POST" and path == "/sitemap-data/stats":
+                return self._extraction_stats(payload, request_id)
+            if method == "POST" and path == "/sitemap-data/urls":
+                return self._extraction_urls(payload, request_id)
+            if method == "POST" and path == "/sitemap-data/refresh":
+                return self._extraction_refresh(payload, request_id)
+            if method == "POST" and path == "/sitemap-data/export":
+                return self._extraction_export(payload, request_id)
             if method == "POST" and path == "/escalations":
                 return self._create_escalation(payload, request_id)
             if method == "POST" and path.startswith("/escalations/") and path.endswith("/resolve"):
                 escalation_id = path[len("/escalations/") : -len("/resolve")].strip("/")
                 return self._resolve_escalation(escalation_id, payload, request_id)
-            if path in {"/query", "/ingestion/run", "/ingestion/status", "/escalations", "/health", "/sitemaps", "/sitemaps/list"} or path.startswith("/escalations/") or path.startswith("/sitemaps/"):
+            if path in {"/query", "/ingestion/run", "/ingestion/status", "/escalations", "/health", "/sitemaps", "/sitemaps/list", "/sitemap-data/stats", "/sitemap-data/urls", "/sitemap-data/refresh", "/sitemap-data/export"} or path.startswith("/escalations/") or path.startswith("/sitemaps/"):
                 return 405, _error("method_not_allowed", "HTTP method is not allowed", request_id), request_id
             return 404, _error("not_found", "Endpoint was not found", request_id), request_id
         except ServiceUnavailableError as exc:
@@ -220,6 +238,8 @@ class Task1Api:
             return 404, _error("not_found", str(exc), request_id), request_id
         except ValueError as exc:
             return 400, _error("invalid_request", str(exc), request_id), request_id
+        except SitemapFetchError as exc:
+            return 502, _error("sitemap_fetch_failed", str(exc), request_id), request_id
         except RuntimeError as exc:
             return 409, _error("conflict", str(exc), request_id), request_id
         except Exception:
@@ -271,6 +291,63 @@ class Task1Api:
             int(payload.get("limit", 500)), int(payload.get("offset", 0)),
         )
         return 200, {"urls": list(urls), "request_id": request_id}, request_id
+
+    def _sitemap_stats(self, sitemap_id: str, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        stats = self._require_sitemaps().stats(self._owner(payload), sitemap_id)
+        return 200, {"stats": stats, "request_id": request_id}, request_id
+
+    def _extraction_stats(self, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        stats = self._require_sitemaps().extraction_stats(self._owner(payload))
+        return 200, {"stats": stats, "request_id": request_id}, request_id
+
+    def _extraction_refresh(self, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        body = payload or {}
+        owner_id = self._owner(body)
+        sitemap_id = body.get("sitemap_id")
+        if sitemap_id is None:
+            records = self._require_sitemaps().list(owner_id)
+            if not records:
+                raise KeyError("sitemap not found")
+            sitemap_id = records[0].sitemap_id
+        if not isinstance(sitemap_id, str) or not sitemap_id.strip():
+            raise ValueError("sitemap_id must be a non-empty string")
+        result = self._require_sitemaps().refresh_extraction(owner_id, sitemap_id)
+        refresh = dict(result)
+        if refresh.get("sitemap") is not None and not isinstance(refresh["sitemap"], dict):
+            refresh["sitemap"] = _sitemap_payload(refresh["sitemap"])
+        return 200, {"refresh": refresh, "request_id": request_id}, request_id
+
+    def _extraction_urls(self, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        payload = payload or {}
+        search = payload.get("search", "")
+        if not isinstance(search, str) or len(search) > 500:
+            raise ValueError("search must be a string of at most 500 characters")
+        article_only = payload.get("article_only", False)
+        if not isinstance(article_only, bool):
+            raise ValueError("article_only must be a boolean")
+        url_type = payload.get("url_type", "article" if article_only else "all")
+        if not isinstance(url_type, str) or url_type not in {"all", "article", "other"}:
+            raise ValueError("url_type must be all, article, or other")
+        limit = int(payload.get("limit", 100))
+        offset = int(payload.get("offset", 0))
+        service = self._require_sitemaps()
+        urls = service.extraction_urls(self._owner(payload), search=search, article_only=article_only, url_type=url_type, limit=limit, offset=offset)
+        total = service.extraction_url_count(self._owner(payload), search=search, article_only=article_only, url_type=url_type)
+        return 200, {"urls": list(urls), "total": total, "limit": limit, "offset": offset, "request_id": request_id}, request_id
+
+    def _extraction_export(self, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
+        body = payload or {}
+        url_type = body.get("url_type", "all")
+        file_format = body.get("format", "txt")
+        search = body.get("search", "")
+        if not isinstance(url_type, str) or url_type not in {"all", "article", "other"}:
+            raise ValueError("url_type must be all, article, or other")
+        if not isinstance(file_format, str) or file_format not in {"txt", "csv"}:
+            raise ValueError("format must be txt or csv")
+        if not isinstance(search, str) or len(search) > 500:
+            raise ValueError("search must be a string of at most 500 characters")
+        export = self._require_sitemaps().extraction_export(self._owner(body), search=search, url_type=url_type, file_format=file_format)
+        return 200, {"export": export, "request_id": request_id}, request_id
 
     def _query(self, payload: dict[str, Any] | None, request_id: str) -> tuple[int, dict[str, Any], str]:
         question = _required_string(payload, "question", 10_000)
@@ -385,6 +462,11 @@ def openapi_document() -> dict[str, Any]:
             "/sitemaps/{id}/runs": {"post": {"operationId": "listSitemapRuns", "responses": {"200": {"description": "Refresh history"}}}},
             "/sitemaps/{id}/pending": {"post": {"operationId": "pendingSitemapActions", "responses": {"200": {"description": "Pending lifecycle actions"}}}},
             "/sitemaps/{id}/urls": {"post": {"operationId": "listRefreshUrls", "responses": {"200": {"description": "Persisted URL results"}}}},
+            "/sitemaps/{id}/stats": {"post": {"operationId": "sitemapStats", "responses": {"200": {"description": "Persisted import dashboard statistics"}}}},
+            "/sitemap-data/stats": {"post": {"operationId": "localSitemapExtractionStats", "responses": {"200": {"description": "Local extraction counts"}}}},
+            "/sitemap-data/urls": {"post": {"operationId": "localSitemapUrls", "responses": {"200": {"description": "Paginated local sitemap URLs"}}}},
+            "/sitemap-data/refresh": {"post": {"operationId": "refreshSitemapDiscovery", "responses": {"200": {"description": "Live sitemap URL import without article-page extraction"}, "502": {"description": "Sitemap fetch failed"}}}},
+            "/sitemap-data/export": {"post": {"operationId": "exportSitemapUrls", "responses": {"200": {"description": "Text or CSV export of persisted sitemap URLs"}}}},
         },
     }
 

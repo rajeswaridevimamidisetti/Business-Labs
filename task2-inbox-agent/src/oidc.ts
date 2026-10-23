@@ -11,6 +11,7 @@ type Discovery = { authorization_endpoint: string; token_endpoint: string; jwks_
 const pending = new Map<string, PendingLogin>();
 let discoveryPromise: Promise<Discovery> | undefined;
 let jwksCache: { expiresAt: number; keys: Array<Record<string, unknown>> } | undefined;
+const PROVIDER_REQUEST_TIMEOUT_MS = 10_000;
 
 export function loadOidcConfig(env: NodeJS.ProcessEnv, port: number): OidcConfig | undefined {
   let file: { client_id?: string; client_secret?: string } | undefined;
@@ -49,16 +50,34 @@ export function createLogin(config: OidcConfig): { url: string; state: string } 
 }
 
 async function discovery(config: OidcConfig): Promise<Discovery> {
-  discoveryPromise ??= fetch(`${config.issuer}/.well-known/openid-configuration`).then(async (response) => {
-    if (!response.ok) throw new OidcAuthenticationError("identity provider discovery failed");
-    return await response.json() as Discovery;
-  });
-  return discoveryPromise;
+  if (!discoveryPromise) {
+    discoveryPromise = (async () => {
+      try {
+        const response = await fetch(`${config.issuer}/.well-known/openid-configuration`, { signal: AbortSignal.timeout(PROVIDER_REQUEST_TIMEOUT_MS) });
+        if (!response.ok) throw new OidcAuthenticationError("identity provider discovery failed");
+        return await response.json() as Discovery;
+      } catch (error: unknown) {
+        if (error instanceof OidcAuthenticationError) throw error;
+        throw new OidcAuthenticationError("identity provider discovery request failed");
+      }
+    })();
+  }
+  try {
+    return await discoveryPromise;
+  } catch (error: unknown) {
+    discoveryPromise = undefined;
+    throw error;
+  }
 }
 
 async function jwks(uri: string): Promise<Array<Record<string, unknown>>> {
   if (jwksCache && jwksCache.expiresAt > Date.now()) return jwksCache.keys;
-  const response = await fetch(uri);
+  let response: Response;
+  try {
+    response = await fetch(uri, { signal: AbortSignal.timeout(PROVIDER_REQUEST_TIMEOUT_MS) });
+  } catch {
+    throw new OidcAuthenticationError("identity provider signing-key request failed");
+  }
   if (!response.ok) throw new OidcAuthenticationError("identity provider signing keys unavailable");
   const body = await response.json() as { keys?: Array<Record<string, unknown>> };
   if (!body.keys?.length) throw new OidcAuthenticationError("identity provider returned no signing keys");
@@ -92,7 +111,12 @@ export async function completeLogin(config: OidcConfig, code: string, state: str
   pending.delete(state);
   if (!login || login.expiresAt <= Date.now()) throw new OidcAuthenticationError("login state is missing or expired");
   const metadata = await discovery(config);
-  const response = await fetch(metadata.token_endpoint, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ code, client_id: config.clientId, client_secret: config.clientSecret, redirect_uri: config.redirectUri, grant_type: "authorization_code", code_verifier: login.verifier }).toString() });
+  let response: Response;
+  try {
+    response = await fetch(metadata.token_endpoint, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ code, client_id: config.clientId, client_secret: config.clientSecret, redirect_uri: config.redirectUri, grant_type: "authorization_code", code_verifier: login.verifier }).toString(), signal: AbortSignal.timeout(PROVIDER_REQUEST_TIMEOUT_MS) });
+  } catch {
+    throw new OidcAuthenticationError("identity provider token exchange request failed");
+  }
   if (!response.ok) {
     let providerCode = "unknown";
     try { providerCode = String((await response.json() as { error?: unknown }).error ?? providerCode).replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80); } catch { /* preserve the safe generic code */ }

@@ -27,7 +27,7 @@ class LocalIngestionService(IngestionService):
 
     def _runner(self) -> CrawlRunner:
         manifest = ManifestStore(self.database_path)
-        return _ClosingRunner(manifest, CrawlConfig(max_articles=int(os.getenv("TASK1_MAX_ARTICLES", "10"))), self.sitemap_url)
+        return _ClosingRunner(manifest, _crawl_config(), self.sitemap_url)
 
     def run(self, request_id: str) -> IngestionStatus:
         with self._lock:
@@ -49,7 +49,7 @@ class LocalIngestionService(IngestionService):
         manifest = ManifestStore(self.database_path)
         return _ClosingRunner(
             manifest,
-            CrawlConfig(max_articles=int(os.getenv("TASK1_MAX_ARTICLES", "10"))),
+            _crawl_config(),
             config.root_url,
         )
 
@@ -68,6 +68,20 @@ class _ClosingRunner(CrawlRunner):
             return super().run(sitemap_url or self.sitemap_url)
         finally:
             self.manifest.close()
+
+
+def _crawl_config() -> CrawlConfig:
+    """Build production crawler settings without silently truncating imports."""
+    raw_limit = os.getenv("TASK1_MAX_ARTICLES", "0").strip()
+    limit = int(raw_limit) if raw_limit else 0
+    if limit < 0:
+        raise ValueError("TASK1_MAX_ARTICLES must be zero (unlimited) or positive")
+    return CrawlConfig(
+        max_articles=limit or None,
+        article_path_fragment=os.getenv(
+            "TASK1_ARTICLE_PATH_FRAGMENT", "/support/solutions/articles/"
+        ).strip() or None,
+    )
 
 
 def main() -> None:

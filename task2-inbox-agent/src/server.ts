@@ -9,8 +9,9 @@ import { ReviewAction } from "./schemas.js";
 import { classifyEmailDeterministically } from "./classifier.js";
 import { FeedbackStore } from "./feedback.js";
 import { GmailClient } from "./gmail.js";
-import { GmailOAuth, loadOAuthConfig, OAuthConfigurationError } from "./oauth.js";
+import { GMAIL_READ_SCOPE, GMAIL_SEND_SCOPE, GmailOAuth, loadOAuthConfig, OAuthConfigurationError } from "./oauth.js";
 import { GmailSyncStore } from "./sync-store.js";
+import { createDataExport } from "./data-export.js";
 import { DraftStore } from "./draft-store.js";
 import { authenticateRequest, AuthenticationError, clearSessionCookie, sessionCookie } from "./auth.js";
 import { completeLogin, createLogin, loadOidcConfig, OidcAuthenticationError, oidcConfigured } from "./oidc.js";
@@ -39,6 +40,7 @@ const gmail = new GmailClient({
   userId: process.env.GMAIL_USER_ID,
   liveSendEnabled: process.env.GMAIL_LIVE_SEND_ENABLED === "true",
 });
+const liveSendEnabled = process.env.GMAIL_LIVE_SEND_ENABLED === "true";
 let oauthConfig;
 try {
   oauthConfig = loadOAuthConfig(process.env, `http://127.0.0.1:${port}/v1/gmail/oauth/callback`);
@@ -50,6 +52,7 @@ const gmailOAuth = new GmailOAuth({
   ...oauthConfig,
   encryptionKey: process.env.GMAIL_TOKEN_ENCRYPTION_KEY,
   tokenPath: process.env.GMAIL_TOKEN_PATH ?? "data/local/gmail-tokens.enc",
+  requestedScopes: liveSendEnabled ? [GMAIL_READ_SCOPE, GMAIL_SEND_SCOPE] : [GMAIL_READ_SCOPE],
 });
 const syncStore = new GmailSyncStore(process.env.GMAIL_SYNC_PATH ?? "data/local/gmail-sync.json");
 function syncedEmail(ownerId: string, emailId: unknown) {
@@ -162,7 +165,14 @@ const server = createServer(async (request, response) => {
   }
   if (request.method === "GET" && request.url === "/v1/gmail/status") {
     const token = gmailOAuth.get(ownerId);
-    send(response, 200, { configured: gmailOAuth.configured(), connected: Boolean(token), account: token?.emailAddress || null, liveSendEnabled: process.env.GMAIL_LIVE_SEND_ENABLED === "true", testMode: process.env.GMAIL_LIVE_SEND_ENABLED !== "true" });
+    const missingScopes = gmailOAuth.missingScopes(ownerId);
+    send(response, 200, { configured: gmailOAuth.configured(), connected: Boolean(token && missingScopes.length === 0), needsReconnect: Boolean(token && missingScopes.length > 0), missingScopes, account: token?.emailAddress || null, liveSendEnabled, testMode: !liveSendEnabled });
+    return;
+  }
+  if (request.method === "GET" && request.url === "/v1/data/export") {
+    const archive = createDataExport();
+    response.writeHead(200, { "content-type": "application/zip", "content-disposition": `attachment; filename="business-labs-data-${new Date().toISOString().slice(0, 10)}.zip"`, "content-length": archive.length, "cache-control": "no-store" });
+    response.end(archive);
     return;
   }
   if (request.method === "GET" && request.url === "/v1/gmail/oauth/start") {
@@ -224,7 +234,7 @@ const server = createServer(async (request, response) => {
   }
   if (request.method === "POST" && request.url === "/v1/gmail/sync") {
     syncStore.runExclusive(ownerId, async () => {
-      await ensureGmailCredentials(ownerId, true);
+       await ensureGmailCredentials(ownerId);
       const cursor = syncStore.state(ownerId).nextPageToken;
       let page;
       try {
@@ -308,7 +318,7 @@ const server = createServer(async (request, response) => {
       const attempt = draftStore.claimSend(ownerId, email.id, idempotencyKey, account, new Date().toISOString());
       if (attempt.status !== "sending") return send(response, 409, { error: "send_attempt_already_recorded", attempt });
       try {
-        await ensureGmailCredentials(ownerId);
+        await ensureGmailCredentials(ownerId, true);
         const result = await gmail.sendMessage({ to: draft.recipient, subject: draft.subject, body: draft.suggestedReply }, false);
         const completed = draftStore.completeSend(idempotencyKey, result.accepted ? "sent" : "outcome_unknown", new Date().toISOString(), result.accepted ? undefined : "gmail_outcome_unknown", result.accepted ? undefined : "Gmail returned no provider message ID", result.messageId);
         return send(response, result.accepted ? 200 : 503, { result, attempt: completed, testMode: false });
