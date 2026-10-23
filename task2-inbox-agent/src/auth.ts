@@ -5,6 +5,8 @@ export interface AuthPrincipal {
   expiresAt: number;
 }
 
+export const SESSION_COOKIE = "business_labs_session";
+
 export class AuthenticationError extends Error {}
 
 function base64url(value: string): string {
@@ -35,4 +37,27 @@ export function authenticate(request: { headers: Record<string, string | string[
     throw new AuthenticationError("authenticated session is expired or invalid");
   }
   return { subject: candidate.subject, expiresAt: candidate.expiresAt };
+}
+
+function cookieValue(cookieHeader: string | string[] | undefined, name: string): string | undefined {
+  const value = Array.isArray(cookieHeader) ? cookieHeader.join(";") : cookieHeader;
+  return value?.split(";").map((part) => part.trim()).find((part) => part.startsWith(`${name}=`))?.slice(name.length + 1);
+}
+
+/** Authenticate browser requests from the HttpOnly OIDC session cookie, retaining bearer support for service clients. */
+export function authenticateRequest(request: { headers: Record<string, string | string[] | undefined> }, secret = process.env.TASK2_AUTH_SIGNING_SECRET): AuthPrincipal {
+  const authorization = request.headers.authorization;
+  if (typeof authorization === "string" && authorization.startsWith("Bearer ")) return authenticate(request, secret);
+  const cookie = cookieValue(request.headers.cookie, SESSION_COOKIE);
+  if (!cookie) throw new AuthenticationError("authentication required");
+  return authenticate({ headers: { authorization: `Bearer ${cookie}` } }, secret);
+}
+
+export function clearSessionCookie(): string {
+  return `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
+}
+
+export function sessionCookie(principal: AuthPrincipal, secret = process.env.TASK2_AUTH_SIGNING_SECRET): string {
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  return `${SESSION_COOKIE}=${createTestSession(principal, secret ?? "")}; Path=/; HttpOnly; SameSite=Lax${secure}; Max-Age=${Math.max(0, Math.floor((principal.expiresAt - Date.now()) / 1000))}`;
 }

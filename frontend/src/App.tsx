@@ -9,11 +9,9 @@ type Complaint = { status: string; error?: string; analysis?: { summary: string;
 type ScopeResult = { requirements: Array<{ requirement_id: string; description: string; source_segment_id: string; status: string }>; feasibility: Array<{ requirement_id: string; classification: string; evidence: Citation[]; reason?: string }>; estimates: Array<{ requirement_id: string; task: string; low_hours: number; likely_hours: number; high_hours: number }>; proposal: { proposal_id: string; version: number; approval_status: string; total_likely_hours: number; pricing_assumption: string }; changes: { added: string[]; removed: string[]; modified: string[]; unchanged: string[] } | null };
 
 async function api<T>(url: string, options?: RequestInit): Promise<T> {
-  const token = sessionStorage.getItem("business-labs-session");
   const headers = new Headers(options?.headers);
   headers.set("content-type", "application/json");
-  if (token) headers.set("authorization", `Bearer ${token}`);
-  const response = await fetch(url, { ...options, headers });
+  const response = await fetch(url, { ...options, headers, credentials: "include" });
   const body = await response.text();
   let payload: (T & { error?: string; message?: string }) | undefined;
   if (body.trim()) {
@@ -24,6 +22,7 @@ async function api<T>(url: string, options?: RequestInit): Promise<T> {
     }
 
   }
+  if (response.status === 401) window.dispatchEvent(new Event("business-labs-auth-expired"));
   if (!response.ok) throw new Error(payload?.message ?? payload?.error ?? `Request failed (${response.status})`);
   if (!payload) throw new Error(`Service returned an empty response (${response.status}).`);
   return payload;
@@ -36,6 +35,10 @@ function Status({ message, error }: { message?: string; error?: string }) {
 
 function AuthenticationRequired() {
   return <main className="auth-screen"><div className="auth-card"><div className="brand-mark">BL</div><span className="eyebrow">BUSINESS-LABS · AUTHENTICATED WORKSPACE</span><h1>Connect your Gmail workspace.</h1><p>Sign in through your organization&apos;s authenticated gateway to continue. Business-Labs never treats a browser-supplied account ID as identity.</p><div className="demo-notice"><strong>AUTHENTICATION REQUIRED</strong><span>Real Gmail data only · no demo inbox · live sending disabled</span></div><p className="muted">No production identity provider is bundled in this repository. After your gateway issues a valid bearer session, reload this page to access the Gmail connection flow.</p><small>Your session is checked server-side and scoped to your authenticated subject.</small></div></main>;
+}
+
+function AuthenticationRequiredV2({ providerConfigured, error, onLogin }: { providerConfigured: boolean; error?: string; onLogin: () => void }) {
+  return <main className="auth-screen"><div className="auth-card"><div className="brand-mark">BL</div><span className="eyebrow">BUSINESS-LABS · AUTHENTICATED WORKSPACE</span><h1>Sign in to connect your Gmail workspace.</h1><p>Business-Labs verifies your identity with Google OpenID Connect before Gmail or draft operations are available.</p><div className="demo-notice"><strong>{providerConfigured ? "AUTHENTICATION REQUIRED" : "IDENTITY PROVIDER NOT CONFIGURED"}</strong><span>Real Gmail data only · no demo inbox · live sending disabled</span></div>{error && <p className="status error">{error}</p>}{providerConfigured ? <button onClick={onLogin}>Sign in with Google</button> : <p className="muted">Configure the Google OIDC variables on the backend, then reload this page. See AUDIT_REPORT.md.</p>}<small>Your session is checked server-side and scoped to your authenticated subject.</small></div></main>;
 }
 
 function KnowledgeBrain() {
@@ -213,17 +216,20 @@ function MeetingScope() {
 }
 
 export default function App() {
-  const [session, setSession] = useState(() => sessionStorage.getItem("business-labs-session"));
+  const [session, setSession] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [providerConfigured, setProviderConfigured] = useState(false);
+  const [authError, setAuthError] = useState("");
   useEffect(() => {
-    if (!session) return;
-    void api("/api/task2/v1/gmail/status").catch((reason) => {
-      if (reason instanceof Error && /authentication|401/i.test(reason.message)) {
-        sessionStorage.removeItem("business-labs-session");
-        setSession(null);
-      }
-    });
-  }, [session]);
-  if (!session) return <AuthenticationRequired />;
-  function logout() { sessionStorage.removeItem("business-labs-session"); setSession(null); }
+    const loginError = new URLSearchParams(window.location.search).get("auth_error");
+    if (loginError) setAuthError(loginError === "provider_denied" ? "Google sign-in was cancelled or denied." : `Sign-in could not be completed: ${loginError}`);
+    const onExpired = () => { setSession(false); setAuthError("Your session expired. Sign in again to continue."); };
+    window.addEventListener("business-labs-auth-expired", onExpired);
+    void api<{ authenticated: boolean; providerConfigured: boolean }>("/api/task2/v1/auth/session").then((status) => { setProviderConfigured(status.providerConfigured); setSession(status.authenticated); }).catch(() => setAuthError("The authentication service is unavailable.")).finally(() => setAuthLoading(false));
+    return () => window.removeEventListener("business-labs-auth-expired", onExpired);
+  }, []);
+  if (authLoading) return <main className="auth-screen"><div className="auth-card"><div className="brand-mark">BL</div><p>Checking your authenticated session…</p></div></main>;
+  if (!session) return <AuthenticationRequiredV2 providerConfigured={providerConfigured} error={authError} onLogin={() => window.location.assign("/api/task2/v1/auth/login")} />;
+  async function logout() { await api("/api/task2/v1/auth/logout", { method: "POST", body: "{}" }).catch(() => undefined); setSession(false); }
   return <div className="product-shell"><aside className="sidebar"><div className="brand"><span className="brand-mark">BL</span><span>Business<span className="brand-muted">Labs</span></span></div><div className="workspace-chip"><span className="avatar">W</span><span><strong>Authenticated workspace</strong><small>GATEWAY SESSION</small></span></div><nav aria-label="Primary navigation"><a href="#overview" className="active">Overview</a><a href="#inbox">Inbox Agent</a><a href="#knowledge">Knowledge Brain</a><a href="#sitemaps">Sources</a><a href="#scope">Meeting to Scope</a></nav><div className="sidebar-bottom"><span className="demo-label">LIVE DATA · SEND DISABLED</span><button className="sidebar-logout" onClick={logout}>Log out</button></div></aside><main className="main-content"><header id="overview" className="topbar"><div><span className="eyebrow">WORKSPACE OVERVIEW</span><h1>Evidence-led work, ready for review.</h1><p>Connected services and data are reported by the backend.</p></div><div className="topbar-actions"><span className="connection-dot"><i /> Authenticated session</span><button className="quiet" onClick={logout}>Log out</button></div></header><div className="safe-banner"><strong>Live sending is disabled.</strong><span>Business-Labs will never label a preview or approved draft as sent.</span></div><div className="dashboard"><SitemapManagement /><KnowledgeBrain /><InboxAgent /><MeetingScope /></div><footer>Business-Labs - Authenticated workspace - Backend responses are authoritative</footer></main></div>;
 }

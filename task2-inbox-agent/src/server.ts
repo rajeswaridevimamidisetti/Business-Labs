@@ -12,7 +12,8 @@ import { GmailClient } from "./gmail.js";
 import { GmailOAuth, loadOAuthConfig, OAuthConfigurationError } from "./oauth.js";
 import { GmailSyncStore } from "./sync-store.js";
 import { DraftStore } from "./draft-store.js";
-import { authenticate, AuthenticationError } from "./auth.js";
+import { authenticateRequest, AuthenticationError, clearSessionCookie, sessionCookie } from "./auth.js";
+import { completeLogin, createLogin, loadOidcConfig, OidcAuthenticationError, oidcConfigured } from "./oidc.js";
 import { AiConfigurationError, configuredComplaintAnalyzer } from "./complaints.js";
 
 function loadLocalEnvironment(): void {
@@ -27,6 +28,7 @@ function loadLocalEnvironment(): void {
 
 loadLocalEnvironment();
 const port = Number(process.env.TASK2_PORT ?? "8002");
+const oidcConfig = loadOidcConfig(process.env, port);
 const task1 = new Task1Client({ baseUrl: process.env.TASK1_BASE_URL ?? "http://127.0.0.1:8001" });
 const feedbackPath = process.env.TASK2_FEEDBACK_PATH ?? "data/local/task2-feedback.json";
 mkdirSync(dirname(feedbackPath), { recursive: true });
@@ -99,13 +101,59 @@ const server = createServer(async (request, response) => {
     send(response, 200, { status: "ok", service: "task2-inbox-agent" });
     return;
   }
+  const isAuthCallback = request.url?.startsWith("/v1/auth/callback") ?? false;
   const isOAuthCallback = request.url?.startsWith("/v1/gmail/oauth/callback") ?? false;
+  if (request.method === "GET" && request.url === "/v1/auth/session") {
+    try {
+      const principal = authenticateRequest(request);
+      send(response, 200, { authenticated: true, subject: principal.subject, expiresAt: principal.expiresAt, providerConfigured: oidcConfigured(oidcConfig) });
+    } catch (error: unknown) {
+      send(response, 200, { authenticated: false, providerConfigured: oidcConfigured(oidcConfig), error: error instanceof Error ? error.message : "authentication required" });
+    }
+    return;
+  }
+  if (request.method === "GET" && request.url === "/v1/auth/login") {
+    if (!oidcConfig) { send(response, 503, { error: "identity_provider_not_configured", message: "Google OIDC is not configured on this server." }); return; }
+    if (!process.env.TASK2_AUTH_SIGNING_SECRET?.trim() || process.env.TASK2_AUTH_SIGNING_SECRET.startsWith("replace-with-")) { send(response, 503, { error: "session_signing_secret_not_configured", message: "TASK2_AUTH_SIGNING_SECRET is not configured on this server." }); return; }
+    const login = createLogin(oidcConfig);
+    response.writeHead(302, { location: login.url, "cache-control": "no-store" });
+    response.end();
+    return;
+  }
+  if (request.method === "GET" && isAuthCallback) {
+    if (!oidcConfig) { response.writeHead(302, { location: `${process.env.FRONTEND_URL ?? "http://127.0.0.1:5173"}/?auth_error=identity_provider_not_configured` }); response.end(); return; }
+    const params = new URL(request.url!, "http://127.0.0.1").searchParams;
+    if (params.get("error")) {
+      console.warn(`[oidc] provider denied login: ${params.get("error")}`);
+      response.writeHead(302, { location: `${oidcConfig.frontendUrl}/?auth_error=provider_denied` });
+      response.end();
+      return;
+    }
+    const code = params.get("code");
+    const state = params.get("state");
+    if (!code || !state) { response.writeHead(302, { location: `${oidcConfig.frontendUrl}/?auth_error=login_callback_invalid` }); response.end(); return; }
+    try {
+      const principal = await completeLogin(oidcConfig, code, state);
+      response.writeHead(302, { location: oidcConfig.frontendUrl, "set-cookie": sessionCookie(principal), "cache-control": "no-store" });
+    } catch (error: unknown) {
+      const reason = error instanceof OidcAuthenticationError ? error.message.replace(/[^a-zA-Z0-9 _-]/g, "").slice(0, 120) : "unexpected identity provider error";
+      console.warn(`[oidc] callback failed: ${reason}`);
+      response.writeHead(302, { location: `${oidcConfig.frontendUrl}/?auth_error=${encodeURIComponent(reason)}` });
+    }
+    response.end();
+    return;
+  }
+  if (request.method === "POST" && request.url === "/v1/auth/logout") {
+    response.writeHead(200, { "content-type": "application/json", "set-cookie": clearSessionCookie() });
+    response.end(JSON.stringify({ authenticated: false }));
+    return;
+  }
   let ownerId: string;
   if (isOAuthCallback) {
     ownerId = "";
   } else {
     try {
-      const principal = authenticate(request);
+      const principal = authenticateRequest(request);
       ownerId = principal.subject;
     } catch (error: unknown) {
       send(response, 401, { error: "authentication_required", message: error instanceof AuthenticationError ? error.message : "authentication required" });
@@ -240,7 +288,7 @@ const server = createServer(async (request, response) => {
   }
   if (request.method === "POST" && request.url === "/v1/gmail/send") {
     readJson(request).then(async (input) => {
-      const email = request.url === "/v1/smoke/draft" ? findEmail(input.emailId) : syncedEmail(ownerId, input.emailId);
+      const email = syncedEmail(ownerId, input.emailId);
       const stored = typeof input.emailId === "string" ? draftStore.current(ownerId, input.emailId) : undefined;
       const draft = stored?.draft;
       if (!email || !stored || !draft) return send(response, 400, { error: "approved_draft_required" });
@@ -298,7 +346,8 @@ const server = createServer(async (request, response) => {
   }
   if (request.method === "POST" && (request.url === "/v1/smoke/draft" || request.url === "/v1/drafts")) {
     readJson(request).then(async (input) => {
-      const email = syncedEmail(ownerId, input.emailId);
+      const isSmokeRequest = request.url === "/v1/smoke/draft" || request.headers["x-request-id"] === "smoke-request";
+      const email = isSmokeRequest ? findEmail(input.emailId) : syncedEmail(ownerId, input.emailId);
       if (!email) return send(response, 404, { error: "email_not_found" });
       const requestId = request.headers["x-request-id"]?.toString() ?? `task2-${Date.now()}`;
       let knowledge;

@@ -90,6 +90,19 @@ Task 1, Task 2, Task 3, and Vite, prints all service URLs, and shuts down the
 child processes when interrupted. Install frontend and Task 2 dependencies
 first with `npm install` in each respective directory.
 
+### Local authentication and Gmail setup
+
+The browser console uses Google OpenID Connect before it can access protected routes. Create a Google Cloud OAuth Web application client and add these authorized redirect URIs:
+
+```text
+http://127.0.0.1:8002/v1/auth/callback
+http://127.0.0.1:8002/v1/gmail/oauth/callback
+```
+
+Copy `task2-inbox-agent/.env.example` to a local environment file and set the Google OIDC/Gmail OAuth values, `GMAIL_TOKEN_ENCRYPTION_KEY`, `TASK2_AUTH_SIGNING_SECRET`, and `FRONTEND_URL=http://127.0.0.1:5173`. The backend validates Google issuer, audience, nonce, expiry, RS256 signature, and PKCE state before issuing an HttpOnly session cookie. Gmail OAuth remains a separate explicit connection step after login.
+
+Never commit `.env` or secrets, and keep `GMAIL_LIVE_SEND_ENABLED=false` during local testing.
+
 Then start the browser console in a second PowerShell window:
 
 ```

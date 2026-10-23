@@ -1,6 +1,9 @@
 """Start a safe deterministic three-service HTTP smoke environment."""
 
 import json
+import base64
+import hashlib
+import hmac
 import os
 from pathlib import Path
 import subprocess
@@ -15,6 +18,13 @@ def _port_available(port: int) -> bool:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
         probe.settimeout(0.2)
         return probe.connect_ex(("127.0.0.1", port)) != 0
+
+
+def _local_session(secret: str) -> str:
+    payload = json.dumps({"subject": "local-smoke", "expiresAt": int((time.time() + 3600) * 1000)}, separators=(",", ":")).encode()
+    encoded = base64.urlsafe_b64encode(payload).rstrip(b"=")
+    signature = hmac.new(secret.encode(), encoded, hashlib.sha256).digest()
+    return f"{encoded.decode()}.{base64.urlsafe_b64encode(signature).rstrip(b'=').decode()}"
 
 
 if __name__ == "__main__":
@@ -42,6 +52,7 @@ if __name__ == "__main__":
         raise SystemExit(f"Required local port(s) are already in use: {', '.join(map(str, occupied))}")
     processes: list[subprocess.Popen[str]] = []
     environment = os.environ.copy()
+    environment.setdefault("TASK2_AUTH_SIGNING_SECRET", "local-development-secret")
     environment.update({"TASK1_MANIFEST_DB": "data/manifest.sqlite3", "TASK1_PORT": "8001", "TASK2_PORT": "8002", "TASK3_PORT": "8003", "TASK1_BASE_URL": "http://127.0.0.1:8001"})
     if full_stack:
         environment["GMAIL_LIVE_SEND_ENABLED"] = "false"
@@ -54,7 +65,7 @@ if __name__ == "__main__":
     try:
         for command, cwd, extra in commands:
             child_env = environment | extra
-            processes.append(subprocess.Popen(command, cwd=cwd, env=child_env, stdout=None if full_stack else subprocess.PIPE, stderr=None if full_stack else subprocess.PIPE, text=True))
+            processes.append(subprocess.Popen(command, cwd=cwd, env=child_env, stdout=None if full_stack or keep_alive else subprocess.PIPE, stderr=None if full_stack or keep_alive else subprocess.PIPE, text=True))
         if full_stack:
             npm_command = "npm.cmd" if os.name == "nt" else "npm"
             processes.append(subprocess.Popen([npm_command, "run", "dev", "--", "--host", "127.0.0.1"], cwd=root / "frontend", env=environment, stdout=None, stderr=None, text=True))
@@ -90,7 +101,7 @@ if __name__ == "__main__":
                     time.sleep(1)
         def post(url: str, payload: dict[str, str]) -> dict[str, object]:
             body = json.dumps(payload).encode()
-            req = request.Request(url, data=body, headers={"content-type": "application/json", "x-request-id": "smoke-request"}, method="POST")
+            req = request.Request(url, data=body, headers={"content-type": "application/json", "x-request-id": "smoke-request", "authorization": f"Bearer {_local_session(environment['TASK2_AUTH_SIGNING_SECRET'])}"}, method="POST")
             with request.urlopen(req, timeout=3) as response:
                 return json.loads(response.read().decode())
         task2_result = post("http://127.0.0.1:8002/v1/smoke/draft", {"emailId": "email-001"})

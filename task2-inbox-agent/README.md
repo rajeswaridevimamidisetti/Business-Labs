@@ -99,14 +99,18 @@ value before exchanging the authorization code. Tokens are encrypted with
 AES-256-GCM when `GMAIL_TOKEN_ENCRYPTION_KEY` and `GMAIL_TOKEN_PATH` are set;
 they are never returned by the API. `GET /v1/gmail/status` reports only
 configuration and connected-account metadata. Protected routes fail closed
-unless they receive an expiring gateway-issued `Authorization: Bearer`
-session signed with `TASK2_AUTH_SIGNING_SECRET`. The signed subject is the
+unless they receive an expiring server-issued HttpOnly session cookie or an
+authorized service `Authorization: Bearer` session signed with
+`TASK2_AUTH_SIGNING_SECRET`. The browser starts Google OpenID Connect at
+`/v1/auth/login`; the callback validates issuer, audience, nonce, expiry, RS256
+signature, and PKCE state before issuing the cookie. The signed subject is the
 only owner identity used for drafts, approvals, Gmail tokens, sync records, and
 send attempts; frontend-supplied owner/account IDs are ignored. Health and the
-OAuth callback are public because Google must redirect to the callback. This
-repository does not contain an identity provider or session issuer, so the
-deployment must provide that gateway before the frontend can use protected
-routes. Do not use `TASK2_OWNER_ID` as authentication.
+OAuth callbacks are public because Google must redirect to them. The OIDC
+callback is `http://127.0.0.1:8002/v1/auth/callback`, distinct from the Gmail
+callback `http://127.0.0.1:8002/v1/gmail/oauth/callback` and the authorized
+frontend JavaScript origin `http://127.0.0.1:5173`. Do not use
+`TASK2_OWNER_ID` as authentication.
 
 `GET /v1/gmail/messages` reads message metadata only when connected.
 `POST /v1/gmail/sync` incrementally imports one Gmail page per call into
